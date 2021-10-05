@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "magictauschboerse": {
+      "hosting": {
+        "angular": [
+          "magictauschboerse"
+        ]
+      }
+    }
+  }
+}
