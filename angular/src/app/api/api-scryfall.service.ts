@@ -1,28 +1,43 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class ApiScryfallService {
 
+  private errorCounter: number = 0;
+  private response: IApiResponseScryfall = {object: '',
+                                            uri: '',
+                                            total_values: 0,
+                                            data: []};
   constructor(private http: HttpClient) {}
 
+  /*
+    Liste aller Verfügbaren Karten, die es in Magic gibt laden
+  */
   public getAllCardNames() {
-    const obs = this.http.get<string>('https://api.scryfall.com/catalog/card-names', {observe: 'response'})
-    .subscribe(resp => {
-      console.log(resp);
-    });
+    return this.http.get<IApiResponseScryfall>('https://api.scryfall.com/catalog/card-names')
+      .pipe(map((res: IApiResponseScryfall) => {
+              return res.data}),
+            catchError((error,src) => {
+              console.log('Exeption geworfen!!!!')
+              this.errorCounter++;
+              if (this.errorCounter < 2) {
+                return src;
+              } else {
+                throw new Error(error)
+              }
+            })
+      )
+    }
 
-    /*
-    obs.subscribe((result) => {
-    });
-    */
 
-    return obs;
 
-  }
+
+
 
 /*
 
@@ -36,4 +51,12 @@ For example, if you are submitting a request to a method that requires Applicati
 */
 
 
+}
+
+
+export interface IApiResponseScryfall {
+  object: string;
+  uri: string;
+  total_values: number;
+  data: string[];
 }
