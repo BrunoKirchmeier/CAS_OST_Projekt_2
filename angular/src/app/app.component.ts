@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiScryfallService } from './api/api-scryfall.service';
+import { getApp } from '@angular/fire/app';
+import { collection, doc, setDoc } from "firebase/firestore";
 
 @Component({
   selector: 'app-root',
@@ -15,15 +17,13 @@ export class AppComponent {
   constructor(private scryfall: ApiScryfallService) {}
 
   ngOnInit(): void {
+
     this.subscribeCardNames = this.scryfall.getAllCardNames()
                               .subscribe({ next: data => this.cardnames,
                                            error: err => console.log(`ERR... ${err}`),
                                            complete: () => console.log(`Complete!`),
                                          });
   }
-
-
-
 
 
 
@@ -36,3 +36,6 @@ export class AppComponent {
 
 
 }
+
+
+export interface cards { cardname: string; id: number; }

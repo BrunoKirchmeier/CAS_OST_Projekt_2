@@ -8,24 +8,28 @@ import { map, catchError } from 'rxjs/operators';
 
 export class ApiScryfallService {
 
-  private errorCounter: number = 0;
-  private response: IApiResponseScryfall = {object: '',
-                                            uri: '',
-                                            total_values: 0,
-                                            data: []};
-  constructor(private http: HttpClient) {}
+  /*
+    Variablen Definitionen
+  */
+  private _errorCounter: number = 0;
 
   /*
+    Konstruktor
+  */
+  constructor(private _http: HttpClient) {}
+
+  /*
+    Funktion: getAllCardNames
     Liste aller Verfügbaren Karten, die es in Magic gibt laden
   */
   public getAllCardNames() {
-    return this.http.get<IApiResponseScryfall>('https://api.scryfall.com/catalog/card-names')
+    return this._http.get<IApiResponseScryfall>('https://api.scryfall.com/catalog/card-names')
       .pipe(map((res: IApiResponseScryfall) => {
               return res.data}),
             catchError((error,src) => {
               console.log('Exeption geworfen!!!!')
-              this.errorCounter++;
-              if (this.errorCounter < 2) {
+              this._errorCounter++;
+              if (this._errorCounter < 2) {
                 return src;
               } else {
                 throw new Error(error)
@@ -53,7 +57,10 @@ For example, if you are submitting a request to a method that requires Applicati
 
 }
 
-
+/*
+  Interface:
+  Datentyp Definitionen
+*/
 export interface IApiResponseScryfall {
   object: string;
   uri: string;
