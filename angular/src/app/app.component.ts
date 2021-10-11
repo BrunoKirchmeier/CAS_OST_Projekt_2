@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { Firestore, FirestoreInstances, FirestoreModule } from '@angular/fire/firestore';
+import { doc, onSnapshot } from '@firebase/firestore';
+import { DocumentData, DocumentReference } from 'rxfire/firestore/interfaces';
 import { Observable } from 'rxjs';
 import { ApiScryfallService } from './api/api-scryfall.service';
-import { getApp } from '@angular/fire/app';
-import { collection, doc, setDoc } from "firebase/firestore";
 
 @Component({
   selector: 'app-root',
@@ -11,10 +12,16 @@ import { collection, doc, setDoc } from "firebase/firestore";
 })
 export class AppComponent {
   title = 'angular';
+
   private cardnames: [] = [];
   private subscribeCardNames: any;
+  private doc: DocumentReference<DocumentData>;
 
-  constructor(private scryfall: ApiScryfallService) {}
+  constructor(private scryfall: ApiScryfallService,
+              private firestore: Firestore) {
+
+     this.doc = doc<DocumentData>(this.firestore, 'foo/bar')
+  }
 
   ngOnInit(): void {
 
