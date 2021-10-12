@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Firestore, FirestoreInstances, FirestoreModule } from '@angular/fire/firestore';
-import { doc, onSnapshot } from '@firebase/firestore';
-import { DocumentData, DocumentReference } from 'rxfire/firestore/interfaces';
-import { Observable } from 'rxjs';
+import { Firestore } from '@angular/fire/firestore';
+import { doc, DocumentReference, DocumentData, getDoc } from '@firebase/firestore';
+import { from, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { ApiScryfallService } from './api/api-scryfall.service';
 
 @Component({
@@ -20,7 +20,11 @@ export class AppComponent {
   constructor(private scryfall: ApiScryfallService,
               private firestore: Firestore) {
 
-     this.doc = doc<DocumentData>(this.firestore, 'foo/bar')
+    this.doc = doc(this.firestore, 'cards/hqWBVjCrPARptTQQWsgk');
+
+    const docSnap =  getDoc(this.doc);
+    console.log(docSnap);
+
   }
 
   ngOnInit(): void {
@@ -30,10 +34,22 @@ export class AppComponent {
                                            error: err => console.log(`ERR... ${err}`),
                                            complete: () => console.log(`Complete!`),
                                          });
+
+    const test = this.getUserEventSummary()
+                .subscribe({ next: data => console.log(data),
+                            error: err => console.log(`ERR... ${err}`),
+                            complete: () => console.log(`Complete!`),
+                          });
+
   }
 
 
-
+  getUserEventSummary() {
+    return from(getDoc(doc(this.firestore, 'cards/hqWBVjCrPARptTQQWsgk'))).pipe(
+      filter((docSnap: any) => docSnap.exists()),
+      map(docSnap => docSnap.data())
+    );
+  }
 
 
   ngOnDestroy() {
