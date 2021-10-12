@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+
 import { Firestore } from '@angular/fire/firestore';
 import { doc, DocumentReference, DocumentData, getDoc } from '@firebase/firestore';
-import { from, Observable } from 'rxjs';
+
+import { from } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+
 import { ApiScryfallService } from './api/api-scryfall.service';
 
 @Component({
