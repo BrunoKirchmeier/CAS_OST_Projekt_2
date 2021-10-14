@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-navigation',
@@ -10,11 +10,8 @@ export class NavigationComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.burgerMenuClick();
-  }
-
-  burgerMenuClick() {
 
   }
+
 
 }

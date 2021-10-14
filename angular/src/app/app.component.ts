@@ -8,6 +8,8 @@ import { filter, map } from 'rxjs/operators';
 
 import { ApiScryfallService } from './api/api-scryfall.service';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,6 +17,8 @@ import { ApiScryfallService } from './api/api-scryfall.service';
 })
 export class AppComponent {
   title = 'angular';
+
+  public isCollapsed = false;
 
   private cardnames: [] = [];
   private subscribeCardNames: any;
