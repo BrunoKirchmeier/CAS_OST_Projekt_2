@@ -5,11 +5,6 @@ export const appRoutes: Routes = [
 
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
-    path: '',
-    component: HomeComponent,
-    data: { title: 'Home'}
-  },
-  {
     path: 'home',
     component: HomeComponent,
     data: { title: 'Home'}

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { environment } from 'src/environments/environment';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -15,6 +16,7 @@ import { MatButtonModule} from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NoPreloading, RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
@@ -39,12 +41,15 @@ import { NavigationComponent } from './navigation/navigation.component';
     NgbModule,
     RouterModule.forRoot(appRoutes, { useHash: false, preloadingStrategy: NoPreloading, enableTracing: !environment.production, relativeLinkResolution: 'legacy' }),
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatIconModule,
     MatSidenavModule,
     MatButtonModule,
     MatMenuModule,
     MatToolbarModule,
     MatListModule,
+    MatSnackBarModule
 
   ],
   providers: [],
