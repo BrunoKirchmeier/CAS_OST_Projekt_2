@@ -22,12 +22,14 @@ import { NoPreloading, RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { CardSearchComponent } from './card-search/card-search.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavigationComponent
+    NavigationComponent,
+    CardSearchComponent
   ],
   imports: [
     BrowserModule,

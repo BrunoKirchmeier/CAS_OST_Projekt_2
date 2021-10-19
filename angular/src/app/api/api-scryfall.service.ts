@@ -8,24 +8,39 @@ import { map, catchError } from 'rxjs/operators';
 
 export class ApiScryfallService {
 
-  /*
-    Variablen Definitionen
-  */
-  private _errorCounter: number = 0;
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  // Declarations
+  ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  /*
-    Konstruktor
-  */
+  private _errorCounter: number = 0;
+  private _cardNameList: Array<ICardName> = [];
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  // Constructor and destructor
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+
   constructor(private _http: HttpClient) {}
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  // API calls
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+
   /*
-    Funktion: getAllCardNames
-    Liste aller Verfügbaren Karten, die es in Magic gibt laden
+    Function: getAllCardNames
+    List of all existing cards
   */
   public getAllCardNames() {
     return this._http.get<IApiResponseScryfall>('https://api.scryfall.com/catalog/card-names')
       .pipe(map((res: IApiResponseScryfall) => {
-              return res.data}),
+              let i: number = 0;
+              res.data.forEach(element => {
+                const cardName: ICardName = {id: i,
+                                             name: element};
+                this._cardNameList.push(cardName);
+                i++;
+              });
+              return this._cardNameList;
+            }),
             catchError((error,src) => {
               console.log('Exeption geworfen!!!!')
               this._errorCounter++;
@@ -57,13 +72,24 @@ For example, if you are submitting a request to a method that requires Applicati
 
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////////////
+
 /*
-  Interface:
-  Datentyp Definitionen
+  Datatyp: API Scryfall Response
 */
 export interface IApiResponseScryfall {
   object: string;
   uri: string;
   total_values: number;
   data: string[];
+}
+
+/*
+  Datatyp: API Scryfall CardName
+*/
+export interface ICardName {
+  id: number;
+  name: string;
 }

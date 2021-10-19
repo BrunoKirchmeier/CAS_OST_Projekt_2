@@ -20,12 +20,9 @@ export class AppComponent {
 
   public isCollapsed = false;
 
-  private cardnames: [] = [];
-  private subscribeCardNames: any;
   private doc: DocumentReference<DocumentData>;
 
-  constructor(private scryfall: ApiScryfallService,
-              private firestore: Firestore) {
+  constructor(private firestore: Firestore) {
 
     this.doc = doc(this.firestore, 'cards/hqWBVjCrPARptTQQWsgk');
 
@@ -35,19 +32,11 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-
-    this.subscribeCardNames = this.scryfall.getAllCardNames()
-                              .subscribe({ next: data => this.cardnames,
-                                           error: err => console.log(`ERR... ${err}`),
-                                           complete: () => console.log(`Complete!`),
-                                         });
-
     const test = this.getUserEventSummary()
                 .subscribe({ next: data => console.log(data),
                             error: err => console.log(`ERR... ${err}`),
                             complete: () => console.log(`Complete!`),
                           });
-
   }
 
 
@@ -59,13 +48,7 @@ export class AppComponent {
   }
 
 
-  ngOnDestroy() {
-    this.subscribeCardNames
-    .unsubscribe();
-  }
+  ngOnDestroy() {}
 
 
 }
-
-
-export interface cards { cardname: string; id: number; }

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { CardSearchComponent } from './card-search/card-search.component';
 import { HomeComponent } from './home/home/home.component';
 
 export const appRoutes: Routes = [
@@ -8,6 +9,11 @@ export const appRoutes: Routes = [
     path: 'home',
     component: HomeComponent,
     data: { title: 'Home'}
+  },
+  {
+    path: 'card-search',
+    component: CardSearchComponent,
+    data: { title: 'Kartensuche'}
   }
 
   /*

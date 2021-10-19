@@ -1,0 +1,16 @@
+<form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+
+  <label for="cardEdition">Editionen: </label>
+  <div *ngIf="cardNameListIsLoaded === false">
+    <select formControlName="cardEdition" id="cardEdition" Value="Is loading"></select>
+  </div>
+  <div *ngIf="cardNameListIsLoaded === true">
+    <select formControlName="cardEdition" id="cardEdition">
+      <option *ngFor="let cardName of cardNameList" [ngValue]="cardName.id">{{cardName.name}}</option>
+    </select>
+  </div>
+
+  <label for="cardName">Kartenname: </label>
+  <input type="text" id="cardName" formControlName="cardName">
+
+</form>
