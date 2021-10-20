@@ -14,6 +14,7 @@ export class ApiScryfallService {
 
   private _errorCounter: number = 0;
   private _cardNameList: Array<ICardName> = [];
+  private _editionNameList: Array<IEditionName> = [];
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Constructor and destructor
@@ -53,7 +54,31 @@ export class ApiScryfallService {
       )
     }
 
+  /*
+    Function: getAllEditionNames
+    List of all existing cards
+  */
+    public getAllEditionNames() {
+      return this._http.get<IApiResponseScryfall>('https://api.scryfall.com/sets')
+        .pipe(map((res: IApiResponseScryfall) => {
 
+                res.data.forEach((element: any) => {
+                  const obj: IEditionName = element;
+                  this._editionNameList.push(obj);
+                });
+                return this._editionNameList;
+              }),
+              catchError((error,src) => {
+                console.log('Exeption geworfen!!!!')
+                this._errorCounter++;
+                if (this._errorCounter < 2) {
+                  return src;
+                } else {
+                  throw new Error(error)
+                }
+              })
+        )
+      }
 
 
 
@@ -92,4 +117,25 @@ export interface IApiResponseScryfall {
 export interface ICardName {
   id: number;
   name: string;
+}
+
+/*
+  Datatyp: API Scryfall CardName
+*/
+export interface IEditionName {
+  object: string;
+  id: string;
+  code: string;
+  tcgplayer_id: number;
+  name: string;
+  uri: string;
+  scryfall_uri: string;
+  search_uri: string;
+  released_at: Date;
+  set_type: string;
+  card_count: number;
+  digital: boolean;
+  nonfoil_only: boolean;
+  foil_only: boolean;
+  icon_svg_uri: string;
 }

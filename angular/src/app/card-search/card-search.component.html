@@ -1,16 +1,87 @@
-<form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+<div class="form-container">
 
-  <label for="cardEdition">Editionen: </label>
+  <form [formGroup]="form" (submit)="onFormSubmit()">
+
+    <mat-form-field class="" appearance="outline">
+      <mat-label for="cardEditions">Editionen: </mat-label>
+      <mat-select id="cardEditions" name="cardEditions" value="">
+        <mat-option *ngFor="let edition of editionNameList" [value]="edition.id">
+          {{edition.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+<!--
+    <mat-form-field class="" appearance="outline">
+      <mat-label for="cardNames">Kartenname: </mat-label>
+      <mat-select id="cardNames" name="cardNames" value="">
+        <cdk-virtual-scroll-viewport itemSize="20" minBufferPx="200" maxBufferPx="400" class="">
+          <mat-option *cdkVirtualFor="let cardName of cardNameList" [value]="cardName.id">{{cardName.name}}</mat-option>
+        </cdk-virtual-scroll-viewport>
+      </mat-select>
+    </mat-form-field>
+-->
+
+
+
+        <!--
+
+[(value)]="selectedCountry"
+        -->
+
+  </form>
+</div>
+
+
+<!--
+  <form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+
+  <label for="cardEditions">Editionen: </label>
   <div *ngIf="cardNameListIsLoaded === false">
-    <select formControlName="cardEdition" id="cardEdition" Value="Is loading"></select>
+    <select formControlName="cardEditions" id="cardEditions" Value="Is loading" [virtualScroll]="true" itemSize="30"></select>
   </div>
   <div *ngIf="cardNameListIsLoaded === true">
-    <select formControlName="cardEdition" id="cardEdition">
+    <select formControlName="cardEditions" id="cardEditions">
+      <option *ngFor="let edition of editionNameList" [ngValue]="edition.id">{{edition.name}}</option>
+    </select>
+  </div>
+
+  <label for="cardNames">Kartenname: </label>
+  <div *ngIf="cardNameListIsLoaded === false">
+    <select formControlName="cardNames" id="cardNames" Value="Is loading"></select>
+  </div>
+  <div *ngIf="cardNameListIsLoaded === true">
+    <select formControlName="cardNames" id="cardNames">
       <option *ngFor="let cardName of cardNameList" [ngValue]="cardName.id">{{cardName.name}}</option>
     </select>
   </div>
 
-  <label for="cardName">Kartenname: </label>
-  <input type="text" id="cardName" formControlName="cardName">
-
 </form>
+
+
+    <mat-form-field class="" appearance="outline">
+      <mat-label for="cardEditions">Editionen: </mat-label>
+      <mat-select id="cardEditions" name="cardEditions" value="">
+        <mat-option *ngFor="let edition of editionNameList" [value]="edition.id">
+          {{edition.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="" appearance="outline">
+      <mat-label for="cardNames">Kartenname: </mat-label>
+      <mat-select id="cardNames" name="cardNames" value="">
+        <mat-option *ngFor="let cardName of cardNameList" [value]="cardName.id">
+          {{cardName.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+-->
+
+
+<!--
+<cdk-virtual-scroll-viewport  style="height: 500px" itemSize="90" >
+  <div *cdkVirtualFor="let n of numbers" style="height:130px;">{{n}}</div>
+</cdk-virtual-scroll-viewport>
+-->
