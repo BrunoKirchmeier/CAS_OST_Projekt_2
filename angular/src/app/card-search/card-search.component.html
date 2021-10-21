@@ -10,6 +10,14 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Select</mat-label>
+      <mat-select (infiniteScroll)="getNextBatch()" [complete]="cardNameListOffset === cardNameList.length" msInfiniteScroll>
+          <mat-option *ngFor="let cardName of cardNameListScroll$ | async" [value]="cardName.id">{{cardName.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
 <!--
     <mat-form-field class="" appearance="outline">
       <mat-label for="cardNames">Kartenname: </mat-label>

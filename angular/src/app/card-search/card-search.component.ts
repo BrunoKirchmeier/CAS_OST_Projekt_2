@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { ApiScryfallService, ICardName, IEditionName } from '../api/api-scryfall.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { MatSelect } from '@angular/material/select';
+import { scan } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-card-search',
@@ -10,24 +11,22 @@ import { MatSelect } from '@angular/material/select';
   styleUrls: ['./card-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class CardSearchComponent implements OnInit {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Declarations
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // @ViewChild(CdkVirtualScrollViewport, { static: false })
-  // @ViewChild(MatSelect, { static: true })
-
   private _subscribeEditionNameList: any;
   private _subscribeCardNameList: any;
+  private _cardNameListLimit: number = 100;
+  private _cardNameListBehaviorSub = new BehaviorSubject<ICardName[]>([]);
 
   public editionNameList: Array<IEditionName> = [];
-  public editionNameListIsLoaded: boolean = false;
   public cardNameList: Array<ICardName> = [];
-  public cardNameListIsLoaded: boolean = false;
-
-  // public isSubmitted = false;
+  public cardNameListOffset: number = 0;
+  public cardNameListScroll$: any;
 
   public form = new FormGroup({
     cardEditions: new FormControl(''),
@@ -38,21 +37,25 @@ export class CardSearchComponent implements OnInit {
   // Constructor and destructor
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  constructor(private scryfall: ApiScryfallService,
-              // public cdkVirtualScrollViewPort: CdkVirtualScrollViewport,
-              // public matSelect: MatSelect
-              ) {
+  constructor(private scryfall: ApiScryfallService) {
 
     this._subscribeEditionNameList = this.scryfall.getAllEditionNames()
     .subscribe({ next: data => this.editionNameList = data,
-                  error: err => console.log(`ERR... ${err}`),
-                  complete: () => this.editionNameListIsLoaded = true,
+                 error: err => console.log(`ERR... ${err}`),
               });
 
     this._subscribeCardNameList = this.scryfall.getAllCardNames()
-    .subscribe({ next: data => this.cardNameList = data,
-                  error: err => console.log(`ERR... ${err}`),
-                  complete: () => this.cardNameListIsLoaded = true,
+    .subscribe({ next: (data: ICardName[]) => {
+                  this.cardNameListScroll$ =
+                  this._cardNameListBehaviorSub.asObservable().pipe(
+                      scan((acc: Array<ICardName>, curr: Array<ICardName>) => {
+                        return [...acc, ...curr];
+                    }, [])
+                  );
+                  this.cardNameList = data;
+                  this.getNextBatch();
+                 },
+                 error: err => console.log(`ERR... ${err}`),
               });
 
   }
@@ -76,7 +79,11 @@ export class CardSearchComponent implements OnInit {
     // console.log('Name:' + this.form.get('cardName').value);
   }
 
-
+  getNextBatch() {
+    const result = this.cardNameList.slice(this.cardNameListOffset, this.cardNameListOffset + this._cardNameListLimit);
+    this._cardNameListBehaviorSub.next(result);
+    this.cardNameListOffset += this._cardNameListLimit;
+  }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Functions

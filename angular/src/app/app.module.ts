@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { environment } from 'src/environments/environment';
@@ -21,6 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { MatSelectModule } from '@angular/material/select';
+import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule} from '@angular/material/button';
 
@@ -58,8 +58,8 @@ import { CardSearchComponent } from './card-search/card-search.component';
     MatToolbarModule,
     MatListModule,
     MatSnackBarModule,
-    ScrollingModule,
     MatSelectModule,
+    MatSelectInfiniteScrollModule,
     MatFormFieldModule,
     MatInputModule,
   ],
