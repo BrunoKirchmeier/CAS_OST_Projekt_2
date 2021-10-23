@@ -1,40 +1,50 @@
 <div class="form-container">
+  <form [formGroup]="form"
+        (ngSubmit)="onFormSubmit()">
+    <mat-card>
+      <mat-card-content>
+        <mat-form-field class=""
+                        appearance="outline">
+          <mat-label for="cardEdition">Editionen: </mat-label>
+          <mat-select id="cardEdition"
+                      name="cardEdition"
+                      (valueChange)="onChangeSelectCardEdition($event)">
+            <mat-option *ngFor="let edition of editionNameList"
+                        data-id="edition.id"
+                        [value]="edition.name">
+              {{edition.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-  <form [formGroup]="form" (submit)="onFormSubmit()">
-
-    <mat-form-field class=""
-                    appearance="outline">
-      <mat-label for="cardEdition">Editionen: </mat-label>
-      <mat-select id="cardEdition"
-                  name="cardEdition"
-                  value="">
-        <mat-option *ngFor="let edition of editionNameList"
-                    [value]="edition.id">
-          {{edition.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Select</mat-label>
-      <mat-select id="cardName"
-                  name="cardName"
-                  msInfiniteScroll
-                  (infiniteScroll)="getNextBatch()"
-                  [complete]="cardNameListOffset === cardNameList.length">
-                  <mat-option>
-                    <ngx-mat-select-search
-                        [formControl]="cardNameSearch"
-                        placeholderLabel="search"
-                        noEntriesFoundLabel="No entry matches">
-                    </ngx-mat-select-search>
-                </mat-option>
-          <mat-option *ngFor="let cardName of cardNameListScroll$ | async"
-                      [value]="cardName.id">
-                      {{cardName.name}}
-          </mat-option>
-      </mat-select>
-    </mat-form-field>
-
+        <mat-form-field appearance="outline">
+          <mat-label>Select</mat-label>
+          <mat-select id="cardName"
+                      name="cardName"
+                      (valueChange)="onChangeSelectCardName($event)"
+                      msInfiniteScroll
+                      (infiniteScroll)="getNextBatch()"
+                      [complete]="cardNameListOffset === cardNameList.length">
+                      <mat-option>
+                        <ngx-mat-select-search
+                            [formControl]="cardNameSearch"
+                            placeholderLabel="search"
+                            noEntriesFoundLabel="No entry matches">
+                        </ngx-mat-select-search>
+                    </mat-option>
+              <mat-option *ngFor="let cardName of cardNameListScroll$ | async"
+                          data-id="cardName.id"
+                          [value]="cardName.name">
+                          {{cardName.name}}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button
+                type="submit"
+                color="primary">Suchen</button>
+      </mat-card-actions>
+    </mat-card>
   </form>
 </div>

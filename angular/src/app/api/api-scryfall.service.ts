@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -79,6 +79,32 @@ export class ApiScryfallService {
         )
       }
 
+  /*
+    Function: getCardPictureByName
+    Get the Picture of a single Card
+  */
+    public getCardPictureByName(cardName: string,
+                                format: CardPictureFormat = CardPictureFormat.Small) {
+      const params = new HttpParams()
+        .set('exact', cardName);
+
+      return this._http.get<any>('https://api.scryfall.com/cards/named')
+        .pipe(map((res: any) => {
+          console.log(res);
+              }),
+              catchError((error,src) => {
+                console.log('Exeption geworfen!!!!')
+                this._errorCounter++;
+                if (this._errorCounter < 2) {
+                  return src;
+                } else {
+                  throw new Error(error)
+                }
+              })
+        )
+      }
+
+
 
 
 
@@ -137,4 +163,39 @@ export interface IEditionName {
   nonfoil_only: boolean;
   foil_only: boolean;
   icon_svg_uri: string;
+}
+
+/*
+  Datatyp: API Scryfall ISingleCard
+*/
+export interface ISingleCard {
+  oracle_text: string;
+  image_uris: object;
+  mana_cost: string;
+  tcgplayer_id: number;
+  name: string;
+  uri: string;
+  scryfall_uri: string;
+  search_uri: string;
+  released_at: Date;
+  set_type: string;
+  card_count: number;
+  digital: boolean;
+  nonfoil_only: boolean;
+  foil_only: boolean;
+  icon_svg_uri: string;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+export enum CardPictureFormat {
+  Small = 'small',
+  Normal = 'normal',
+  Large = 'large',
+  PNG = 'png',
+  CropArt = 'art_crop',
+  CropBorder = 'border_crop'
 }

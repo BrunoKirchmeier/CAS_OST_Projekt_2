@@ -10,6 +10,7 @@ import { enableIndexedDbPersistence, getFirestore, provideFirestore } from '@ang
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule} from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -55,6 +56,7 @@ import { CardSearchComponent } from './pages/card-search/card-search.component';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    MatCardModule,
     MatIconModule,
     MatSidenavModule,
     MatButtonModule,
