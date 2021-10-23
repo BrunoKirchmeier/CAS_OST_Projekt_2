@@ -31,8 +31,8 @@ export class ApiScryfallService {
     List of all existing cards
   */
   public getAllCardNames() {
-    return this._http.get<IApiResponseScryfall>('https://api.scryfall.com/catalog/card-names')
-      .pipe(map((res: IApiResponseScryfall) => {
+    return this._http.get<IApiResponseScryfallListtype>('https://api.scryfall.com/catalog/card-names')
+      .pipe(map((res: IApiResponseScryfallListtype) => {
               let i: number = 0;
               res.data.forEach(element => {
                 const cardName: ICardName = {id: i,
@@ -59,8 +59,8 @@ export class ApiScryfallService {
     List of all existing cards
   */
     public getAllEditionNames() {
-      return this._http.get<IApiResponseScryfall>('https://api.scryfall.com/sets')
-        .pipe(map((res: IApiResponseScryfall) => {
+      return this._http.get<IApiResponseScryfallListtype>('https://api.scryfall.com/sets')
+        .pipe(map((res: IApiResponseScryfallListtype) => {
                 res.data.forEach((element: any) => {
                   const obj: IEditionName = element;
                   this._editionNameList.push(obj);
@@ -80,17 +80,29 @@ export class ApiScryfallService {
       }
 
   /*
-    Function: getCardPictureByName
-    Get the Picture of a single Card
+    Function: getCardDetailsByName
+    Get the detail Information of a single Card
   */
-    public getCardPictureByName(cardName: string,
-                                format: CardPictureFormat = CardPictureFormat.Small) {
-      const params = new HttpParams()
-        .set('exact', cardName);
+    public getCardDetailsByName(cardName: string,
+                                format: CardPictureFormat = CardPictureFormat.Normal) {
+      const urlParams = new HttpParams()
+        .set('fuzzy', cardName);
 
-      return this._http.get<any>('https://api.scryfall.com/cards/named')
+      return this._http.get<any>('https://api.scryfall.com/cards/named', {params: urlParams})
         .pipe(map((res: any) => {
-          console.log(res);
+                let uri: string = '';
+                if(typeof res === 'object' &&
+                  res.hasOwnProperty('image_uris') &&
+                  res.image_uris.hasOwnProperty(format)) {
+                    uri = res.image_uris[format];
+                }
+                const obj: ICardDetails =
+                {
+                  oracle_text: res.oracle_text,
+                  card_image_uri: uri,
+                  mana_cost: res.mana_cost
+                }
+                return obj;
               }),
               catchError((error,src) => {
                 console.log('Exeption geworfen!!!!')
@@ -127,9 +139,9 @@ For example, if you are submitting a request to a method that requires Applicati
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
-  Datatyp: API Scryfall Response
+  Datatyp: API Scryfall Response of List Objects
 */
-export interface IApiResponseScryfall {
+export interface IApiResponseScryfallListtype {
   object: string;
   uri: string;
   total_values: number;
@@ -137,7 +149,7 @@ export interface IApiResponseScryfall {
 }
 
 /*
-  Datatyp: API Scryfall CardName
+  Datatyp: API Scryfall card names
 */
 export interface ICardName {
   id: number;
@@ -145,7 +157,7 @@ export interface ICardName {
 }
 
 /*
-  Datatyp: API Scryfall CardName
+  Datatyp: API Scryfall editon names
 */
 export interface IEditionName {
   object: string;
@@ -166,24 +178,12 @@ export interface IEditionName {
 }
 
 /*
-  Datatyp: API Scryfall ISingleCard
+  Datatyp: API Scryfall ICardDetails
 */
-export interface ISingleCard {
+export interface ICardDetails {
   oracle_text: string;
-  image_uris: object;
+  card_image_uri: string;
   mana_cost: string;
-  tcgplayer_id: number;
-  name: string;
-  uri: string;
-  scryfall_uri: string;
-  search_uri: string;
-  released_at: Date;
-  set_type: string;
-  card_count: number;
-  digital: boolean;
-  nonfoil_only: boolean;
-  foil_only: boolean;
-  icon_svg_uri: string;
 }
 
 
