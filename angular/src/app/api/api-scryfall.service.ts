@@ -13,8 +13,8 @@ export class ApiScryfallService {
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   private _errorCounter: number = 0;
-  private _cardNameList: Array<ICardName> = [];
-  private _editionNameList: Array<IEditionName> = [];
+  private _cardNameList: ICardName[] = [];
+  private _editionNameList: IEditionName[] = [];
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Constructor and destructor
@@ -61,7 +61,6 @@ export class ApiScryfallService {
     public getAllEditionNames() {
       return this._http.get<IApiResponseScryfall>('https://api.scryfall.com/sets')
         .pipe(map((res: IApiResponseScryfall) => {
-
                 res.data.forEach((element: any) => {
                   const obj: IEditionName = element;
                   this._editionNameList.push(obj);

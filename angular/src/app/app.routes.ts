@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { CardSearchComponent } from './card-search/card-search.component';
-import { HomeComponent } from './home/home/home.component';
+import { CardSearchComponent } from './pages/card-search/card-search.component';
+import { HomeComponent } from './pages/home/home.component';
 
 export const appRoutes: Routes = [
 

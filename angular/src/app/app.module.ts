@@ -20,6 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { MatSelectModule } from '@angular/material/select';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule} from '@angular/material/button';
@@ -27,15 +28,18 @@ import { MatButtonModule} from '@angular/material/button';
 import { NoPreloading, RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { AppComponent } from './app.component';
-import { NavigationComponent } from './navigation/navigation.component';
-import { CardSearchComponent } from './card-search/card-search.component';
+import { NavigationComponent } from './elements/navigation/navigation.component';
+import { HtmlSelectComponent } from './elements/html-select/html-select.component';
+
+import { CardSearchComponent } from './pages/card-search/card-search.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
-    CardSearchComponent
+    CardSearchComponent,
+    HtmlSelectComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +63,7 @@ import { CardSearchComponent } from './card-search/card-search.component';
     MatListModule,
     MatSnackBarModule,
     MatSelectModule,
+    NgxMatSelectSearchModule,
     MatSelectInfiniteScrollModule,
     MatFormFieldModule,
     MatInputModule,
