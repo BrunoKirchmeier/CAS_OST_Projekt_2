@@ -13,14 +13,14 @@ export const appRoutes: Routes = [
     data: { title: 'Home'}
   },
   {
-    path: 'show-search-card',
+    path: 'show-searched-cards',
     component: ShowSearchedCardsComponent,
     data: { title: 'Kartensuche'}
   },
   {
     path: 'create-offer',
     component: CreateOfferComponent,
-    data: { title: 'Angebt erstellen'}
+    data: { title: 'Angebot erstellen'}
   },
   {
     path: 'search-offers',

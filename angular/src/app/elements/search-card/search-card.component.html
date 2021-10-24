@@ -3,24 +3,10 @@
         (ngSubmit)="onSubmitSearchForm()">
     <mat-card>
       <mat-card-content>
-        <!--
-        <mat-form-field class=""
-                        appearance="outline">
-          <mat-label for="cardEdition">Editionen: </mat-label>
-          <mat-select id="cardEdition"
-                      name="cardEdition"
-                      (valueChange)="onChangeSelectCardEdition($event)">
-            <mat-option *ngFor="let edition of editionNameList"
-                        data-id="edition.id"
-                        [value]="edition.name">
-              {{edition.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        -->
         <mat-form-field appearance="outline">
           <mat-label>Kartenname: </mat-label>
           <mat-select id="cardName"
+                      name="cardName"
                       formControlName="cardName"
                       (valueChange)="onChangeSelectCardName($event)"
                       msInfiniteScroll
