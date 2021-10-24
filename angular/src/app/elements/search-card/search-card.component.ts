@@ -86,11 +86,7 @@ export class SearchCardComponent implements OnInit {
     })
   }
 
-  onChangeSelectCardName(element: string): void {
-    this.searchForm.patchValue({
-      cardName: element
-    })
-  }
+  onChangeSelectCardName(element: string): void {}
 
   onSubmitSearchForm(): void {
     const edition = this.searchForm.get('cardEdition')?.value;

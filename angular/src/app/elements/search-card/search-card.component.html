@@ -21,7 +21,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Kartenname: </mat-label>
           <mat-select id="cardName"
-                      name="cardName"
+                      formControlName="cardName"
                       (valueChange)="onChangeSelectCardName($event)"
                       msInfiniteScroll
                       (infiniteScroll)="getLimitedPartOfCardNames()"
