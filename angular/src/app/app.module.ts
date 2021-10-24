@@ -30,17 +30,19 @@ import { NoPreloading, RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './elements/navigation/navigation.component';
-import { HtmlSelectComponent } from './elements/html-select/html-select.component';
-
-import { CardSearchComponent } from './pages/card-search/card-search.component';
-
+import { SearchCardComponent } from './elements/search-card/search-card.component';
+import { ShowSearchedCardsComponent } from './pages/show-searched-cards/show-searched-cards.component';
+import { CreateOfferComponent } from './pages/create-offer/create-offer.component';
+import { SearchOffersComponent } from './pages/search-offers/search-offers.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
-    CardSearchComponent,
-    HtmlSelectComponent
+    SearchCardComponent,
+    ShowSearchedCardsComponent,
+    CreateOfferComponent,
+    SearchOffersComponent
   ],
   imports: [
     BrowserModule,

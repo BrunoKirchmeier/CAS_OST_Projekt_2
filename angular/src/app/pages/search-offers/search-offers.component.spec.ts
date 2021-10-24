@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HtmlSelectComponent } from './html-select.component';
+import { SearchOffersComponent } from './search-offers.component';
 
-describe('HtmlSelectComponent', () => {
-  let component: HtmlSelectComponent;
-  let fixture: ComponentFixture<HtmlSelectComponent>;
+describe('SearchOffersComponent', () => {
+  let component: SearchOffersComponent;
+  let fixture: ComponentFixture<SearchOffersComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HtmlSelectComponent ]
+      declarations: [ SearchOffersComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HtmlSelectComponent);
+    fixture = TestBed.createComponent(SearchOffersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

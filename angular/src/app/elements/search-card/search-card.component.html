@@ -3,6 +3,7 @@
         (ngSubmit)="onSubmitSearchForm()">
     <mat-card>
       <mat-card-content>
+        <!--
         <mat-form-field class=""
                         appearance="outline">
           <mat-label for="cardEdition">Editionen: </mat-label>
@@ -16,7 +17,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-
+        -->
         <mat-form-field appearance="outline">
           <mat-label>Kartenname: </mat-label>
           <mat-select id="cardName"
@@ -33,7 +34,8 @@
                         </ngx-mat-select-search>
                     </mat-option>
               <mat-option *ngFor="let cardName of cardNameListScroll$ | async"
-                          data-id="cardName.id"
+                          data-id="cardName.index"
+                          data-name="cardName.name"
                           [value]="cardName.name">
                           {{cardName.name}}
               </mat-option>
@@ -47,13 +49,4 @@
       </mat-card-actions>
     </mat-card>
   </form>
-</div>
-
-<div class="result-container">
-
-  <div *ngFor="let cardDetail of cardDetailsList">
-    <img src="{{cardDetail.card_image_uri}}"
-         class="card-detail-img">
-  </div>
-
 </div>

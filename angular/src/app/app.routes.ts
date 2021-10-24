@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
-import { CardSearchComponent } from './pages/card-search/card-search.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ShowSearchedCardsComponent } from './pages/show-searched-cards/show-searched-cards.component';
+import { CreateOfferComponent } from './pages/create-offer/create-offer.component';
+import { SearchOffersComponent } from './pages/search-offers/search-offers.component';
 
 export const appRoutes: Routes = [
 
@@ -11,9 +13,19 @@ export const appRoutes: Routes = [
     data: { title: 'Home'}
   },
   {
-    path: 'card-search',
-    component: CardSearchComponent,
+    path: 'show-search-card',
+    component: ShowSearchedCardsComponent,
     data: { title: 'Kartensuche'}
+  },
+  {
+    path: 'create-offer',
+    component: CreateOfferComponent,
+    data: { title: 'Angebt erstellen'}
+  },
+  {
+    path: 'search-offers',
+    component: SearchOffersComponent,
+    data: { title: 'Angebotssuche'}
   }
 
   /*

@@ -1,25 +1,28 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ApiScryfallService, ICardName, IEditionName, ICardDetails } from '../../api/api-scryfall.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, map, scan } from 'rxjs/operators';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-card-search',
-  templateUrl: './card-search.component.html',
-  styleUrls: ['./card-search.component.scss'],
+  selector: 'app-search-card',
+  templateUrl: './search-card.component.html',
+  styleUrls: ['./search-card.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class CardSearchComponent implements OnInit {
+export class SearchCardComponent implements OnInit {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Declarations
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
+  @Output() onChangeSearchResults = new EventEmitter();
+
   private _subscriptions: Subscription[] = [];
   private _cardNameListLimit: number = 1000;
   private _cardNameListSearchLimit: number = 20;
+  private cardDetailsList: ICardDetails[] = [];
 
   public editionNameList: IEditionName[] = [];
   public cardNameList: ICardName[] = [];
@@ -30,11 +33,6 @@ export class CardSearchComponent implements OnInit {
     cardEdition: new FormControl(''),
     cardName: new FormControl(''),
   });
-
-  public cardDetailsList: ICardDetails[] = [];
-  // public cardDetailsList$: BehaviorSubject<ICardDetails[]> = new BehaviorSubject<ICardDetails[]>([]);
-
-
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,53 +98,17 @@ export class CardSearchComponent implements OnInit {
 
     this._subscriptions.push(this.scryfall.getCardDetailsByName(cardName)
     .subscribe({  next: (data: ICardDetails) => {
-                  console.log(data);
                   this.cardDetailsList = [];
                   this.cardDetailsList.push(data);
+                  this.onChangeSearchResults.emit(this.cardDetailsList);
                   }
               })
     );
   }
 
 
-
-
-
-    // this.searchForm.reset();
-
-
-  // console.log(e);
-    // const cardName = 1;
-    /*
-    this._subscriptions.push(this.scryfall.getCardPictureByName()
-    .subscribe({ next: (data: any) => {
-                }
-              })
-    );
-*/
-    /*
-    this.scryfall.getCardPictureByName()
-    .subscribe({ next: (data: ICardName[]) => {
-                  this.cardNameListScroll$.pipe(
-                      scan((acc: ICardName[], curr: ICardName[]) => {
-                        console.log('-- LOG:2 ACC --');
-                        console.log(acc);
-                        console.log('-- LOG:2 CURR --');
-                        console.log(curr);
-                        return [...acc, ...curr];
-                    }, [])
-                  );
-                  this.cardNameList = data;
-                  this.getNextBatch();
-                  },
-                  error: err => console.log(`ERR... ${err}`),
-              }));
-              */
-
-
-
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Functions Async
+  // Event functions
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   getLimitedPartOfCardNames() {

@@ -35,7 +35,7 @@ export class ApiScryfallService {
       .pipe(map((res: IApiResponseScryfallListtype) => {
               let i: number = 0;
               res.data.forEach(element => {
-                const cardName: ICardName = {id: i,
+                const cardName: ICardName = {index: i,
                                              name: element};
                 this._cardNameList.push(cardName);
                 i++;
@@ -98,9 +98,11 @@ export class ApiScryfallService {
                 }
                 const obj: ICardDetails =
                 {
-                  oracle_text: res.oracle_text,
-                  card_image_uri: uri,
-                  mana_cost: res.mana_cost
+                  id: res.id,
+                  name: res.name,
+                  text: res.oracle_text,
+                  cardImageUri: uri,
+                  manaCost: res.mana_cost
                 }
                 return obj;
               }),
@@ -152,7 +154,7 @@ export interface IApiResponseScryfallListtype {
   Datatyp: API Scryfall card names
 */
 export interface ICardName {
-  id: number;
+  index: number;
   name: string;
 }
 
@@ -181,9 +183,11 @@ export interface IEditionName {
   Datatyp: API Scryfall ICardDetails
 */
 export interface ICardDetails {
-  oracle_text: string;
-  card_image_uri: string;
-  mana_cost: string;
+  id: string;
+  name: string;
+  text: string;
+  cardImageUri: string;
+  manaCost: string;
 }
 
 
