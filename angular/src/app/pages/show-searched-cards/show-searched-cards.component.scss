@@ -1,6 +1,33 @@
-.card-detail-img {
-  max-width: 60%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+
+.tab {
+  &-create-offer {margin: 10px; }
+}
+
+
+.create-offer {
+  &-container {}
+}
+
+
+.create-offer-result {
+  &-container {}
+
+  &-img {
+    max-width: 40%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &-img:hover {
+    max-width: 100%;
+  }
+}
+
+.create-offer-values {
+  &-container {}
+}
+
+.margin {
+  margin: 10px;
 }

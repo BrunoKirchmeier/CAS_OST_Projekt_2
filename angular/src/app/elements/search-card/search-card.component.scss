@@ -1,0 +1,13 @@
+:host {
+  display: inline-block;
+}
+
+.search-card {
+  &-container {
+    display: inline;
+  }
+
+  &-form {
+    display: flex;
+  }
+}

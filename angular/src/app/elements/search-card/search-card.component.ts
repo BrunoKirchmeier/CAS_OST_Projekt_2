@@ -68,6 +68,7 @@ export class SearchCardComponent implements OnInit {
         this.searchOfCardNamesChanged(element);
       })
     );
+
   }
 
   ngOnDestroy(): void {
@@ -91,6 +92,7 @@ export class SearchCardComponent implements OnInit {
   onSubmitSearchForm(): void {
     const edition = this.searchForm.get('cardEdition')?.value;
     const cardName = this.searchForm.get('cardName')?.value;
+    this.searchForm.reset();
 
     this._subscriptions.push(this.scryfall.getCardDetailsByName(cardName)
     .subscribe({  next: (data: ICardDetails) => {

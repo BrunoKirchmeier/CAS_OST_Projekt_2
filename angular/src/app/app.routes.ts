@@ -4,6 +4,8 @@ import { ShowSearchedCardsComponent } from './pages/show-searched-cards/show-sea
 import { CreateOfferComponent } from './pages/create-offer/create-offer.component';
 import { SearchOffersComponent } from './pages/search-offers/search-offers.component';
 
+import { SearchCardComponent } from './elements/search-card/search-card.component';
+
 export const appRoutes: Routes = [
 
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -26,6 +28,11 @@ export const appRoutes: Routes = [
     path: 'search-offers',
     component: SearchOffersComponent,
     data: { title: 'Angebotssuche'}
+  },
+  {
+    path: 'test',
+    component: SearchCardComponent,
+    data: { title: 'TEST'}
   }
 
   /*

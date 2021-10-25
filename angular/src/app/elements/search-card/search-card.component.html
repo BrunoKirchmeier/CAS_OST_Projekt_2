@@ -1,38 +1,37 @@
-<div class="search-container">
-  <form [formGroup]="searchForm"
-        (ngSubmit)="onSubmitSearchForm()">
-    <mat-card>
-      <mat-card-content>
-        <mat-form-field appearance="outline">
-          <mat-label>Kartenname: </mat-label>
-          <mat-select id="cardName"
-                      name="cardName"
-                      formControlName="cardName"
-                      (valueChange)="onChangeSelectCardName($event)"
-                      msInfiniteScroll
-                      (infiniteScroll)="getLimitedPartOfCardNames()"
-                      [complete]="cardNameListOffset === cardNameList.length">
-                      <mat-option>
-                        <ngx-mat-select-search
-                            [formControl]="cardNameSearch"
-                            placeholderLabel="search"
-                            noEntriesFoundLabel="No entry matches">
-                        </ngx-mat-select-search>
-                    </mat-option>
-              <mat-option *ngFor="let cardName of cardNameListScroll$ | async"
-                          data-id="cardName.index"
-                          data-name="cardName.name"
-                          [value]="cardName.name">
-                          {{cardName.name}}
-              </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button
-                type="submit"
-                color="primary">Suchen</button>
-      </mat-card-actions>
-    </mat-card>
-  </form>
-</div>
+<ng-container>
+  <div class="search-card-container">
+    <form [formGroup]="searchForm"
+          (ngSubmit)="onSubmitSearchForm()"
+          class="search-card-form">
+      <mat-form-field appearance="outline"
+                      class="pad-mar-0">
+        <mat-label>Kartenname: </mat-label>
+        <mat-select id="cardName"
+                    name="cardName"
+                    formControlName="cardName"
+                    (valueChange)="onChangeSelectCardName($event)"
+                    msInfiniteScroll
+                    (infiniteScroll)="getLimitedPartOfCardNames()"
+                    [complete]="cardNameListOffset === cardNameList.length">
+                    <mat-option>
+                      <ngx-mat-select-search
+                          [formControl]="cardNameSearch"
+                          placeholderLabel="search"
+                          noEntriesFoundLabel="No entry matches">
+                      </ngx-mat-select-search>
+                  </mat-option>
+            <mat-option *ngFor="let cardName of cardNameListScroll$ | async"
+                        data-id="cardName.index"
+                        data-name="cardName.name"
+                        [value]="cardName.name">
+                        {{cardName.name}}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button
+              type="submit"
+              color="primary">Suchen
+      </button>
+    </form>
+  </div>
+</ng-container>

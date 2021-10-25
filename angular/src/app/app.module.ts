@@ -10,6 +10,8 @@ import { enableIndexedDbPersistence, getFirestore, provideFirestore } from '@ang
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { MatTabsModule } from '@angular/material/tabs';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule} from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -56,6 +58,7 @@ import { SearchOffersComponent } from './pages/search-offers/search-offers.compo
     NgbModule,
     RouterModule.forRoot(appRoutes, { useHash: false, preloadingStrategy: NoPreloading, enableTracing: !environment.production, relativeLinkResolution: 'legacy' }),
     BrowserAnimationsModule,
+    MatTabsModule,
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,

@@ -13,6 +13,8 @@ export class ShowSearchedCardsComponent implements OnInit {
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   public cardDetailsList: ICardDetails[] = [];
+  public creatOfferisHidden: boolean = false;
+  public creatOfferIcon: string = 'add';
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Constructor and destructor
@@ -33,6 +35,13 @@ export class ShowSearchedCardsComponent implements OnInit {
 
   resultsChanged(elements: ICardDetails[]) {
     this.cardDetailsList = elements;
+  }
+
+  createOffer() {
+    this.creatOfferisHidden = !this.creatOfferisHidden;
+    this.creatOfferIcon = this.creatOfferisHidden === false
+                        ? 'add'
+                        : 'clear';
   }
 
 
