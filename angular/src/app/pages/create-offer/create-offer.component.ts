@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ICardDetails } from '../../api/api-scryfall.service';
 
 
 @Component({
-  selector: 'app-create-offer',
+  selector: 'app-create-offer, img[loaded]',
   templateUrl: './create-offer.component.html',
   styleUrls: ['./create-offer.component.scss']
 })
@@ -24,12 +24,24 @@ export class CreateOfferComponent implements OnInit {
   });
   public deliveryModes = [{name: 'collection', description: 'Abholung'},
                           {name: 'shipping', description: 'Versand'}]
+  public imgIsloaded: Boolean = false;
+
+  @Output() loaded = new EventEmitter();
+
+  @HostListener('load')
+  onLoad() {
+    this.loaded.emit();
+  }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Constructor and destructor
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  constructor() { }
+  constructor(private elRef: ElementRef<HTMLImageElement>) {
+    if (this.elRef.nativeElement.complete) {
+      this.loaded.emit();
+    }
+  }
 
   ngOnInit(): void {
   }
@@ -53,18 +65,15 @@ export class CreateOfferComponent implements OnInit {
 
   resultsChanged(elements: ICardDetails[]) {
     this.cardDetailsList = elements;
-  }
-
-  createOffer() {
-    this.creatOfferisHidden = !this.creatOfferisHidden;
-    this.creatOfferIcon = this.creatOfferisHidden === false
-                        ? 'add'
-                        : 'clear';
+    this.imgIsloaded = false;
   }
 
   resizeImg() {
     this.imgIsResized = !this.imgIsResized;
   }
 
+  onLoaded() {
+    this.imgIsloaded = true;
+  }
 
 }

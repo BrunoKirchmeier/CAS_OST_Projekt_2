@@ -2,31 +2,30 @@
   <mat-tab-group animationDuration="0ms">
     <mat-tab label="Angebot Erstellen">
       <div class="tab-create-offer">
-        <button mat-raised-button
-                type="submit"
-                color="primary"
-                (click)="createOffer()"><mat-icon>{{creatOfferIcon}}</mat-icon>
-        </button>
+
+        <div>
+          <app-search-card (onChangeSearchResults)="resultsChanged($event)"
+                            class="create-offer-search margin"></app-search-card>
+        </div>
 
         <div class="create-offer-container"
-             *ngIf="creatOfferisHidden">
-          <div>
-            <app-search-card (onChangeSearchResults)="resultsChanged($event)"
-                              class="create-offer-search margin"></app-search-card>
-          </div>
+        *ngIf="cardDetailsList.length > 0">
+
           <div *ngFor="let cardDetail of cardDetailsList"
                 class="create-offer-result-container">
+
             <img src="{{cardDetail.cardImageUri}}"
                 data-id="{{cardDetail.id}}"
                 data-name="{{cardDetail.name}}"
                 class="create-offer-result-img"
                 (click)="resizeImg()"
+                (loaded)="onLoaded()"
                 [ngClass]="imgIsResized ? 'isFullSize' : 'isSmallSize'">
+
           </div>
 
-
           <div class="create-offer-values-container"
-               *ngIf="cardDetailsList.length > 0">
+               *ngIf="imgIsloaded">
             <form [formGroup]="offerForm"
                   (ngSubmit)="onSubmit()"
                   class="offer-form">

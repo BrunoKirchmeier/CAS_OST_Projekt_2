@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ApiScryfallService, ICardName, IEditionName, ICardDetails } from '../../api/api-scryfall.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, map, scan } from 'rxjs/operators';
@@ -18,6 +18,7 @@ export class SearchCardComponent implements OnInit {
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Output() onChangeSearchResults = new EventEmitter();
+  @Input() resetForm = () => this.searchForm.reset();
 
   private _subscriptions: Subscription[] = [];
   private _cardNameListLimit: number = 1000;
@@ -92,7 +93,6 @@ export class SearchCardComponent implements OnInit {
   onSubmitSearchForm(): void {
     const edition = this.searchForm.get('cardEdition')?.value;
     const cardName = this.searchForm.get('cardName')?.value;
-    this.searchForm.reset();
 
     this._subscriptions.push(this.scryfall.getCardDetailsByName(cardName)
     .subscribe({  next: (data: ICardDetails) => {
@@ -103,7 +103,6 @@ export class SearchCardComponent implements OnInit {
               })
     );
   }
-
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Event functions
