@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ICardDetails } from '../../api/api-scryfall.service';
 
 
@@ -19,8 +19,10 @@ export class CreateOfferComponent implements OnInit {
   public imgIsResized: boolean = false;
   public creatOfferIcon: string = 'add';
   public offerForm = new FormGroup({
-    offerPrice: new FormControl(''),
-    deliveryMode: new FormControl(''),
+    offerPrice: new FormControl('', [Validators.required]),
+    deliveryMode: new FormControl('', [Validators.required]),
+    cardAmount: new FormControl('', [Validators.required]),
+    additionInfo: new FormControl('')
   });
   public deliveryModes = [{name: 'collection', description: 'Abholung'},
                           {name: 'shipping', description: 'Versand'}]

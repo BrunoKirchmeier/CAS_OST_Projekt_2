@@ -56,4 +56,16 @@ mat-form-field {
       margin: 0;
     }
   }
+
+  &.pad-mar-1 {
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+      margin: 5;
+    }
+  }
+
+
+
+
+
 }

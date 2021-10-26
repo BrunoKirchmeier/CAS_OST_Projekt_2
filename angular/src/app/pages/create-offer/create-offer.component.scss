@@ -1,16 +1,30 @@
 
 .tab {
-  &-create-offer {margin: 10px; }
+  &-create-offer {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+}
+
+.main {
+  &-create-offer {
+  }
 }
 
 
 .create-offer {
-  &-container {}
-}
-
-
-.create-offer-result {
-  &-container {}
+  &-container {
+    border: solid 2px;
+    border-radius: 10px;
+    border-color: blue;
+    border-collapse: collapse;
+    width: 80%;
+    display: inline-block;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+  }
 
   &-img {
     max-width: 40%;
@@ -22,18 +36,39 @@
   &-img:hover {
     max-width: 100%;
   }
+
+  &-price {
+    // width: 50%;
+  }
+
+  &-amount {
+   //  width: 50%;
+  }
+
+  &-form {
+    //  width: 100%;
+   }
+
 }
 
-.create-offer-values {
-  &-container {}
+.create-offer-field {
+  &-container {
+  }
 }
+
+
+
 
 .margin {
-  margin: 10px;
+  // margin: 10px;
 }
 
 .isFullSize {
   width: 100%;
+}
+
+.isHalfSize {
+  width: 50%;
 }
 
 .isSmallSize {
