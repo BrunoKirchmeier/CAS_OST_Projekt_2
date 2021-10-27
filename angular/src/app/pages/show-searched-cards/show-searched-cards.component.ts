@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ICardDetails } from '../../api/api-scryfall.service';
+import { ICardDetails } from '../../modules/scryfallApi/services/scryfallApi.service';
 
 @Component({
   selector: 'app-show-searched-cards',

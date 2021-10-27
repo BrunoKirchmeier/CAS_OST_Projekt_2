@@ -1,14 +1,16 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
+import { HomeComponent } from './modules/home/home.component';
 import { ShowSearchedCardsComponent } from './pages/show-searched-cards/show-searched-cards.component';
 import { CreateOfferComponent } from './pages/create-offer/create-offer.component';
 import { SearchOffersComponent } from './pages/search-offers/search-offers.component';
 
-import { SearchCardComponent } from './elements/search-card/search-card.component';
+import { SearchCardComponent } from './shared/search-card/search-card.component';
+import { LoginComponent } from './core/login/login.component';
 
 export const appRoutes: Routes = [
 
   { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
   {
     path: 'home',
     component: HomeComponent,

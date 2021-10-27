@@ -1,14 +1,9 @@
 import { Component } from '@angular/core';
 
-import { Firestore } from '@angular/fire/firestore';
-import { doc, DocumentReference, DocumentData, getDoc } from '@firebase/firestore';
-
+import { Firestore, doc, DocumentReference, DocumentData, getDoc } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth/';
 import { from } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-
-import { ApiScryfallService } from './api/api-scryfall.service';
-
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-root',
@@ -20,14 +15,24 @@ export class AppComponent {
 
   public isCollapsed = false;
 
-  private doc: DocumentReference<DocumentData>;
 
-  constructor(private firestore: Firestore) {
+
+
+
+  private doc: DocumentReference;
+
+  constructor(private firestore: Firestore,
+              private fireStoreAuth: Auth) {
+
+                // fireStoreAuth.
+
 
     this.doc = doc(this.firestore, 'cards/hqWBVjCrPARptTQQWsgk');
 
+
     const docSnap =  getDoc(this.doc);
     console.log(docSnap);
+
 
   }
 

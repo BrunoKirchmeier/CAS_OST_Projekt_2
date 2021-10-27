@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ICardDetails } from '../../api/api-scryfall.service';
+import { ICardDetails } from '../../modules/scryfallApi/services/scryfallApi.service';
 
 
 @Component({

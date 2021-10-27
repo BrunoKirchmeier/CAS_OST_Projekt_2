@@ -6,7 +6,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { environment } from 'src/environments/environment';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { enableIndexedDbPersistence, getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { enableIndexedDbPersistence, getFirestore, provideFirestore, FirestoreModule } from '@angular/fire/firestore';
+import { AuthModule } from '@angular/fire/auth/';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -27,15 +28,20 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule} from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { NoPreloading, RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { AppComponent } from './app.component';
-import { NavigationComponent } from './elements/navigation/navigation.component';
-import { SearchCardComponent } from './elements/search-card/search-card.component';
+import { NavigationComponent } from './core/navigation/navigation.component';
+import { SearchCardComponent } from './shared/search-card/search-card.component';
 import { ShowSearchedCardsComponent } from './pages/show-searched-cards/show-searched-cards.component';
 import { CreateOfferComponent } from './pages/create-offer/create-offer.component';
 import { SearchOffersComponent } from './pages/search-offers/search-offers.component';
+import { LoginComponent } from './core/login/login.component';
+import { MatDialogModule } from '@angular/material/dialog';
+
+
 
 @NgModule({
   declarations: [
@@ -44,7 +50,8 @@ import { SearchOffersComponent } from './pages/search-offers/search-offers.compo
     SearchCardComponent,
     ShowSearchedCardsComponent,
     CreateOfferComponent,
-    SearchOffersComponent
+    SearchOffersComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,7 +62,9 @@ import { SearchOffersComponent } from './pages/search-offers/search-offers.compo
       enableIndexedDbPersistence(firestore);
       return firestore;
     }),
+    AuthModule,
     NgbModule,
+    FirestoreModule,
     RouterModule.forRoot(appRoutes, { useHash: false, preloadingStrategy: NoPreloading, enableTracing: !environment.production, relativeLinkResolution: 'legacy' }),
     BrowserAnimationsModule,
     MatTabsModule,
@@ -74,6 +83,8 @@ import { SearchOffersComponent } from './pages/search-offers/search-offers.compo
     MatSelectInfiniteScrollModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

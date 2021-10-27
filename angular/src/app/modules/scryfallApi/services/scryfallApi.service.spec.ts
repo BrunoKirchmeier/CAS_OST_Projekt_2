@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ApiScryfallService } from './api-scryfall.service';
+import { ApiScryfallService } from './scryfallApi.service';
 
 describe('ApiScryfallService', () => {
   let service: ApiScryfallService;
