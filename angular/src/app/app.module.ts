@@ -40,6 +40,7 @@ import { CreateOfferComponent } from './pages/create-offer/create-offer.componen
 import { SearchOffersComponent } from './pages/search-offers/search-offers.component';
 import { LoginComponent } from './core/login/login.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { AccountComponent } from './modules/account/account-create.component';
 
 
 
@@ -52,6 +53,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     CreateOfferComponent,
     SearchOffersComponent,
     LoginComponent,
+    AccountComponent,
   ],
   imports: [
     BrowserModule,

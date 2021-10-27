@@ -24,7 +24,7 @@ export class AppComponent {
   constructor(private firestore: Firestore,
               private fireStoreAuth: Auth) {
 
-                // fireStoreAuth.
+                // this.fireStoreAuth.
 
 
     this.doc = doc(this.firestore, 'cards/hqWBVjCrPARptTQQWsgk');

@@ -6,11 +6,19 @@ import { SearchOffersComponent } from './pages/search-offers/search-offers.compo
 
 import { SearchCardComponent } from './shared/search-card/search-card.component';
 import { LoginComponent } from './core/login/login.component';
+import { AccountComponent } from './modules/account/account-create.component';
+
+
 
 export const appRoutes: Routes = [
 
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  {
+    path: 'register',
+    component: AccountComponent,
+    data: { title: 'Account'}
+  },
   {
     path: 'home',
     component: HomeComponent,
