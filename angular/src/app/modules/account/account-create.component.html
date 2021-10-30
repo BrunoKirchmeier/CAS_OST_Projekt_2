@@ -1,29 +1,65 @@
 <ng-container>
-  <div>
+  <div class="page-container"
+       (click)="closeSnackBar()">
     <form [formGroup]="form"
-          (ngSubmit)="onSubmitForm()">
+          (ngSubmit)="onSubmitForm()"
+          class="form">
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline"
+                      class="form-field">
         <mat-label for="email">E-Mail: </mat-label>
         <input  matInput
             id="email"
             name="email"
             type="email"
             formControlName="email">
+        <mat-error *ngIf="form.get('email')?.errors">
+          <span>Ung&uuml;ltige E-Mail Adresse</span>
+        </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline"
+                      class="form-field">
         <mat-label for="password">Passwort: </mat-label>
         <input  matInput
             id="password"
             name="password"
             type="password"
             formControlName="password">
+        <mat-error *ngIf="form.get('password')?.errors">
+          <span>Ung&uuml;ltiges Passwort</span>
+        </mat-error>
       </mat-form-field>
+
+      <mat-form-field appearance="outline"
+            class="form-field">
+        <mat-label for="password">Passwort Best&auml;tigung: </mat-label>
+        <input  matInput
+                id="passwordConfirm"
+                name="passwordConfirm"
+                type="password"
+                formControlName="passwordConfirm">
+        <mat-error *ngIf="form.get('passwordConfirm')?.errors">
+          <span>Passwort nicht identisch</span>
+        </mat-error>
+      </mat-form-field>
+
       <button mat-raised-button
               type="submit"
-              color="primary">Acount Erstellen
+              color="primary"
+              class="form-button-submit">Acount Erstellen
       </button>
+
+      <div class="form-requirements">
+        <span>Minimale Passwort Anforderungen:</span>
+        <ul>
+          <li>Ein Grossbuchstabe</li>
+          <li>Ein Kleinbuchstabe</li>
+          <li>Eine Zahl</li>
+          <li>Acht Zeichen</li>
+        </ul>
+      </div>
+
     </form>
   </div>
 </ng-container>

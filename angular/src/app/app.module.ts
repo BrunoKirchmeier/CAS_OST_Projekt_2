@@ -1,38 +1,41 @@
+// Configurations
+import { environment } from 'src/environments/environment';
+
+// Providers
+import { AuthGuard } from './core/guards/auth.guard';
+
+// Modules System
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-
-import { environment } from 'src/environments/environment';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { enableIndexedDbPersistence, getFirestore, provideFirestore, FirestoreModule } from '@angular/fire/firestore';
 import { AuthModule } from '@angular/fire/auth/';
-
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NoPreloading, RouterModule } from '@angular/router';
+import { appRoutes } from './app.routes';
+import { AppComponent } from './app.component';
 
+// Modules Material Desing
 import { MatTabsModule } from '@angular/material/tabs';
-
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule} from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
-
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule} from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { NoPreloading, RouterModule } from '@angular/router';
-import { appRoutes } from './app.routes';
-import { AppComponent } from './app.component';
+// Modules Custom
 import { NavigationComponent } from './core/navigation/navigation.component';
 import { SearchCardComponent } from './shared/search-card/search-card.component';
 import { ShowSearchedCardsComponent } from './pages/show-searched-cards/show-searched-cards.component';
@@ -41,8 +44,6 @@ import { SearchOffersComponent } from './pages/search-offers/search-offers.compo
 import { LoginComponent } from './core/login/login.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AccountComponent } from './modules/account/account-create.component';
-
-
 
 @NgModule({
   declarations: [
@@ -88,7 +89,7 @@ import { AccountComponent } from './modules/account/account-create.component';
     MatProgressSpinnerModule,
     MatDialogModule,
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

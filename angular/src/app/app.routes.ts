@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './core/guards/auth.guard';
+
 import { HomeComponent } from './modules/home/home.component';
 import { ShowSearchedCardsComponent } from './pages/show-searched-cards/show-searched-cards.component';
 import { CreateOfferComponent } from './pages/create-offer/create-offer.component';
 import { SearchOffersComponent } from './pages/search-offers/search-offers.component';
-
 import { SearchCardComponent } from './shared/search-card/search-card.component';
 import { LoginComponent } from './core/login/login.component';
 import { AccountComponent } from './modules/account/account-create.component';
@@ -12,8 +13,10 @@ import { AccountComponent } from './modules/account/account-create.component';
 
 export const appRoutes: Routes = [
 
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full'},
+
+  { path: 'login',
+    component: LoginComponent },
   {
     path: 'register',
     component: AccountComponent,
@@ -31,7 +34,7 @@ export const appRoutes: Routes = [
   },
   {
     path: 'create-offer',
-    component: CreateOfferComponent,
+    component: CreateOfferComponent, canActivate: [AuthGuard],
     data: { title: 'Angebot erstellen'}
   },
   {

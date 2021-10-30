@@ -1,0 +1,21 @@
+.form {
+  margin-top: 20px;
+  text-align: center;
+
+  &-password-requirements {
+    margin-top: 30px;
+  }
+
+  &-button-submit {
+    &-container {
+      display: block;
+    }
+  }
+
+  &-link-register {
+    &-container {
+      display: block;
+      margin-top: 20px;
+    }
+  }
+}

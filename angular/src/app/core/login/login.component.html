@@ -1,7 +1,9 @@
 <ng-container>
-  <div>
+  <div class="container"
+      (click)="closeSnackBar()">
     <form [formGroup]="form"
-          (ngSubmit)="onSubmitForm()">
+          (ngSubmit)="login()"
+          class="form">
 
       <mat-form-field appearance="outline">
         <mat-label for="email">E-Mail: </mat-label>
@@ -10,6 +12,9 @@
             name="email"
             type="email"
             formControlName="email">
+        <mat-error *ngIf="form.get('email')?.errors">
+          <span>Ung&uuml;ltige E-Mail Adresse</span>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -19,13 +24,20 @@
             name="password"
             type="password"
             formControlName="password">
+        <mat-error *ngIf="form.get('password')?.errors">
+          <span>Ung&uuml;ltiges Passwort</span>
+        </mat-error>
       </mat-form-field>
-      <button mat-raised-button
-              type="submit"
-              color="primary">Login
-      </button>
-      <a [routerLink]="['/register']">Registrieren</a>
-
+      <div class="form-button-submit-container">
+        <button mat-raised-button
+                type="submit"
+                color="primary"
+                class="form-button-submit">Login
+        </button>
+      </div>
+      <div class="form-link-register-container">
+        <a [routerLink]="['/register']">Registrieren</a>
+      </div>
     </form>
   </div>
 </ng-container>
