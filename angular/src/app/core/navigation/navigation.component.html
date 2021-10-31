@@ -1,35 +1,41 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-
     <button mat-icon-button (click)="drawer.toggle();"><mat-icon routerLinkActive="active-icon">menu</mat-icon></button>
-    <span>{{title}}</span>
-
     <span class="toolbar-spacer "></span>
-
   </mat-toolbar-row>
-
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container" >
   <mat-sidenav
   #drawer
   class="sidenav"
-  [attr.role]="isHandset ? 'dialog' : 'navigation'"
-  [mode]="isHandset ? 'over' : 'side'"
-  [opened]="isHandset === false">
-
-    <mat-nav-list >
-      <a [routerLink]="['/home']" mat-list-item href="#" routerLinkActive="active"><mat-icon routerLinkActive="active-icon">home</mat-icon><span class="ml-2" >Home</span></a>
-      <a [routerLink]="['/show-searched-cards']" mat-list-item href="#" routerLinkActive="active"><mat-icon routerLinkActive="active-icon">search</mat-icon><span class="ml-2">Kartensuche</span></a>
-      <a [routerLink]="['/create-offer']" mat-list-item href="#" routerLinkActive="active"><mat-icon routerLinkActive="active-icon">create</mat-icon><span class="ml-2">Angebot erstellen</span></a>
+  [attr.role]="isMobile ? 'dialog' : 'navigation'"
+  [mode]="isMobile ? 'over' : 'side'"
+  [opened]="isMenuOpen">
+    <mat-nav-list (click)="closeMenue()">
+      <a [routerLink]="['/home']"
+         mat-list-item href="#"
+         routerLinkActive="active">
+        <mat-icon routerLinkActive="active-icon">home</mat-icon>
+        <span class="ml-2" >Home</span>
+      </a>
+      <a [routerLink]="['/show-searched-cards']"
+         mat-list-item href="#"
+         routerLinkActive="active">
+        <mat-icon routerLinkActive="active-icon">search</mat-icon>
+        <span class="ml-2">Kartensuche</span>
+      </a>
+      <a [routerLink]="['/create-offer']"
+          mat-list-item href="#"
+          routerLinkActive="active">
+          <mat-icon routerLinkActive="active-icon">create</mat-icon>
+          <span class="ml-2">Angebot erstellen</span>
+      </a>
     </mat-nav-list>
-
   </mat-sidenav>
-
   <mat-sidenav-content [ngStyle]="{ 'margin-left.px': contentMargin }" >
     <div class="main">
       <router-outlet #outlet="outlet"></router-outlet>
     </div>
   </mat-sidenav-content>
-
 </mat-sidenav-container>
