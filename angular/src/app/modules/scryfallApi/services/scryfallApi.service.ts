@@ -51,88 +51,81 @@ export class ApiScryfallService {
                 throw new Error(error)
               }
             })
-      )
-    }
+        )
+  }
+
 
   /*
     Function: getAllEditionNames
     List of all existing cards
   */
-    public getAllEditionNames() {
-      return this._http.get<IScryfallApiResList>('https://api.scryfall.com/sets')
-        .pipe(map((res: IScryfallApiResList) => {
-                res.data.forEach((element: any) => {
-                  const obj: IEditionName = element;
-                  this._editionNameList.push(obj);
-                });
-                return this._editionNameList;
-              }),
-              catchError((error,src) => {
-                console.log('Exeption geworfen!!!!')
-                this._errorCounter++;
-                if (this._errorCounter < 2) {
-                  return src;
-                } else {
-                  throw new Error(error)
-                }
-              })
-        )
-      }
+  public getAllEditionNames() {
+    return this._http.get<IScryfallApiResList>('https://api.scryfall.com/sets')
+      .pipe(map((res: IScryfallApiResList) => {
+              res.data.forEach((element: any) => {
+                const obj: IEditionName = element;
+                this._editionNameList.push(obj);
+              });
+              return this._editionNameList;
+            }),
+            catchError((error,src) => {
+              console.log('Exeption geworfen!!!!')
+              this._errorCounter++;
+              if (this._errorCounter < 2) {
+                return src;
+              } else {
+                throw new Error(error)
+              }
+            })
+      )
+  }
+
 
   /*
     Function: getCardDetailsByName
     Get the detail Information of a single Card
   */
-    public getCardDetailsByName(cardName: string,
-                                format: CardPictureFormat = CardPictureFormat.NORMAL) {
-      const urlParams = new HttpParams()
-        .set('fuzzy', cardName);
+  public getCardDetailsByName(cardName: string,
+                              format: CardPictureFormat = CardPictureFormat.NORMAL) {
+    const urlParams = new HttpParams()
+      .set('fuzzy', cardName);
 
-      return this._http.get<any>('https://api.scryfall.com/cards/named', {params: urlParams})
-        .pipe(map((res: any) => {
-                let uri: string = '';
-                if(typeof res === 'object' &&
-                  res.hasOwnProperty('image_uris') &&
-                  res.image_uris.hasOwnProperty(format)) {
-                    uri = res.image_uris[format];
-                }
-                const obj: ICardDetails =
-                {
-                  id: res.id,
-                  name: res.name,
-                  text: res.oracle_text,
-                  cardImageUri: uri,
-                  manaCost: res.mana_cost
-                }
-                return obj;
-              }),
-              catchError((error,src) => {
-                console.log('Exeption geworfen!!!!')
-                this._errorCounter++;
-                if (this._errorCounter < 2) {
-                  return src;
-                } else {
-                  throw new Error(error)
-                }
-              })
+    return this._http.get<any>('https://api.scryfall.com/cards/named', {params: urlParams})
+      .pipe(map((res: any) => {
+              let uri: string = '';
+              if(typeof res === 'object' &&
+                res.hasOwnProperty('image_uris') &&
+                res.image_uris.hasOwnProperty(format)) {
+                  uri = res.image_uris[format];
+              }
+              const obj: ICardDetails =
+              {
+                id: res.id,
+                name: res.name,
+                text: res.oracle_text,
+                cardImageUri: uri,
+                manaCost: res.mana_cost
+              }
+              return obj;
+            }),
+            catchError((error,src) => {
+              console.log('Exeption geworfen!!!!')
+              this._errorCounter++;
+              if (this._errorCounter < 2) {
+                return src;
+              } else {
+                throw new Error(error)
+              }
+            })
         )
-      }
-
-
-
-
+  }
 
 /*
-
 https://api.scryfall.com
-
 We kindly ask that you insert 50 – 100 milliseconds of delay between the requests you send to the server at api.scryfall.co
 HTTP 429 Too Many Requests status code. Continuing to overload the API after this point may result in a temporary or permanent ban of your IP address.
-
 For example, if you are submitting a request to a method that requires Application authorization, you must submit an HTTP header like Authorization: Bearer X where X is your client_secret token, including the cs- prefix.
-
 */
-
 
 }
 

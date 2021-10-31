@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ApiScryfallService, ICardName, IEditionName, ICardDetails } from '../../modules/scryfallApi/services/scryfallApi.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, map, scan } from 'rxjs/operators';
+import { FormControl, FormGroup } from '@angular/forms';
+import { debounceTime, scan } from 'rxjs/operators';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
@@ -77,6 +77,7 @@ export class SearchCardComponent implements OnInit {
       element.unsubscribe();
     });
   }
+
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Form Search (Search Option for API Request to Scryfall)

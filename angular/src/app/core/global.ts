@@ -1,5 +1,3 @@
-import { Type } from "@angular/core";
-
 /*
   Datatyp: CurrentUser for Authentification
 */

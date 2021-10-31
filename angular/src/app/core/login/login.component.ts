@@ -2,7 +2,7 @@ import { ICurrentUser } from '../global';
 
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, IAuthRes } from '../services/auth.services';
 
@@ -17,7 +17,6 @@ export class LoginComponent implements OnInit {
   // Declarations
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // public returnUrl: string = '';
   public form = new FormGroup({
     email: new FormControl('', Validators.compose([Validators.required,
                                                    Validators.email])),
@@ -25,19 +24,16 @@ export class LoginComponent implements OnInit {
   });
   public isSpinnerActive: boolean = false;
 
+
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Constructor and destructor
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-  constructor( // private _route: ActivatedRoute,
-              private _router: Router,
+  constructor(private _router: Router,
               private _authService: AuthService,
               private _snackBar: MatSnackBar) { }
 
-  ngOnInit() {
-    // this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/';
-  }
+  ngOnInit() {}
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////

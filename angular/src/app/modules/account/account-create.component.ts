@@ -38,8 +38,8 @@ export class AccountComponent implements OnInit {
   constructor(private _authService: AuthService,
               private _snackBar: MatSnackBar) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
+
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Form Search (New Account)
@@ -60,6 +60,7 @@ export class AccountComponent implements OnInit {
       });
     }
   }
+
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Event functions to HTML
@@ -86,7 +87,6 @@ export class AccountComponent implements OnInit {
       this._snackBar.open('E-Mail und Passwortfeld ausfüllen');
     }
   }
-
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////

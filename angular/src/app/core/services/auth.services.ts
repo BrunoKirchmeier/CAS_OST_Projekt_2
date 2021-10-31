@@ -3,7 +3,6 @@ import { Auth } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
 import { getAuth, signInAnonymously, createUserWithEmailAndPassword,
          sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { Observable, BehaviorSubject } from 'rxjs';
 import { ICurrentUser } from '../../core/global';;
 
 @Injectable({
@@ -98,6 +97,7 @@ export class AuthService {
     });
   }
 
+
   /*
     Function: Login
     Login to Firebase
@@ -155,6 +155,7 @@ export class AuthService {
     });
   }
 
+
   /*
     Function: send Email validation Link
     New Account in Firebase with Verifications E-Mail
@@ -209,9 +210,6 @@ export class AuthService {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Synchron Functions
 ////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Interfaces
