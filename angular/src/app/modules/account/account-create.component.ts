@@ -53,21 +53,33 @@ export class AccountComponent implements OnInit {
       const auth = getAuth();
       sendEmailVerification(userCredential.user)
       .then((response) => {
-        // Email verification sent!
-        // ...
-        console.log(response)
+        this._snackBar.open('Der Account wurde erfolgreich angelegt. Sie erhalten in kürze eine E-Mail zur Bestätigung des Kontos.');
+        this.router.navigate(['/login']);
       })
       .catch((error) => {
-        this._snackBar.open('Fehler beim versenden des Validierungslinkes');
-        console.log(error)
+        let errorMessage: string = '';
+        switch (error.code) {
+          case "":
+            errorMessage = "";
+            break;
+          default:
+            errorMessage = "Es ist ein unbekannter Fehler aufgetaucht. Fehlercode: " + error.code;
+        }
+        this._snackBar.open(errorMessage);
       });
     })
     .catch((error) => {
-      this._snackBar.open('Der Account ist bereits vorhanden oder es ist ein Fehler aufgetreten');
-      console.log(error)
+      let errorMessage: string = '';
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          errorMessage = "Das Konto mit dieser E-Mail Adresse ist bereits angelegt";
+          break;
+        default:
+          errorMessage = "Es ist ein unbekannter Fehler aufgetaucht. Fehlercode: " + error.code;
+      }
+      this._snackBar.open(errorMessage);
     });
   }
-
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Event functions
