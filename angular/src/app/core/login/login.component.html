@@ -1,11 +1,12 @@
 <ng-container>
-  <div class="container"
-      (click)="closeSnackBar()">
+  <div class="page-container"
+      (change)="closeSnackBar()">
     <form [formGroup]="form"
-          (ngSubmit)="login()"
+          (ngSubmit)="onSubmitForm()"
           class="form">
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline"
+                      class="form-field">
         <mat-label for="email">E-Mail: </mat-label>
         <input  matInput
             id="email"
@@ -17,7 +18,8 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline"
+                      class="form-field">
         <mat-label for="password">Passwort: </mat-label>
         <input  matInput
             id="password"
@@ -28,17 +30,25 @@
           <span>Ung&uuml;ltiges Passwort</span>
         </mat-error>
       </mat-form-field>
-      <div class="form-button-submit-container">
-        <button mat-raised-button
-                type="submit"
-                color="primary"
-                class="form-button-submit">Login
-        </button>
-      </div>
-      <div class="form-link-register-container">
-        <a [routerLink]="['/register']"
-           class="form-link-register">Registrieren</a>
-      </div>
+
+      <button mat-raised-button
+              type="submit"
+              color="primary"
+              class="form-button">Login
+      </button>
+
+      <a [routerLink]="['/register']"
+          class="form-link">Registrieren</a>
+
+      <a [routerLink]="['/register']"
+         class="form-link"
+         (click)="resetPassword()">Passwort vergessen</a>
+
     </form>
+
+    <div *ngIf="isSpinnerActive === true">
+      <mat-spinner class="spinner" ></mat-spinner>
+    </div>
+
   </div>
 </ng-container>

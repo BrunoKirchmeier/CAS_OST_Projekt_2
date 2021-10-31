@@ -1,22 +1,28 @@
-.form {
-  margin-top: 20px;
+.page-container {
   text-align: center;
+}
 
-  &-password-requirements {
-    margin-top: 30px;
+.form {
+  text-align: left;
+  display: inline-block;
+  width: 70%;
+  margin-top: 30px;
+
+  &-field {
+    width: 100%;
   }
 
-  &-button-submit {
-    &-container {
-      display: block;
-    }
+  &-button {
+    width: 100%;
   }
+}
 
-  &-link-register {
-    text-decoration: none;
-    &-container {
-      display: block;
-      margin-top: 20px;
-    }
-  }
+.form-link {
+  display: block;
+  margin-top: 20px;
+  text-decoration: none;
+}
+
+.spinner {
+  display: inline-block;
 }

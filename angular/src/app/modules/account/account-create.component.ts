@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';;
-import { getAuth, signInAnonymously, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail , signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { AuthService, IAuthRes } from 'src/app/core/services/auth.services';
-import { __await } from 'tslib';
 import { CompareValidator } from '../../core/helpers/form-validators';;
 
 @Component({
@@ -31,14 +28,14 @@ export class AccountComponent implements OnInit {
                                                              CompareValidator('password')]))
     }
   )
+  public isSpinnerActive: boolean = false;
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Constructor and destructor
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  constructor(private _router: Router,
-              private _authService: AuthService,
+  constructor(private _authService: AuthService,
               private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -49,38 +46,52 @@ export class AccountComponent implements OnInit {
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   onSubmitForm(): void {
-
+    this.isSpinnerActive = true;
     if(this.form.valid) {
       const email = this.form.get('email')?.value;
       const password = this.form.get('password')?.value;
       this._authService.createAccount(email, password)
       .then((res: IAuthRes) => {
+        this.isSpinnerActive = false;
         this._snackBar.open(res.message_ch);
       })
       .catch((error) => {
-        console.log(error);
+        this.isSpinnerActive = false;
       });
     }
-
-
-    // const res: IAuthRes = this._authService.createAccount(email, password);
-
-
-
-    // this._snackBar.open(res.message_ch);
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Event functions
+  // Event functions to HTML
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   closeSnackBar() {
     this._snackBar.dismiss();
   }
 
+  sendEmailValidation() {
+    this.isSpinnerActive = true;
+    const email = this.form.get('email')?.value;
+    const password = this.form.get('password')?.value;
+    if(email !== '' && password !== '') {
+      this._authService.sendEmailValidationLink(email, password)
+      .then((res: IAuthRes) => {
+        this.isSpinnerActive = false;
+        this._snackBar.open(res.message_ch);
+      })
+      .catch((error) => {
+        this.isSpinnerActive = false;
+      });
+    } else {
+      this._snackBar.open('E-Mail und Passwortfeld ausfüllen');
+    }
+  }
 
 
-    // https://modularfirebase.web.app/common-use-cases/authentication/
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  // Asynchron functions
+  ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 }

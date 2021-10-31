@@ -2,9 +2,9 @@ import { ICurrentUser } from '../global';
 
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { getAuth, signInAnonymously, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail , signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService, IAuthRes } from '../services/auth.services';
 
 @Component({
   selector: 'app-login',
@@ -21,21 +21,17 @@ export class LoginComponent implements OnInit {
   public form = new FormGroup({
     email: new FormControl('', Validators.compose([Validators.required,
                                                    Validators.email])),
-    // Passwort requirments:
-    // - At least 8 characters in length
-    // - Lowercase letters
-    // - Uppercase letters
-    password: new FormControl('', Validators.compose([Validators.required,
-                                                      Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')]))
+    password: new FormControl('', Validators.compose([Validators.required]))
   });
+  public isSpinnerActive: boolean = false;
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Constructor and destructor
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-  constructor(private _router: Router,
-              private _route: ActivatedRoute,
+  constructor(private _route: ActivatedRoute,
+              private _authService: AuthService,
               private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -47,6 +43,33 @@ export class LoginComponent implements OnInit {
   // Form Search (Login To Firestore)
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
+  onSubmitForm(): void {
+    if(this.form.valid) {
+      const email = this.form.get('email')?.value;
+      const password = this.form.get('password')?.value;
+      this._authService.login(email, password)
+      .then((res: IAuthRes) => {
+        this._snackBar.open(res.message_ch);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+  }
+
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  // Event Functions
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+
+  resetPassword() {
+
+  }
+
+
+
+
+/*
   login() : void {
 
     if (this.form.invalid) {
@@ -79,6 +102,9 @@ export class LoginComponent implements OnInit {
       this._snackBar.open('Fehlerhafte Anmeldung. Bitte versuchen Sie es erneut');
     });
   }
+
+  */
+
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Event functions

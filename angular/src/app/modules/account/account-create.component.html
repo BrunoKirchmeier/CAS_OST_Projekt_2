@@ -1,6 +1,6 @@
 <ng-container>
   <div class="page-container"
-       (click)="closeSnackBar()">
+       (change)="closeSnackBar()">
     <form [formGroup]="form"
           (ngSubmit)="onSubmitForm()"
           class="form">
@@ -61,11 +61,14 @@
       </div>
 
       <a [routerLink]="['/register']"
-         class="form-link">Paswort vergessen</a>
-
-      <a [routerLink]="['/register']"
-         class="form-link">Best&auml;tigungslink erneut versenden</a>
+         class="form-link"
+         (click)="sendEmailValidation()">Best&auml;tigungslink erneut versenden</a>
 
     </form>
+
+    <div *ngIf="isSpinnerActive === true">
+      <mat-spinner class="spinner" ></mat-spinner>
+    </div>
+
   </div>
 </ng-container>
