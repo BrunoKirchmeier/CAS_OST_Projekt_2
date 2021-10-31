@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';;
 import { getAuth, signInAnonymously, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail , signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { AuthService, IAuthRes } from 'src/app/core/services/auth.services';
+import { __await } from 'tslib';
 import { CompareValidator } from '../../core/helpers/form-validators';;
 
 @Component({
@@ -24,9 +26,10 @@ export class AccountComponent implements OnInit {
     // - Lowercase letters
     // - Uppercase letters
     password: new FormControl('', Validators.compose([Validators.required,
-      Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')])),
-    passwordConfirm: new FormControl('', CompareValidator('password'))
-    },
+                                  Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')])),
+    passwordConfirm: new FormControl('', Validators.compose([Validators.required,
+                                                             CompareValidator('password')]))
+    }
   )
 
 
@@ -34,7 +37,8 @@ export class AccountComponent implements OnInit {
   // Constructor and destructor
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  constructor(private router: Router,
+  constructor(private _router: Router,
+              private _authService: AuthService,
               private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -45,40 +49,25 @@ export class AccountComponent implements OnInit {
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   onSubmitForm(): void {
-    const email = this.form.get('email')?.value;
-    const password = this.form.get('password')?.value;
-    const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const auth = getAuth();
-      sendEmailVerification(userCredential.user)
-      .then((response) => {
-        this._snackBar.open('Der Account wurde erfolgreich angelegt. Sie erhalten in kürze eine E-Mail zur Bestätigung des Kontos.');
-        this.router.navigate(['/login']);
+
+    if(this.form.valid) {
+      const email = this.form.get('email')?.value;
+      const password = this.form.get('password')?.value;
+      this._authService.createAccount(email, password)
+      .then((res: IAuthRes) => {
+        this._snackBar.open(res.message_ch);
       })
       .catch((error) => {
-        let errorMessage: string = '';
-        switch (error.code) {
-          case "":
-            errorMessage = "";
-            break;
-          default:
-            errorMessage = "Es ist ein unbekannter Fehler aufgetaucht. Fehlercode: " + error.code;
-        }
-        this._snackBar.open(errorMessage);
+        console.log(error);
       });
-    })
-    .catch((error) => {
-      let errorMessage: string = '';
-      switch (error.code) {
-        case "auth/email-already-in-use":
-          errorMessage = "Das Konto mit dieser E-Mail Adresse ist bereits angelegt";
-          break;
-        default:
-          errorMessage = "Es ist ein unbekannter Fehler aufgetaucht. Fehlercode: " + error.code;
-      }
-      this._snackBar.open(errorMessage);
-    });
+    }
+
+
+    // const res: IAuthRes = this._authService.createAccount(email, password);
+
+
+
+    // this._snackBar.open(res.message_ch);
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////

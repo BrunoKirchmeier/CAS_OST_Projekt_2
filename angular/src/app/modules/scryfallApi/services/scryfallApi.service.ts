@@ -31,8 +31,8 @@ export class ApiScryfallService {
     List of all existing cards
   */
   public getAllCardNames() {
-    return this._http.get<IApiResponseScryfallListtype>('https://api.scryfall.com/catalog/card-names')
-      .pipe(map((res: IApiResponseScryfallListtype) => {
+    return this._http.get<IScryfallApiResList>('https://api.scryfall.com/catalog/card-names')
+      .pipe(map((res: IScryfallApiResList) => {
               let i: number = 0;
               res.data.forEach(element => {
                 const cardName: ICardName = {index: i,
@@ -59,8 +59,8 @@ export class ApiScryfallService {
     List of all existing cards
   */
     public getAllEditionNames() {
-      return this._http.get<IApiResponseScryfallListtype>('https://api.scryfall.com/sets')
-        .pipe(map((res: IApiResponseScryfallListtype) => {
+      return this._http.get<IScryfallApiResList>('https://api.scryfall.com/sets')
+        .pipe(map((res: IScryfallApiResList) => {
                 res.data.forEach((element: any) => {
                   const obj: IEditionName = element;
                   this._editionNameList.push(obj);
@@ -84,7 +84,7 @@ export class ApiScryfallService {
     Get the detail Information of a single Card
   */
     public getCardDetailsByName(cardName: string,
-                                format: CardPictureFormat = CardPictureFormat.Normal) {
+                                format: CardPictureFormat = CardPictureFormat.NORMAL) {
       const urlParams = new HttpParams()
         .set('fuzzy', cardName);
 
@@ -143,7 +143,7 @@ For example, if you are submitting a request to a method that requires Applicati
 /*
   Datatyp: API Scryfall Response of List Objects
 */
-export interface IApiResponseScryfallListtype {
+export interface IScryfallApiResList {
   object: string;
   uri: string;
   total_values: number;
@@ -192,14 +192,14 @@ export interface ICardDetails {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-// Interfaces
+// Enum Values
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 export enum CardPictureFormat {
-  Small = 'small',
-  Normal = 'normal',
-  Large = 'large',
+  SMALL = 'small',
+  NORMAL = 'normal',
+  LARGE = 'large',
   PNG = 'png',
-  CropArt = 'art_crop',
-  CropBorder = 'border_crop'
+  CROP_ART = 'art_crop',
+  CROP_BORDER = 'border_crop'
 }
