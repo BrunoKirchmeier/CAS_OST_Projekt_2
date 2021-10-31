@@ -4,6 +4,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { getAuth, signInAnonymously, createUserWithEmailAndPassword,
          sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { Observable, BehaviorSubject } from 'rxjs';
+import { ICurrentUser } from '../../core/global';;
 
 @Injectable({
   providedIn: 'root'
@@ -66,10 +67,8 @@ export class AuthService {
     let ret: IAuthRes = { state: this._statesDict.UNDEFINED.state,
                           errorCode: '',
                           errorMessage: '',
-                          message_ch: this._statesDict.UNDEFINED.message_ch ,
-                          accessToken: '',
-                          refreshToken: '',
-                          tokenExpireIn: 0 };
+                          message_ch: this._statesDict.UNDEFINED.message_ch};
+
     await createUserWithEmailAndPassword(auth, email, password)
     .then((res) => {
       userCredential = res;
@@ -105,27 +104,28 @@ export class AuthService {
   */
   async login(email: string, password: string): Promise<IAuthRes> {
     const auth = getAuth();
+    let userCredential: any;
     let ret: IAuthRes = { state: this._statesDict.UNDEFINED.state,
                           errorCode: '',
                           errorMessage: '',
-                          message_ch: this._statesDict.UNDEFINED.message_ch,
-                          accessToken: '',
-                          refreshToken: '',
-                          tokenExpireIn: 0 };
+                          message_ch: this._statesDict.UNDEFINED.message_ch};
+
     await signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+    .then((res) => {
+      userCredential = res;
       if(userCredential.user.emailVerified === true) {
         ret.state = this._statesDict.LOGIN_SUCCESS_CH.state;
         ret.message_ch = this._statesDict.LOGIN_SUCCESS_CH.message_ch;
 
-    /*     ret.accessToken = userCredential.
-        ret.refreshToken = userCredential.user
-        ret.tokenExpireIn = userCredential.user
+        if(userCredential.hasOwnProperty('user') &&
+           userCredential.user.hasOwnProperty('accessToken')) {
+            const currentUser: ICurrentUser = {
+              email: email,
+              accessToken: userCredential.user?.accessToken
+            }
+            localStorage.setItem('currentUser', JSON.stringify(currentUser))
+        }
 
-        local storage token setzen
-
-
-        */
       } else {
         ret.state = this._statesDict.EMAIL_VALIDATION_NEEDED_CH.state;
         ret.message_ch = this._statesDict.EMAIL_VALIDATION_NEEDED_CH.message_ch;
@@ -148,7 +148,9 @@ export class AuthService {
           ret.message_ch = this._statesDict.UNDEFINED.message_ch;
       }
     });
+
     return new Promise((resolve, reject) => {
+      console.log(ret);
       resolve(ret);
     });
   }
@@ -163,10 +165,7 @@ export class AuthService {
     let ret: IAuthRes = { state: this._statesDict.UNDEFINED.state,
                           errorCode: '',
                           errorMessage: '',
-                          message_ch: this._statesDict.UNDEFINED.message_ch,
-                          accessToken: '',
-                          refreshToken: '',
-                          tokenExpireIn: 0 }
+                          message_ch: this._statesDict.UNDEFINED.message_ch}
 
     await signInWithEmailAndPassword(auth, email, password)
     .then((res) => {
@@ -226,9 +225,6 @@ export interface IAuthRes {
   errorCode: string;
   errorMessage: string;
   message_ch: string;
-  accessToken: string;
-  refreshToken: string;
-  tokenExpireIn: number;
 }
 
 
