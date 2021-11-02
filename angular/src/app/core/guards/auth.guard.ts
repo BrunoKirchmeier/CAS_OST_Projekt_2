@@ -19,14 +19,14 @@ export class AuthGuard implements CanActivate {
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
-    if (localStorage.getItem('currentUser')) {
-        return true;
+    if(localStorage.getItem('currentUser')) {
+      localStorage.setItem('redirectUrl', state.url)
+      return true;
+    } else {
+      this._router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
+      return false;
     }
 
-    localStorage.setItem('redirectTo', state.url);
-    this._router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
-    return false;
   }
 
 }

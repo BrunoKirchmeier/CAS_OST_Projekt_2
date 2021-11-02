@@ -5,6 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, IAuthRes } from '../services/auth.services';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,6 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', Validators.compose([Validators.required]))
   });
   public isSpinnerActive: boolean = false;
-
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Constructor and destructor
@@ -48,7 +48,9 @@ export class LoginComponent implements OnInit {
       .then((res: IAuthRes) => {
         this._snackBar.open(res.message_ch);
         if (localStorage.getItem('currentUser')) {
-          this._router.navigate([localStorage.getItem('redirectTo')]);
+          const redirect = localStorage.getItem('redirectTo');
+          localStorage.removeItem('redirectTo');
+          this._router.navigate([redirect]);
         }
       })
       .catch((error) => {

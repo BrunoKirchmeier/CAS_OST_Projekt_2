@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { Firestore } from '@angular/fire/firestore';
 import { getAuth, signInAnonymously, createUserWithEmailAndPassword,
          sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { BehaviorSubject } from 'rxjs';
 import { ICurrentUser } from '../../core/global';;
 
 @Injectable({
@@ -45,12 +45,18 @@ export class AuthService {
         message_ch: 'Der Bestätigungslink wurde erfolgreich versendet'},
   };
 
+  public isLoggedIn$ = new BehaviorSubject<boolean>(false);
+
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Constructor and destructor
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  constructor(private db: Firestore,
-              private dbAuth: Auth) {}
+  constructor(private dbAuth: Auth) {
+
+    this.dbAuth?.onAuthStateChanged((user) => {});
+
+  }
+
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Firebase Function Calls
@@ -150,7 +156,7 @@ export class AuthService {
     });
 
     return new Promise((resolve, reject) => {
-      console.log(ret);
+      this.isLoggedIn$.next(true);
       resolve(ret);
     });
   }
@@ -204,8 +210,29 @@ export class AuthService {
       resolve(ret);
     });
   }
-}
 
+
+ /*
+    Function: logout
+    Logout to Firebase
+  */
+  async logout(): Promise<void> {
+    const auth = getAuth();
+    await signOut(auth)
+    return new Promise((resolve, reject) => {
+      localStorage.removeItem('currentUser');
+      this.isLoggedIn$.next(false);
+      resolve();
+    });
+  }
+
+
+
+
+
+
+
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Synchron Functions
