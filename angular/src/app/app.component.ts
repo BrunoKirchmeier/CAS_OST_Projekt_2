@@ -53,7 +53,9 @@ export class AppComponent {
   }
 
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    localStorage.removeItem('currentUser');
+  }
 
 
 }
