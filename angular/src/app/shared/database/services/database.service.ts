@@ -1,8 +1,10 @@
 import { query } from '@angular/animations';
 import { Injectable } from '@angular/core';
 import { Firestore, CollectionReference, doc, Timestamp } from '@angular/fire/firestore';
-import { collection, onSnapshot, setDoc } from '@firebase/firestore';
-import { Subscription } from 'rxjs';
+import { addDoc, collection, DocumentReference, DocumentSnapshot, getDoc, getDocs, onSnapshot, QueryDocumentSnapshot, QuerySnapshot, setDoc } from '@firebase/firestore';
+import { Unsubscribe } from '@firebase/util';
+import { DocumentData } from 'rxfire/firestore/interfaces';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { AuthService } from '../../auth/auth.services';
 
 @Injectable({
@@ -16,7 +18,10 @@ export class DatabaseService {
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   private _currentUser: any = null;
-  private _subscriptions: Subscription[] = []
+  private _subscriptions: Subscription[] = [];
+  private _unSubscriptions: Unsubscribe[] = [];
+
+  public onChangeOffer$ = new BehaviorSubject<any>([]);
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Constructor and destructor
@@ -29,47 +34,89 @@ export class DatabaseService {
         next: data => this._currentUser = JSON.parse(data.currentUser),
       })
     );
+/*
+    this._unSubscriptions.push(
+      onSnapshot(collection(this._db, 'offers'),
+      { includeMetadataChanges: true }, (snapshot: any) => {
+        this.onChangeOffer$.next(snapshot);
+      })
+    );
+*/
+  }
+
+  ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this._subscriptions.forEach((element: Subscription) => {
+      element.unsubscribe();
+    });
+    this._unSubscriptions.forEach((element: Unsubscribe) => {
+      element();
+    });
+
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Database Statments
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  /*
-  writeOffer(data: IOffers): Promise<any> {
-    setDoc(doc(this._db, "offers", this._currentUser.uid), data)
-    .then(docRef => {
-      console.log("Document written with ID: ", docRef.id);
-      console.log("You can now also access this. as expected: ", this.foo)
-  })
-  .catch(error => console.error("Error adding document: ", error))
-
-    return new Promise((resolve, reject) => {
-      resolve(1);
-    });
-  }
-*/
-
-  async writeOffer(data: any): Promise<any> {
-    const offer: IOffers = {cardName: data.cardName,
-                            providerUid: this._currentUser.uid,
-                            providerEmail: this._currentUser.email,
-                            buyerUid: null,
-                            buyerEmail: null,
-                            unitPrice: data.unitPrice,
-                            quantity: data.quantity,
-                            deliveryMode: data.deliveryMode,
-                            additionInfo: data.additionInfo,
-                            creationDate : Timestamp.now(),
-                            saleDate : null};
-
-    const ret = await setDoc(doc(this._db, "offers", this._currentUser.uid), offer);
-    return new Promise((resolve, reject) => {
-      resolve(ret);
-      // reject(ret);
+  async createOffer(data: any): Promise<any> {
+    const offer: IOffer = {offerId: null,
+                           cardName: data.cardName,
+                           providerUid: this._currentUser.uid,
+                           providerEmail: this._currentUser.email,
+                           buyerUid: null,
+                           buyerEmail: null,
+                           unitPrice: data.unitPrice,
+                           quantity: data.quantity,
+                           deliveryMode: data.deliveryMode,
+                           additionInfo: data.additionInfo,
+                           creationDate : Timestamp.now(),
+                           saleDate : null};
+    try {
+      const docRef: DocumentReference<DocumentData> = await addDoc(collection(this._db, 'offers'), offer);
+      offer.offerId = docRef.id;
+      await setDoc(docRef, offer, { merge: true });
+    } catch (error) {
+      return new Promise((reject) => {
+        reject(error);
+      });
+    }
+    return new Promise((resolve) => {
+      resolve(true);
     });
   }
 
+  async readOffers(id: string | null = null): Promise<any> {
+    let data: IOffer[] = [];
+    let test: any = [];
+    try {
+      if(id !== null) {
+        const ret: DocumentSnapshot<DocumentData> = await getDoc(doc(this._db, "offers", id));
+        if(ret.exists()) {
+          let record = ret.data() as IOffer;
+          record.offerId = ret.id;
+          data.push(record);
+        } else {
+          throw('ID nicht gefunden');
+        }
+      } else {
+        const ret: QuerySnapshot<DocumentData> = await getDocs(collection(this._db, 'offers'));
+        ret.forEach(doc => {
+          let record = doc.data() as IOffer;
+          record.offerId = doc.id;
+          data.push(record);
+        });
+      }
+    } catch (error) {
+      return new Promise((reject) => {
+        reject(error);
+      });
+    }
+    return new Promise((resolve) => {
+      resolve(data);
+    });
+  }
 
 
 
@@ -96,8 +143,8 @@ export class DatabaseService {
 /*
   Datatyp: API Scryfall Response of List Objects
 */
-export interface IOffers {
-  // offerId: number;
+export interface IOffer {
+  offerId: string | null;
   cardName: string;
   providerUid: string;
   providerEmail: string ;

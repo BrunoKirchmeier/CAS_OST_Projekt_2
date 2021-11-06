@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatabaseService } from 'src/app/shared/database/services/database.service';
 import { ICardDetails } from '../../shared/scryfallApi/services/scryfallApi.service';
 
@@ -41,17 +42,22 @@ export class OfferCreateComponent implements OnInit {
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   constructor(private elRef: ElementRef<HTMLImageElement>,
-              private _db: DatabaseService) {
+              private _db: DatabaseService,
+              private _snackBar: MatSnackBar) {
     if (this.elRef.nativeElement.complete) {
       this.loaded.emit();
     }
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  ngOnDestroy(): void {
+/*
+  ngOnInit(): void {
+    this._db.onChangeOffer$
+      .subscribe({ next: (data: any) => { console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'); console.log(data); }});
   }
+*/
+  ngOnDestroy(): void {}
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,13 +71,14 @@ export class OfferCreateComponent implements OnInit {
       const quantity = this.form.get('cardAmount')?.value;
       const deliveryMode = this.form.get('deliveryMode')?.value;
       const additionInfo = this.form.get('additionInfo')?.value;
-      this._db.writeOffer({cardName: cardName,
-                           unitPrice: unitPrice,
-                           quantity: quantity,
-                           deliveryMode: deliveryMode,
-                           additionInfo: additionInfo})
-      .then((res) => { console.log(res); })
-      .catch((error) => { console.log(error); });
+      this._db.createOffer({cardName: cardName,
+                            unitPrice: unitPrice,
+                            quantity: quantity,
+                            deliveryMode: deliveryMode,
+                            additionInfo: additionInfo})
+        .then((res) => { this._snackBar.open('Das Angebot wurde eröffnet'); console.log(res); })
+        .catch((error) => { console.log(error);
+      });
     }
   }
 
