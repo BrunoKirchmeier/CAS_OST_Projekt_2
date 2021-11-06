@@ -1,14 +1,14 @@
 import { Component, HostListener, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ICardDetails } from '../../modules/scryfallApi/services/scryfallApi.service';
+import { ICardDetails } from '../../shared/scryfallApi/services/scryfallApi.service';
 
 
 @Component({
-  selector: 'app-create-offer, img[loaded]',
-  templateUrl: './create-offer.component.html',
-  styleUrls: ['./create-offer.component.scss']
+  selector: 'app-offer-create, img[loaded]',
+  templateUrl: './offer-create.component.html',
+  styleUrls: ['./offer-create.component.scss']
 })
-export class CreateOfferComponent implements OnInit {
+export class OfferCreateComponent implements OnInit {
 
  ////////////////////////////////////////////////////////////////////////////////////////////////
   // Declarations

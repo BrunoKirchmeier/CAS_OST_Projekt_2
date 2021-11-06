@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService, IAuthRes } from 'src/app/core/services/auth.services';
-import { CompareValidator } from '../../core/helpers/form-validators';;
+import { AuthService, IAuthState } from 'src/app/shared/auth/auth.services';
+import { CompareValidator } from '../shared/helpers/form-validators';;
 
 @Component({
   selector: 'app-account',
@@ -51,9 +51,9 @@ export class AccountComponent implements OnInit {
       const email = this.form.get('email')?.value;
       const password = this.form.get('password')?.value;
       this._authService.createAccount(email, password)
-      .then((res: IAuthRes) => {
+      .then((res: IAuthState) => {
         this.isSpinnerActive = false;
-        this._snackBar.open(res.message_ch);
+        this._snackBar.open(res.messageText);
       })
       .catch((error) => {
         this.isSpinnerActive = false;
@@ -76,9 +76,9 @@ export class AccountComponent implements OnInit {
     const password = this.form.get('password')?.value;
     if(email !== '' && password !== '') {
       this._authService.sendEmailValidationLink(email, password)
-      .then((res: IAuthRes) => {
+      .then((res: IAuthState) => {
         this.isSpinnerActive = false;
-        this._snackBar.open(res.message_ch);
+        this._snackBar.open(res.messageText);
       })
       .catch((error) => {
         this.isSpinnerActive = false;

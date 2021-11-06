@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
-import { AuthService } from '../services/auth.services';
+import { AuthService } from '../auth/auth.services';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navigation',
@@ -17,11 +18,12 @@ export class NavigationComponent implements OnInit {
 
   @ViewChild('drawer', { static: true }) public matDrawer!: MatSidenav;
 
+  private _subscriptions: Subscription[] = [];
+
   public isMobile: boolean = false;
   public isMenuOpen: boolean = true;
   public contentMargin = 240;
   public isLoggedIn: Boolean = false;
-  public redirectUrl: string = localStorage.getItem('redirectUrl') ?? '';
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Constructor and destructor
@@ -33,26 +35,29 @@ export class NavigationComponent implements OnInit {
 
   ngOnInit() {
     this.isMenuOpen = true;
-
-    this.breakpointObserver.observe(Breakpoints.Handset)
-    .subscribe((state: BreakpointState) => {
-      if (state.matches) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
-    });
-
-    this._authService.isLoggedIn$
-    .subscribe({ next: (status) => {
-      this.isLoggedIn = localStorage.getItem('currentUser') === null
-                      ? false
-                      : true;
-                }
-              })
+    this._subscriptions.push(
+      this.breakpointObserver.observe(Breakpoints.Handset)
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.isMobile = true;
+        } else {
+          this.isMobile = false;
+        }
+      })
+    );
+    this._subscriptions.push(
+      this._authService.loggedInState$.subscribe({
+        next: data => this.isLoggedIn = data.loginState,
+      })
+    );
 
   }
 
+  ngOnDestroy(): void {
+    this._subscriptions.forEach((element: Subscription) => {
+      element.unsubscribe();
+    });
+  }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Events

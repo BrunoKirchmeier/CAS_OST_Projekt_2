@@ -2,7 +2,7 @@
 import { environment } from 'src/environments/environment';
 
 // Providers
-import { AuthGuard } from './core/guards/auth.guard';
+import { AuthGuard } from './shared/auth/auth.guard';
 
 // Modules System
 import { NgModule } from '@angular/core';
@@ -36,23 +36,21 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 // Modules Custom
-import { NavigationComponent } from './core/navigation/navigation.component';
+import { NavigationComponent } from './shared/navigation/navigation.component';
 import { SearchCardComponent } from './shared/search-card/search-card.component';
-import { ShowSearchedCardsComponent } from './pages/show-searched-cards/show-searched-cards.component';
-import { CreateOfferComponent } from './pages/create-offer/create-offer.component';
-import { SearchOffersComponent } from './pages/search-offers/search-offers.component';
-import { LoginComponent } from './core/login/login.component';
+import { OfferCreateComponent } from './offer/offer-create/offer-create.component';
+import { OfferSearchComponent } from './offer/offer-search/offer-search.component';
+import { LoginComponent } from './shared/auth/login.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { AccountComponent } from './modules/account/account-create.component';
+import { AccountComponent } from './account/account-create.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
     SearchCardComponent,
-    ShowSearchedCardsComponent,
-    CreateOfferComponent,
-    SearchOffersComponent,
+    OfferCreateComponent,
+    OfferSearchComponent,
     LoginComponent,
     AccountComponent,
   ],

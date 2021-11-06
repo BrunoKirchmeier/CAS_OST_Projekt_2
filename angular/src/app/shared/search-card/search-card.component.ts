@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { ApiScryfallService, ICardName, IEditionName, ICardDetails } from '../../modules/scryfallApi/services/scryfallApi.service';
+import { ApiScryfallService, ICardName, IEditionName, ICardDetails } from '../../shared/scryfallApi/services/scryfallApi.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, scan } from 'rxjs/operators';
 import { BehaviorSubject, Subscription } from 'rxjs';

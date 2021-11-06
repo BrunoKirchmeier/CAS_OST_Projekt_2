@@ -1,13 +1,12 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './core/guards/auth.guard';
+import { AuthGuard } from './shared/auth/auth.guard';
 
-import { HomeComponent } from './modules/home/home.component';
-import { ShowSearchedCardsComponent } from './pages/show-searched-cards/show-searched-cards.component';
-import { CreateOfferComponent } from './pages/create-offer/create-offer.component';
-import { SearchOffersComponent } from './pages/search-offers/search-offers.component';
+import { HomeComponent } from './home/home.component';
+import { OfferCreateComponent } from './offer/offer-create/offer-create.component';
+import { OfferSearchComponent } from './offer/offer-search/offer-search.component';
 import { SearchCardComponent } from './shared/search-card/search-card.component';
-import { LoginComponent } from './core/login/login.component';
-import { AccountComponent } from './modules/account/account-create.component';
+import { LoginComponent } from './shared/auth/login.component';
+import { AccountComponent } from './account/account-create.component';
 
 
 
@@ -28,18 +27,13 @@ export const appRoutes: Routes = [
     data: { title: 'Home'}
   },
   {
-    path: 'show-searched-cards',
-    component: ShowSearchedCardsComponent,
-    data: { title: 'Kartensuche'}
-  },
-  {
-    path: 'create-offer',
-    component: CreateOfferComponent, canActivate: [AuthGuard],
+    path: 'offer-create',
+    component: OfferCreateComponent, canActivate: [AuthGuard],
     data: { title: 'Angebot erstellen'}
   },
   {
-    path: 'search-offers',
-    component: SearchOffersComponent,
+    path: 'offer-search',
+    component: OfferSearchComponent,
     data: { title: 'Angebotssuche'}
   },
   {
