@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { getAuth, signInAnonymously, createUserWithEmailAndPassword,
-         sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth,
+         signInAnonymously, signInWithEmailAndPassword, signOut,
+         createUserWithEmailAndPassword,
+         sendEmailVerification,
+         sendPasswordResetEmail, confirmPasswordReset} from "firebase/auth";
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -41,10 +44,13 @@ export class AuthService {
       EMAIL_VALIDATION_SUCCESS: {
         code: 'EMAIL_VALIDATION_SUCCESS',
         message: 'Der Bestätigungslink wurde erfolgreich versendet'},
+      EMAIL_PW_RESET: {
+        code: 'EMAIL_VALIDATION_SUCCESS',
+        message: 'Sie erhalten in Kürze eine E-Mail mit einem Link zum ändern des Passworts.'},
   };
-  private _response: IAuthState = {loginState: false,
-                                   currentUser: {},
-                                   errorCode: this._statesDict.UNDEFINED.code,
+  private _response: IAuthState = {loginState: localStorage.getItem('currentUser') ? true : false,
+                                   currentUser: localStorage.getItem('currentUser') ?? {},
+                                   code: this._statesDict.UNDEFINED.code,
                                    messageText: this._statesDict.UNDEFINED.message};
 
   public loggedInState$ = new BehaviorSubject<IAuthState>(this._response);
@@ -74,18 +80,18 @@ export class AuthService {
     .catch((error) => {
       switch (error.code) {
         case 'auth/email-already-in-use':
-          this._response.errorCode = this._statesDict.ALLREADY_CREATED.code;
+          this._response.code = this._statesDict.ALLREADY_CREATED.code;
           this._response.messageText = this._statesDict.ALLREADY_CREATED.message;
           break;
         default:
-          this._response.errorCode = error.code;
+          this._response.code = error.code;
           this._response.messageText = error.message;
       }
     });
 
     await sendEmailVerification(this._response.currentUser)
     .then(() => {
-      this._response.errorCode = this._statesDict.CREATE_SUCCESS.code;
+      this._response.code = this._statesDict.CREATE_SUCCESS.code;
       this._response.messageText = this._statesDict.CREATE_SUCCESS.message;
     })
 
@@ -105,7 +111,7 @@ export class AuthService {
     await signInWithEmailAndPassword(auth, email, password)
     .then((res) => {
       if(res.user.emailVerified === true) {
-        this._response.errorCode = this._statesDict.LOGIN_SUCCESS.code;
+        this._response.code = this._statesDict.LOGIN_SUCCESS.code;
         this._response.messageText = this._statesDict.LOGIN_SUCCESS.message;
         this._response.loginState = true;
         if(res.hasOwnProperty('user') &&
@@ -114,22 +120,22 @@ export class AuthService {
             this._response.currentUser = res.user;
         }
       } else {
-        this._response.errorCode = this._statesDict.EMAIL_VALIDATION_NEEDED.code;
+        this._response.code = this._statesDict.EMAIL_VALIDATION_NEEDED.code;
         this._response.messageText = this._statesDict.EMAIL_VALIDATION_NEEDED.message;
       }
     })
     .catch((error) => {
       switch (error.code) {
         case 'auth/user-not-found':
-          this._response.errorCode = this._statesDict.UNDEFINED_USER.code;
+          this._response.code = this._statesDict.UNDEFINED_USER.code;
           this._response.messageText = this._statesDict.UNDEFINED_USER.message;
           break;
         case 'auth/wrong-password':
-          this._response.errorCode = this._statesDict.WRONG_PASSWORD.code;
+          this._response.code = this._statesDict.WRONG_PASSWORD.code;
           this._response.messageText = this._statesDict.WRONG_PASSWORD.message;
           break;
         default:
-          this._response.errorCode = error.code;
+          this._response.code = error.code;
           this._response.messageText = error.message;
       }
     });
@@ -154,26 +160,26 @@ export class AuthService {
     .catch((error) => {
       switch (error.code) {
         case 'auth/user-not-found':
-          this._response.errorCode = this._statesDict.UNDEFINED_USER.code;
+          this._response.code = this._statesDict.UNDEFINED_USER.code;
           this._response.messageText = this._statesDict.UNDEFINED_USER.message;
           break;
         case 'auth/invalid-email':
-          this._response.errorCode = this._statesDict.UNVALID_EMAIL.code;
+          this._response.code = this._statesDict.UNVALID_EMAIL.code;
           this._response.messageText = this._statesDict.UNVALID_EMAIL.message;
           break;
         case 'auth/wrong-password':
-          this._response.errorCode = this._statesDict.WRONG_PASSWORD.code;
+          this._response.code = this._statesDict.WRONG_PASSWORD.code;
           this._response.messageText = this._statesDict.WRONG_PASSWORD.message;
           break;
         default:
-          this._response.errorCode = error.code;
+          this._response.code = error.code;
           this._response.messageText = error.message;
       }
     });
 
     await sendEmailVerification(this._response.currentUser)
     .then(() => {
-      this._response.errorCode = this._statesDict.EMAIL_VALIDATION_SUCCESS.code;
+      this._response.code = this._statesDict.EMAIL_VALIDATION_SUCCESS.code;
       this._response.messageText = this._statesDict.EMAIL_VALIDATION_SUCCESS.message;
     })
 
@@ -183,6 +189,26 @@ export class AuthService {
     });
   }
 
+
+  /*
+    Function: send Email Link for reset Password
+    New Account in Firebase with Verifications E-Mail
+  */
+    async sendPasswordResetEmail(email: string): Promise<IAuthState> {
+      const auth = getAuth();
+      await sendPasswordResetEmail(auth, email)
+      .then((res) => {
+        this._response.code = this._statesDict.EMAIL_PW_RESET.code;
+        this._response.messageText = this._statesDict.EMAIL_PW_RESET.message;
+      })
+
+      return new Promise((resolve) => {
+        resolve(this._response);
+      });
+    }
+
+
+// confirmPasswordReset
 
   /*
     Function: logout
@@ -195,8 +221,10 @@ export class AuthService {
 
     localStorage.removeItem('currentUser');
     this._response.loginState = false;
-    this._response.errorCode = this._statesDict.EMAIL_VALIDATION_SUCCESS.code;
+    this._response.code = this._statesDict.EMAIL_VALIDATION_SUCCESS.code;
     this._response.messageText = this._statesDict.EMAIL_VALIDATION_SUCCESS.message;
+
+    this.loggedInState$.next(this._response);
 
     return new Promise((resolve) => {
       resolve(this._response);
@@ -225,7 +253,7 @@ export class AuthService {
 export interface IAuthState {
   loginState: boolean;
   currentUser: any;
-  errorCode: string;
+  code: string;
   messageText: string;
 }
 

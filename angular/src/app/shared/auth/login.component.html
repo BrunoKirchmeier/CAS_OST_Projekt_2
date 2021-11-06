@@ -40,12 +40,11 @@
       <a [routerLink]="['/register']"
           class="form-link">Registrieren</a>
 
-      <a [routerLink]="['/register']"
+      <a [routerLink]="['/login']"
          class="form-link"
          (click)="resetPassword()">Passwort vergessen</a>
 
     </form>
-
     <div *ngIf="isSpinnerActive === true">
       <mat-spinner class="spinner" ></mat-spinner>
     </div>

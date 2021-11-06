@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', Validators.compose([Validators.required]))
   });
   public isSpinnerActive: boolean = false;
+  public isPasswordResetActive: boolean = false;
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,6 +90,20 @@ export class LoginComponent implements OnInit {
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   resetPassword() {
+    const email = this.form.get('email')?.value;
+
+    if(email) {
+      this._authService.sendPasswordResetEmail(email)
+      .then((res: IAuthState) => {
+        this._snackBar.open(res.messageText);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    } else {
+      this._snackBar.open('Bitte gültige E-Mail Adresse angeben');
+    }
 
   }
 
