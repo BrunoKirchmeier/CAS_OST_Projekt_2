@@ -8,22 +8,4 @@ const routes: Routes = [];
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Constructor and destructor
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
-  /*
-  constructor(private dbAuth: Auth) {
-    this.dbAuth.onAuthStateChanged((user) => {
-      if (user) {
-        return
-      } else {
-
-      }
-    });
-  }
-*/
-
-}
+export class AppRoutingModule {}

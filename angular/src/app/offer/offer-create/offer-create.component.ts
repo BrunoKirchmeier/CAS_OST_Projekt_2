@@ -4,7 +4,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatabaseService } from 'src/app/shared/database/services/database.service';
 import { ICardDetails } from '../../shared/scryfallApi/services/scryfallApi.service';
 
-
 @Component({
   selector: 'app-offer-create, img[loaded]',
   templateUrl: './offer-create.component.html',

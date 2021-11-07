@@ -2,9 +2,8 @@
   <mat-tab-group animationDuration="0ms">
     <mat-tab label="Angebot Erstellen">
       <div class="tab-create-offer">
-
         <aside>
-          <app-search-card (onChangeSearchResults)="resultsChanged($event)"></app-search-card>
+          <app-search-card-by-name (onChangeSearchResults)="resultsChanged($event)"></app-search-card-by-name>
         </aside>
         <main>
           <div class="create-offer-container"
@@ -83,19 +82,7 @@
           </div>
         </main>
       </div>
-
-
-
     </mat-tab>
     <mat-tab label="Meine Angebote"></mat-tab>
   </mat-tab-group>
-
-
-
-
-
-
-
-
-
 </div>

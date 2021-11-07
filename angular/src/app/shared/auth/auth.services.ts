@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
 import { getAuth,
          signInAnonymously, signInWithEmailAndPassword, signOut,
          createUserWithEmailAndPassword,
          sendEmailVerification,
-         sendPasswordResetEmail, confirmPasswordReset} from "firebase/auth";
+         sendPasswordResetEmail } from "firebase/auth";
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -59,7 +60,7 @@ export class AuthService {
   // Constructor and destructor
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  constructor() {}
+  constructor(private _db: Firestore) {}
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////

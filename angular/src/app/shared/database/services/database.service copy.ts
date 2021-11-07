@@ -28,16 +28,13 @@ export class DatabaseService {
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   constructor(private _db: Firestore,
-              private _authService: AuthService) {}
-
-  ngOnInit(): void {
+              private _authService: AuthService) {
     this._subscriptions.push(
       this._authService.loggedInState$.subscribe({
-        next: (data) => { this._currentUser = JSON.parse(data.currentUser);},
+        next: data => this._currentUser = JSON.parse(data.currentUser),
       })
     );
-
-    /*
+/*
     this._unSubscriptions.push(
       onSnapshot(collection(this._db, 'offers'),
       { includeMetadataChanges: true }, (snapshot: any) => {
@@ -45,8 +42,9 @@ export class DatabaseService {
       })
     );
 */
-
   }
+
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this._subscriptions.forEach((element: Subscription) => {

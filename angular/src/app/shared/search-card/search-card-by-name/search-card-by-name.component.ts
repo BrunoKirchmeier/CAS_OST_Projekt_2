@@ -1,17 +1,16 @@
-import { ChangeDetectionStrategy, Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { ApiScryfallService, ICardName, IEditionName, ICardDetails } from '../../shared/scryfallApi/services/scryfallApi.service';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { ApiScryfallService, ICardName, IEditionName, ICardDetails } from '../../scryfallApi/services/scryfallApi.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, scan } from 'rxjs/operators';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-search-card',
-  templateUrl: './search-card.component.html',
-  styleUrls: ['./search-card.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-search-card-by-name',
+  templateUrl: './search-card-by-name.component.html',
+  styleUrls: ['./search-card-by-name.component.scss'],
 })
 
-export class SearchCardComponent implements OnInit {
+export class SearchCardByNameComponent implements OnInit {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Declarations
