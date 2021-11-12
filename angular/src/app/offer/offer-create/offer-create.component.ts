@@ -1,8 +1,9 @@
 import { Component, HostListener, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DatabaseService } from 'src/app/shared/database/services/database.service';
-import { ICardDetails } from '../../shared/scryfallApi/services/scryfallApi.service';
+import { OfferService } from '../shared/offer.service';
+import { ICardDetails } from '../../shared/services/scryfallApi.service';
+// import { SearchCardByNameComponent } from '../../shared/shared.module'
 
 @Component({
   selector: 'app-offer-create, img[loaded]',
@@ -10,10 +11,6 @@ import { ICardDetails } from '../../shared/scryfallApi/services/scryfallApi.serv
   styleUrls: ['./offer-create.component.scss']
 })
 export class OfferCreateComponent implements OnInit {
-
- ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Declarations
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   public cardDetailsList: ICardDetails[] = [];
   public creatOfferisHidden: boolean = false;
@@ -36,12 +33,8 @@ export class OfferCreateComponent implements OnInit {
     this.loaded.emit();
   }
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Constructor and destructor
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   constructor(private elRef: ElementRef<HTMLImageElement>,
-              private _db: DatabaseService,
+              private _offerService: OfferService,
               private _snackBar: MatSnackBar) {
     if (this.elRef.nativeElement.complete) {
       this.loaded.emit();
@@ -50,18 +43,7 @@ export class OfferCreateComponent implements OnInit {
 
   ngOnInit(): void {}
 
-/*
-  ngOnInit(): void {
-    this._db.onChangeOffer$
-      .subscribe({ next: (data: any) => { console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'); console.log(data); }});
-  }
-*/
   ngOnDestroy(): void {}
-
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Form Search (Search Option for API Request to Scryfall)
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   onSubmit(): void {
     if(this.form.valid) {
@@ -70,21 +52,16 @@ export class OfferCreateComponent implements OnInit {
       const quantity = this.form.get('cardAmount')?.value;
       const deliveryMode = this.form.get('deliveryMode')?.value;
       const additionInfo = this.form.get('additionInfo')?.value;
-      this._db.createOffer({cardName: cardName,
-                            unitPrice: unitPrice,
-                            quantity: quantity,
-                            deliveryMode: deliveryMode,
-                            additionInfo: additionInfo})
-        .then((res) => { this._snackBar.open('Das Angebot wurde eröffnet'); console.log(res); })
+      this._offerService.createOffer({cardName: cardName,
+                                      unitPrice: unitPrice,
+                                      quantity: quantity,
+                                      deliveryMode: deliveryMode,
+                                      additionInfo: additionInfo})
+        .then(() => { this._snackBar.open('Das Angebot wurde eröffnet'); })
         .catch((error) => { console.log(error);
       });
     }
   }
-
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Event functions
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   resultsChanged(elements: ICardDetails[]) {
     this.cardDetailsList = elements;

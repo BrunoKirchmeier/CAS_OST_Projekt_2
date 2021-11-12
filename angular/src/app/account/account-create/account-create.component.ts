@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService, IAuthState } from 'src/app/shared/auth/auth.services';
+import { AuthService, IAuthState } from 'src/app/shared/services/auth.services';
 import { CompareValidator } from '../../shared/helpers/form-validators';;
 
 @Component({
@@ -10,10 +10,6 @@ import { CompareValidator } from '../../shared/helpers/form-validators';;
   styleUrls: ['./account-create.component.scss']
 })
 export class AccountCreateComponent implements OnInit {
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Declarations
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   public form = new FormGroup({
     email: new FormControl('', Validators.compose([Validators.required,
@@ -30,20 +26,10 @@ export class AccountCreateComponent implements OnInit {
   )
   public isSpinnerActive: boolean = false;
 
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Constructor and destructor
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   constructor(private _authService: AuthService,
               private _snackBar: MatSnackBar) { }
 
   ngOnInit() {}
-
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Form Search (New Account)
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   onSubmitForm(): void {
     this.isSpinnerActive = true;
@@ -60,11 +46,6 @@ export class AccountCreateComponent implements OnInit {
       });
     }
   }
-
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Event functions to HTML
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   closeSnackBar() {
     this._snackBar.dismiss();
@@ -87,11 +68,5 @@ export class AccountCreateComponent implements OnInit {
       this._snackBar.open('E-Mail und Passwortfeld ausfüllen');
     }
   }
-
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Asynchron functions
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 }

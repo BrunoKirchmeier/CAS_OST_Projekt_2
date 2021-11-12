@@ -1,11 +1,11 @@
-import { query } from '@angular/animations';
-import { Injectable } from '@angular/core';
+import { AnimationQueryMetadata, query } from '@angular/animations';
+import { Injectable, Query } from '@angular/core';
 import { Firestore, CollectionReference, doc, Timestamp } from '@angular/fire/firestore';
 import { addDoc, collection, DocumentReference, DocumentSnapshot, getDoc, getDocs, onSnapshot, QueryDocumentSnapshot, QuerySnapshot, setDoc } from '@firebase/firestore';
 import { Unsubscribe } from '@firebase/util';
 import { DocumentData } from 'rxfire/firestore/interfaces';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { AuthService } from '../../shared/auth/auth.services';
+import { AuthService } from '../../shared/services/auth.services';
 
 @Injectable({
   providedIn: 'root'
@@ -13,38 +13,20 @@ import { AuthService } from '../../shared/auth/auth.services';
 
 export class OfferService {
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Declarations
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   private _currentUser: any = null;
   private _subscriptions: Subscription[] = [];
   private _unSubscriptions: Unsubscribe[] = [];
 
-  public onChangeOffer$ = new BehaviorSubject<any>([]);
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Constructor and destructor
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   constructor(private _db: Firestore,
-              private _authService: AuthService) {
+              private _authService: AuthService) {}
+
+  ngOnInit(): void {
     this._subscriptions.push(
       this._authService.loggedInState$.subscribe({
-        next: data => this._currentUser = JSON.parse(data.currentUser),
+        next: (data) => { this._currentUser = JSON.parse(data.currentUser);},
       })
     );
-/*
-    this._unSubscriptions.push(
-      onSnapshot(collection(this._db, 'offers'),
-      { includeMetadataChanges: true }, (snapshot: any) => {
-        this.onChangeOffer$.next(snapshot);
-      })
-    );
-*/
   }
-
-  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this._subscriptions.forEach((element: Subscription) => {
@@ -56,12 +38,8 @@ export class OfferService {
 
   }
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Database Statments
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   async createOffer(data: any): Promise<any> {
-    const offer: IOffer = {offerId: null,
+    const offer: IOffer = {id: null,
                            cardName: data.cardName,
                            providerUid: this._currentUser.uid,
                            providerEmail: this._currentUser.email,
@@ -75,7 +53,7 @@ export class OfferService {
                            saleDate : null};
     try {
       const docRef: DocumentReference<DocumentData> = await addDoc(collection(this._db, 'offers'), offer);
-      offer.offerId = docRef.id;
+      offer.id = docRef.id;
       await setDoc(docRef, offer, { merge: true });
     } catch (error) {
       return new Promise((reject) => {
@@ -87,28 +65,30 @@ export class OfferService {
     });
   }
 
-  async readOffers(id: string | null = null): Promise<any> {
-    let data: IOffer[] = [];
-    let test: any = [];
+  async readDoc<T>(query: any | null = null): Promise<any> {
+    let data: T[] = [];
     try {
-      if(id !== null) {
-        const ret: DocumentSnapshot<DocumentData> = await getDoc(doc(this._db, "offers", id));
-        if(ret.exists()) {
-          let record = ret.data() as IOffer;
-          record.offerId = ret.id;
-          data.push(record);
+      if(query !== null) {
+        const ret: QuerySnapshot<DocumentData> = await getDocs(query);
+        if(ret.empty) {
+          throw('Query Abfrage ist leer');
         } else {
-          throw('ID nicht gefunden');
+          ret.forEach(doc => {
+            let record = doc.data() as any;
+            record.id = doc.id;
+            record = record as T;
+            data.push(record);
+          });
         }
       } else {
         const ret: QuerySnapshot<DocumentData> = await getDocs(collection(this._db, 'offers'));
         ret.forEach(doc => {
-          let record = doc.data() as IOffer;
-          record.offerId = doc.id;
+          let record = doc.data() as any;
+          record.id = doc.id;
           data.push(record);
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       return new Promise((reject) => {
         reject(error);
       });
@@ -118,33 +98,9 @@ export class OfferService {
     });
   }
 
-
-
-
-/*
-    const unsubscribe = onSnapshot(
-      collection(this._db, "cities"),
-      (snapshot) => {
-        // ...
-      },
-      (error) => {
-        // ...
-      });
-      */
-
-
-
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-// Interfaces
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
-  Datatyp: API Scryfall Response of List Objects
-*/
 export interface IOffer {
-  offerId: string | null;
+  id: string | null;
   cardName: string;
   providerUid: string;
   providerEmail: string ;

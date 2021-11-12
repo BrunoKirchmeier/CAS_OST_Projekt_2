@@ -13,10 +13,6 @@ import { BehaviorSubject } from 'rxjs';
 
 export class AuthService {
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Declarations
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   private _statesDict = {
       UNDEFINED: {
         code: 'UNDEFINED',
@@ -56,21 +52,8 @@ export class AuthService {
 
   public loggedInState$ = new BehaviorSubject<IAuthState>(this._response);
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Constructor and destructor
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   constructor(private _db: Firestore) {}
 
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Firebase Function Calls
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
-  /*
-    Function: createAccount
-    New Account in Firebase with Verifications E-Mail
-  */
   async createAccount(email: string, password: string): Promise<IAuthState> {
     const auth = getAuth();
 
@@ -101,11 +84,6 @@ export class AuthService {
     });
   }
 
-
-  /*
-    Function: Login
-    Login to Firebase
-  */
   async login(email: string, password: string): Promise<IAuthState> {
     const auth = getAuth();
 
@@ -147,11 +125,6 @@ export class AuthService {
     });
   }
 
-
-  /*
-    Function: send Email validation Link
-    New Account in Firebase with Verifications E-Mail
-  */
   async sendEmailValidationLink(email: string, password: string): Promise<IAuthState> {
     const auth = getAuth();
     await signInWithEmailAndPassword(auth, email, password)
@@ -190,31 +163,19 @@ export class AuthService {
     });
   }
 
+  async sendPasswordResetEmail(email: string): Promise<IAuthState> {
+    const auth = getAuth();
+    await sendPasswordResetEmail(auth, email)
+    .then((res) => {
+      this._response.code = this._statesDict.EMAIL_PW_RESET.code;
+      this._response.messageText = this._statesDict.EMAIL_PW_RESET.message;
+    })
 
-  /*
-    Function: send Email Link for reset Password
-    New Account in Firebase with Verifications E-Mail
-  */
-    async sendPasswordResetEmail(email: string): Promise<IAuthState> {
-      const auth = getAuth();
-      await sendPasswordResetEmail(auth, email)
-      .then((res) => {
-        this._response.code = this._statesDict.EMAIL_PW_RESET.code;
-        this._response.messageText = this._statesDict.EMAIL_PW_RESET.message;
-      })
+    return new Promise((resolve) => {
+      resolve(this._response);
+    });
+  }
 
-      return new Promise((resolve) => {
-        resolve(this._response);
-      });
-    }
-
-
-// confirmPasswordReset
-
-  /*
-    Function: logout
-    Logout to Firebase
-  */
   async logout(): Promise<IAuthState> {
     const auth = getAuth();
 
@@ -232,25 +193,8 @@ export class AuthService {
     });
   }
 
-
-
-
-
-
-
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-// Synchron Functions
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-// Interfaces
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
-  Datatyp: Authentification Response Status
-*/
 export interface IAuthState {
   loginState: boolean;
   currentUser: any;

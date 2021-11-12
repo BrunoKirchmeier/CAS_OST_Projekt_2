@@ -5,18 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-
-  title = 'angular';
-
-  public isCollapsed = false;
-
-  constructor() {}
-
-  ngOnInit(): void {}
-
-  ngOnDestroy() {
-    localStorage.removeItem('currentUser');
-  }
-
-}
+export class AppComponent {}

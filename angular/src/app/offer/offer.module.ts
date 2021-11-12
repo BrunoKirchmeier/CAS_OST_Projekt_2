@@ -5,7 +5,7 @@ import { offerRoutesModule } from './offer.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Custom Modules
-import { SearchCardModule } from '../shared/search-card/search-card.module'
+import { SharedModule } from '../shared/shared.module'
 import { OfferCreateComponent } from './offer-create/offer-create.component';
 import { OfferSearchComponent } from './offer-search/offer-search.component';
 
@@ -21,12 +21,12 @@ import { MatButtonModule } from '@angular/material/button';
 @NgModule({
   declarations: [
     OfferCreateComponent,
-    OfferSearchComponent
+    OfferSearchComponent,
   ],
   imports: [
     CommonModule,
     offerRoutesModule,
-    SearchCardModule,
+    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     MatTabsModule,

@@ -8,28 +8,12 @@ import { map, catchError } from 'rxjs/operators';
 
 export class ApiScryfallService {
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Declarations
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   private _errorCounter: number = 0;
   private _cardNameList: ICardName[] = [];
   private _editionNameList: IEditionName[] = [];
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Constructor and destructor
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   constructor(private _http: HttpClient) {}
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // API calls
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
-  /*
-    Function: getAllCardNames
-    List of all existing cards
-  */
   public getAllCardNames() {
     return this._http.get<IScryfallApiResList>('https://api.scryfall.com/catalog/card-names')
       .pipe(map((res: IScryfallApiResList) => {
@@ -54,11 +38,6 @@ export class ApiScryfallService {
         )
   }
 
-
-  /*
-    Function: getAllEditionNames
-    List of all existing cards
-  */
   public getAllEditionNames() {
     return this._http.get<IScryfallApiResList>('https://api.scryfall.com/sets')
       .pipe(map((res: IScryfallApiResList) => {
@@ -80,11 +59,6 @@ export class ApiScryfallService {
       )
   }
 
-
-  /*
-    Function: getCardDetailsByName
-    Get the detail Information of a single Card
-  */
   public getCardDetailsByName(cardName: string,
                               format: CardPictureFormat = CardPictureFormat.NORMAL) {
     const urlParams = new HttpParams()
@@ -128,32 +102,16 @@ For example, if you are submitting a request to a method that requires Applicati
 */
 
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-// Interfaces
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
-  Datatyp: API Scryfall Response of List Objects
-*/
 export interface IScryfallApiResList {
   object: string;
   uri: string;
   total_values: number;
   data: string[];
 }
-
-/*
-  Datatyp: API Scryfall card names
-*/
 export interface ICardName {
   index: number;
   name: string;
 }
-
-/*
-  Datatyp: API Scryfall editon names
-*/
 export interface IEditionName {
   object: string;
   id: string;

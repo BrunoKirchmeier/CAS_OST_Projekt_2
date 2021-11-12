@@ -13,14 +13,15 @@ import { enableIndexedDbPersistence, getFirestore, provideFirestore, FirestoreMo
 import { AuthModule } from '@angular/fire/auth/';
 
 // Custom Modules
-import { NavigationComponent } from './shared/navigation/navigation.component';
-// import { NavigationModule } from './shared/navigation/navigation.module';
+import { SharedModule } from './shared/shared.module';
 import { AccountModule } from './account/account.module';
-import { AuthentificationModule } from './shared/auth/auth.module';
 import { OfferModule } from './offer/offer.module';
 
+// Custom Components
+import { NavigationComponent } from './shared/components/navigation/navigation.component';
+
 // Providers
-import { AuthGuard } from './shared/auth/auth.guard';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 // Material Desing vor Navigation Module
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -46,15 +47,17 @@ import { MatIconModule} from '@angular/material/icon';
     }),
     FirestoreModule,
     AuthModule,
-    // NavigationModule,
+    SharedModule,
     AccountModule,
-    AuthentificationModule,
     OfferModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
     MatListModule,
     MatIconModule,
+  ],
+  exports: [
+    RouterModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

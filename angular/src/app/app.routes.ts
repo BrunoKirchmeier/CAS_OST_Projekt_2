@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './shared/auth/auth.guard';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 import { HomeComponent } from './home/home.component';
 import { AccountCreateComponent } from './account/account-create/account-create.component';
-import { LoginComponent } from './shared/auth/login/login.component';
+import { LoginComponent } from './shared/components/login/login.component';
 import { OfferCreateComponent } from './offer/offer-create/offer-create.component';
 import { OfferSearchComponent } from './offer/offer-search/offer-search.component';
 

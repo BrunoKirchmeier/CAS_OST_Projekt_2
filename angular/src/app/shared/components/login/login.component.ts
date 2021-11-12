@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService, IAuthState } from '../auth.services';
+import { AuthService, IAuthState } from '../../services/auth.services';
 import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-login',
@@ -10,10 +10,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Declarations
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   private _isLoggedIn: boolean = false;
   private _subscriptions: Subscription[] = [];
@@ -26,11 +22,6 @@ export class LoginComponent implements OnInit {
   });
   public isSpinnerActive: boolean = false;
   public isPasswordResetActive: boolean = false;
-
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Constructor and destructor
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   constructor(private _router: Router,
               private _route: ActivatedRoute,
@@ -59,11 +50,6 @@ export class LoginComponent implements OnInit {
     });
   }
 
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Form Search (Login To Firestore)
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   onSubmitForm(): void {
     if(this.form.valid) {
       const email = this.form.get('email')?.value;
@@ -80,11 +66,6 @@ export class LoginComponent implements OnInit {
       });
     }
   }
-
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Event Functions
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   resetPassword() {
     const email = this.form.get('email')?.value;
@@ -103,10 +84,6 @@ export class LoginComponent implements OnInit {
     }
 
   }
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Event functions
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   closeSnackBar() {
     this._snackBar.dismiss();

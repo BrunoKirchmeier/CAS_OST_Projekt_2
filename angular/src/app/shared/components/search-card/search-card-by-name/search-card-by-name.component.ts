@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { ApiScryfallService, ICardName, IEditionName, ICardDetails } from '../../scryfallApi/services/scryfallApi.service';
+import { ApiScryfallService, ICardName, IEditionName, ICardDetails } from '../../../services/scryfallApi.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, scan } from 'rxjs/operators';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -11,10 +11,6 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 })
 
 export class SearchCardByNameComponent implements OnInit {
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Declarations
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Output() onChangeSearchResults = new EventEmitter();
   @Input() resetForm = () => this.searchForm.reset();
@@ -33,11 +29,6 @@ export class SearchCardByNameComponent implements OnInit {
     cardEdition: new FormControl(''),
     cardName: new FormControl(''),
   });
-
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Constructor and destructor
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   constructor(private scryfall: ApiScryfallService) {}
 
@@ -77,11 +68,6 @@ export class SearchCardByNameComponent implements OnInit {
     });
   }
 
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Form Search (Search Option for API Request to Scryfall)
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   onChangeSelectCardEdition(element: string): void {
     this.searchForm.patchValue({
       cardEdition: element
@@ -104,10 +90,6 @@ export class SearchCardByNameComponent implements OnInit {
     );
   }
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Event functions
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   getLimitedPartOfCardNames() {
     const result = this.cardNameList.slice(this.cardNameListOffset, this.cardNameListOffset + this._cardNameListLimit);
     this.cardNameListScroll$.next(result);
@@ -124,10 +106,6 @@ export class SearchCardByNameComponent implements OnInit {
     }
     this.cardNameListScroll$.next(this.getAllThatContain(name));
   }
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Functions Sync
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   getAllThatContain(element: string): ICardName[] {
     const results: ICardName[] = this.cardNameList.filter((i) => i.name.toLowerCase().indexOf(element.toLowerCase()) > -1);

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
-import { AuthService } from '../auth/auth.services';
+import { AuthService } from '../../services/auth.services';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 
@@ -12,10 +12,6 @@ import { Subscription } from 'rxjs';
 })
 export class NavigationComponent implements OnInit {
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Declarations
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
   @ViewChild('drawer', { static: true }) public matDrawer!: MatSidenav;
 
   private _subscriptions: Subscription[] = [];
@@ -24,10 +20,6 @@ export class NavigationComponent implements OnInit {
   public isMenuOpen: boolean = true;
   public contentMargin = 240;
   public isLoggedIn: Boolean = false;
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Constructor and destructor
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   constructor(private breakpointObserver: BreakpointObserver,
               private _authService: AuthService,
@@ -58,10 +50,6 @@ export class NavigationComponent implements OnInit {
       element.unsubscribe();
     });
   }
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  // Events
-  ////////////////////////////////////////////////////////////////////////////////////////////////
 
   ngDoCheck() {
       if (this.isMobile) {
