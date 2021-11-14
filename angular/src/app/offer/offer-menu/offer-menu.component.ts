@@ -3,10 +3,10 @@ import { ICardDetails } from '../../shared/services/scryfallApi.service';
 
 @Component({
   selector: 'app-offer-menue',
-  templateUrl: './offer-menue.component.html',
-  styleUrls: ['./offer-menue.component.scss']
+  templateUrl: './offer-menu.component.html',
+  styleUrls: ['./offer-menu.component.scss']
 })
-export class OfferMenueComponent implements OnInit {
+export class OfferMenuComponent implements OnInit {
 
   public cardDetailsList: ICardDetails[] = [];
 

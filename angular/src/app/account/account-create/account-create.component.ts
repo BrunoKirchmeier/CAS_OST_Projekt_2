@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, IAuthState } from 'src/app/shared/services/auth.services';
-import { CompareValidator } from '../../shared/helpers/form-validators';;
+import { CompareValidator } from '../../shared/helpers/form-validators';
 
 @Component({
   selector: 'app-account',
@@ -32,8 +32,8 @@ export class AccountCreateComponent implements OnInit {
   ngOnInit() {}
 
   onSubmitForm(): void {
-    this.isSpinnerActive = true;
     if(this.form.valid) {
+      this.isSpinnerActive = true;
       const email = this.form.get('email')?.value;
       const password = this.form.get('password')?.value;
       this._authService.createAccount(email, password)

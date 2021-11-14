@@ -3,8 +3,9 @@ import { AuthGuard } from './shared/guards/auth.guard';
 
 import { HomeComponent } from './home/home.component';
 import { AccountCreateComponent } from './account/account-create/account-create.component';
+import { AccountMenuComponent } from './account/account-menu/account-menu.component';
 import { LoginComponent } from './shared/components/login/login.component';
-import { OfferMenueComponent } from './offer/offer-menue/offer-menue.component';
+import { OfferMenuComponent } from './offer/offer-menu/offer-menu.component';
 
 export const appRoutes: Routes = [
 
@@ -20,12 +21,17 @@ export const appRoutes: Routes = [
     data: { title: 'Account'}
   },
   {
+    path: 'account-settings',
+    component: AccountMenuComponent, canActivate: [AuthGuard],
+    data: { title: 'Account Update'}
+  },
+  {
     path: 'login',
     component: LoginComponent
   },
   {
     path: 'offer',
-    component: OfferMenueComponent, canActivate: [AuthGuard],
+    component: OfferMenuComponent, canActivate: [AuthGuard],
     data: { title: 'Angebote Menue'}
   },
 ];

@@ -25,6 +25,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 
 // Material Desing vor Navigation Module
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule} from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -51,6 +52,7 @@ import { MatIconModule} from '@angular/material/icon';
     AccountModule,
     OfferModule,
     MatToolbarModule,
+    MatMenuModule,
     MatButtonModule,
     MatSidenavModule,
     MatListModule,

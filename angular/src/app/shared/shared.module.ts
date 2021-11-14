@@ -10,6 +10,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SearchCardByNameComponent } from './components/search-card/search-card-by-name/search-card-by-name.component';
 
 // Material Desing
+import { MatMenuModule } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -28,6 +29,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
   imports: [
     CommonModule,
     RouterModule,
+    MatMenuModule,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,

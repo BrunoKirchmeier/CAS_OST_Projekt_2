@@ -1,0 +1,102 @@
+<ng-container>
+  <div class="create-offer-container">
+    <form [formGroup]="form"
+            (ngSubmit)="onSubmitForm()"
+            class="form">
+      <mat-form-field appearance="outline"
+                      class="form-field">
+        <mat-label for="firstName">Vorname: </mat-label>
+        <input  matInput
+            id="firstName"
+            name="firstName"
+            type="text"
+            formControlName="firstName">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"
+                      class="form-field">
+        <mat-label for="lastName">Nachname: </mat-label>
+        <input  matInput
+            id="lastName"
+            name="lastName"
+            type="text"
+            formControlName="lastName">
+        <mat-error *ngIf="form.get('lastName')?.errors">
+          <span>Der Nachname darf nicht leer sein</span>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"
+            class="form-field">
+        <mat-label for="street">Strasse: </mat-label>
+        <input  matInput
+                id="street"
+                name="street"
+                type="text"
+                formControlName="street">
+        <mat-error *ngIf="form.get('street')?.errors">
+          <span>Die Strasse darf nicht leer sein</span>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"
+            class="form-field">
+        <mat-label for="zip">Postleitzahl: </mat-label>
+        <input  matInput
+                id="zip"
+                name="zip"
+                type="number"
+                formControlName="zip">
+        <mat-error *ngIf="form.get('zip')?.errors">
+          <span>Keine gültige Postleitzahl</span>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"
+                      class="form-field">
+        <mat-label for="city">Ort: </mat-label>
+        <input  matInput
+                id="city"
+                name="city"
+                type="text"
+                formControlName="city">
+        <mat-error *ngIf="form.get('city')?.errors">
+          <span>Der Ort darf nicht leer sein</span>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"
+                    class="form-field">
+        <mat-label for="phone">Tel: </mat-label>
+        <input  matInput
+            id="phone"
+            name="phone"
+            type="tel"
+            formControlName="phone">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"
+                      class="form-field">
+        <mat-label for="accountNumber">Kontonummer: </mat-label>
+        <input  matInput
+            id="accountNumber"
+            name="accountNumber"
+            type="text"
+            formControlName="accountNumber">
+        <mat-error *ngIf="form.get('accountNumber')?.errors">
+          <span>Die Kontonummer ist nicht gültig</span>
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button
+              type="submit"
+              color="primary"
+              class="form-button-submit">Acount Erstellen
+      </button>
+    </form>
+  </div>
+
+  <div *ngIf="isSpinnerActive === true">
+    <mat-spinner class="spinner" ></mat-spinner>
+  </div>
+</ng-container>

@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Custom Modules
 import { SharedModule } from '../shared/shared.module'
-import { OfferMenueComponent } from '../offer/offer-menue/offer-menue.component';
+import { OfferMenuComponent } from './offer-menu/offer-menu.component';
 import { OfferCreateComponent } from '../offer/offer-create/offer-create.component';
 import { OfferUpdateComponent } from './offer-update/offer-update.component';
 
@@ -21,7 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
-    OfferMenueComponent,
+    OfferMenuComponent,
     OfferCreateComponent,
     OfferUpdateComponent,
   ],

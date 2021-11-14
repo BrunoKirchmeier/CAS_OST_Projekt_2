@@ -1,6 +1,29 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <button mat-icon-button (click)="drawer.toggle();"><mat-icon routerLinkActive="active-icon">menu</mat-icon></button>
+    <button mat-icon-button
+            (click)="drawer.toggle();"><mat-icon routerLinkActive="active-icon">menu</mat-icon>
+    </button>
+    <button mat-button
+            [mat-menu-trigger-for]="menu"><mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu x-position="before"
+              #menu="matMenu">
+        <button mat-menu-item
+                routerLink="/account-settings"
+                *ngIf="isLoggedIn === true"><mat-icon>account_circle</mat-icon>
+          Account Einstellungen
+        </button>
+        <button mat-menu-item
+                routerLink="/login"
+                *ngIf="isLoggedIn === false"><mat-icon>person</mat-icon>
+          Login
+        </button>
+        <button mat-menu-item
+                (click)="logout()"
+                *ngIf="isLoggedIn === true"><mat-icon>person</mat-icon>
+          Logout
+        </button>
+    </mat-menu>
     <span class="toolbar-spacer "></span>
   </mat-toolbar-row>
 </mat-toolbar>
