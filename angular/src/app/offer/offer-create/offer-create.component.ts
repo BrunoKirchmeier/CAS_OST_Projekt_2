@@ -32,10 +32,10 @@ export class OfferCreateComponent implements OnInit {
     this.loaded.emit();
   }
 
-  constructor(private elRef: ElementRef<HTMLImageElement>,
+  constructor(private _elRef: ElementRef<HTMLImageElement>,
               private _offerService: OfferService,
               private _snackBar: MatSnackBar) {
-    if (this.elRef.nativeElement.complete) {
+    if (this._elRef.nativeElement.complete) {
       this.loaded.emit();
     }
   }

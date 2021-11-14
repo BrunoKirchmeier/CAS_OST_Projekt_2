@@ -18,7 +18,7 @@ export class SearchCardByNameComponent implements OnInit {
   private _subscriptions: Subscription[] = [];
   private _cardNameListLimit: number = 1000;
   private _cardNameListSearchLimit: number = 20;
-  private cardDetailsList: ICardDetails[] = [];
+  private _cardDetailsList: ICardDetails[] = [];
 
   public editionNameList: IEditionName[] = [];
   public cardNameList: ICardName[] = [];
@@ -30,15 +30,15 @@ export class SearchCardByNameComponent implements OnInit {
     cardName: new FormControl(''),
   });
 
-  constructor(private scryfall: ApiScryfallService) {}
+  constructor(private _scryfall: ApiScryfallService) {}
 
   ngOnInit(): void {
-    this._subscriptions.push(this.scryfall.getAllEditionNames()
+    this._subscriptions.push(this._scryfall.getAllEditionNames()
     .subscribe({ next: data => this.editionNameList = data,
                  error: err => console.log(`ERR... ${err}`),
               }));
 
-    this._subscriptions.push(this.scryfall.getAllCardNames()
+    this._subscriptions.push(this._scryfall.getAllCardNames()
     .subscribe({  next: (data: ICardName[]) => {
                     this.cardNameListScroll$.pipe(
                         scan((acc: ICardName[], curr: ICardName[]) => {
@@ -80,11 +80,11 @@ export class SearchCardByNameComponent implements OnInit {
     const edition = this.searchForm.get('cardEdition')?.value;
     const cardName = this.searchForm.get('cardName')?.value;
 
-    this._subscriptions.push(this.scryfall.getCardDetailsByName(cardName)
+    this._subscriptions.push(this._scryfall.getCardDetailsByName(cardName)
     .subscribe({  next: (data: ICardDetails) => {
-                  this.cardDetailsList = [];
-                  this.cardDetailsList.push(data);
-                  this.onChangeSearchResults.emit(this.cardDetailsList);
+                  this._cardDetailsList = [];
+                  this._cardDetailsList.push(data);
+                  this.onChangeSearchResults.emit(this._cardDetailsList);
                   }
               })
     );

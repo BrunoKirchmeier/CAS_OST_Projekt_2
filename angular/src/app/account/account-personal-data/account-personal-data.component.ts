@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from 'src/app/shared/services/auth.services';
+import { Subscription } from 'rxjs';
 import { CompareValidator } from '../../shared/helpers/form-validators';
+import { AccountService } from '../shared/services/account.service';
 
 @Component({
   selector: 'app-account-personal-data',
@@ -11,10 +12,19 @@ import { CompareValidator } from '../../shared/helpers/form-validators';
 })
 export class AccountPersonalDataComponent implements OnInit {
 
-  constructor(private _authService: AuthService,
-             private _snackBar: MatSnackBar) { }
+  constructor(private _accountService: AccountService,
+              private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this._subscriptions.forEach((element: Subscription) => {
+      element.unsubscribe();
+    });
+  }
+
+  private _subscriptions: Subscription[] = [];
+  private _userData: any = {};
 
   public form = new FormGroup({
     firstName: new FormControl('', Validators.compose([])),
@@ -27,9 +37,6 @@ export class AccountPersonalDataComponent implements OnInit {
     accountNumber: new FormControl('', Validators.compose([])),
   });
   public isSpinnerActive: boolean = false;
-
-
-
 
 
 

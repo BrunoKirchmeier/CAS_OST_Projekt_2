@@ -21,14 +21,14 @@ export class NavigationComponent implements OnInit {
   public contentMargin = 240;
   public isLoggedIn: Boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver,
+  constructor(private _breakpointObserver: BreakpointObserver,
               private _authService: AuthService,
               private _snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.isMenuOpen = true;
     this._subscriptions.push(
-      this.breakpointObserver.observe(Breakpoints.Handset)
+      this._breakpointObserver.observe(Breakpoints.Handset)
       .subscribe((state: BreakpointState) => {
         if (state.matches) {
           this.isMobile = true;

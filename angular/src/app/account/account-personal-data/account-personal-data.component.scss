@@ -1,0 +1,34 @@
+
+.page-container {
+  text-align: center;
+}
+
+.form {
+  text-align: left;
+  display: inline-block;
+  width: 70%;
+  margin-top: 30px;
+
+  &-field {
+    width: 100%;
+  }
+
+  &-requirements {
+    width: 100%;
+    margin-top: 30px;
+  }
+
+  &-button-submit {
+    width: 100%;
+  }
+}
+
+.form-link {
+  display: block;
+  margin-top: 10px;
+  text-decoration: none;
+}
+
+.spinner {
+  display: inline-block;
+}
