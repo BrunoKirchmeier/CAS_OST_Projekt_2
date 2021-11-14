@@ -40,6 +40,7 @@ export class AccountCreateComponent implements OnInit {
       .then((res: IAuthState) => {
         this.isSpinnerActive = false;
         this._snackBar.open(res.messageText);
+        console.log(res);
       })
       .catch((error) => {
         this.isSpinnerActive = false;

@@ -56,10 +56,11 @@ export class AuthService {
 
   async createAccount(email: string, password: string): Promise<IAuthState> {
     const auth = getAuth();
-
+    let success = false;
     await createUserWithEmailAndPassword(auth, email, password)
     .then((res) => {
       this._response.currentUser = res.user;
+      success = true;
     })
     .catch((error) => {
       switch (error.code) {
@@ -72,13 +73,13 @@ export class AuthService {
           this._response.messageText = error.message;
       }
     });
-
-    await sendEmailVerification(this._response.currentUser)
-    .then(() => {
-      this._response.code = this._statesDict.CREATE_SUCCESS.code;
-      this._response.messageText = this._statesDict.CREATE_SUCCESS.message;
-    })
-
+    if(success) {
+      await sendEmailVerification(this._response.currentUser)
+      .then(() => {
+        this._response.code = this._statesDict.CREATE_SUCCESS.code;
+        this._response.messageText = this._statesDict.CREATE_SUCCESS.message;
+      })
+    }
     return new Promise((resolve) => {
       resolve(this._response);
     });
@@ -86,7 +87,6 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<IAuthState> {
     const auth = getAuth();
-
     await signInWithEmailAndPassword(auth, email, password)
     .then((res) => {
       if(res.user.emailVerified === true) {
@@ -118,7 +118,6 @@ export class AuthService {
           this._response.messageText = error.message;
       }
     });
-
     return new Promise((resolve) => {
       this.loggedInState$.next(this._response);
       resolve(this._response);
@@ -127,9 +126,11 @@ export class AuthService {
 
   async sendEmailValidationLink(email: string, password: string): Promise<IAuthState> {
     const auth = getAuth();
+    let success = false;
     await signInWithEmailAndPassword(auth, email, password)
     .then((res) => {
       this._response.currentUser = res.user;
+      success = true;
     })
     .catch((error) => {
       switch (error.code) {
@@ -150,13 +151,13 @@ export class AuthService {
           this._response.messageText = error.message;
       }
     });
-
-    await sendEmailVerification(this._response.currentUser)
-    .then(() => {
-      this._response.code = this._statesDict.EMAIL_VALIDATION_SUCCESS.code;
-      this._response.messageText = this._statesDict.EMAIL_VALIDATION_SUCCESS.message;
-    })
-
+    if(success) {
+      await sendEmailVerification(this._response.currentUser)
+      .then(() => {
+        this._response.code = this._statesDict.EMAIL_VALIDATION_SUCCESS.code;
+        this._response.messageText = this._statesDict.EMAIL_VALIDATION_SUCCESS.message;
+      })
+    }
     return new Promise((resolve) => {
       this.loggedInState$.next(this._response);
       resolve(this._response);
@@ -170,7 +171,6 @@ export class AuthService {
       this._response.code = this._statesDict.EMAIL_PW_RESET.code;
       this._response.messageText = this._statesDict.EMAIL_PW_RESET.message;
     })
-
     return new Promise((resolve) => {
       resolve(this._response);
     });
@@ -178,16 +178,12 @@ export class AuthService {
 
   async logout(): Promise<IAuthState> {
     const auth = getAuth();
-
     await signOut(auth)
-
     localStorage.removeItem('currentUser');
     this._response.loginState = false;
     this._response.code = this._statesDict.EMAIL_VALIDATION_SUCCESS.code;
     this._response.messageText = this._statesDict.EMAIL_VALIDATION_SUCCESS.message;
-
     this.loggedInState$.next(this._response);
-
     return new Promise((resolve) => {
       resolve(this._response);
     });
