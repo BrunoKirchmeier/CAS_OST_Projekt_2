@@ -5,7 +5,7 @@ import { addDoc, collection, DocumentReference, DocumentSnapshot, getDoc, getDoc
 import { Unsubscribe } from '@firebase/util';
 import { DocumentData } from 'rxfire/firestore/interfaces';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { AuthService } from '../../shared/services/auth.services';
+import { AuthService } from '../../../shared/services/auth.services';
 
 @Injectable({
   providedIn: 'root'

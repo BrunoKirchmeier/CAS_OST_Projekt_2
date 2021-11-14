@@ -1,8 +1,8 @@
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from '../shared/guards/auth.guard';
 
-import { OfferCreateComponent } from './offer-create/offer-create.component';
-import { OfferSearchComponent } from './offer-search/offer-search.component';
+import { OfferCreateComponent } from '../offer/offer-create/offer-create.component';
+import { OfferUpdateComponent } from './offer-update/offer-update.component';
 
 const offerRoutes = [
 
@@ -13,8 +13,8 @@ const offerRoutes = [
     data: { title: 'Angebot erstellen'}
   },
   {
-    path: 'offer-search',
-    component: OfferSearchComponent,
+    path: 'offer-update',
+    component: OfferUpdateComponent,
     data: { title: 'Angebotssuche'}
   },
 ];
