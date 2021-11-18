@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { collection, CollectionReference } from '@angular/fire/firestore';
 import { getAuth,
          signInAnonymously, signInWithEmailAndPassword, signOut,
          createUserWithEmailAndPassword,
          sendEmailVerification,
          sendPasswordResetEmail } from "firebase/auth";
 import { BehaviorSubject } from 'rxjs';
+import { IAccountUser } from 'src/app/account/shared/services/account.service';
+import { DatabaseService } from './database.service';
 
 @Injectable({
   providedIn: 'root'
@@ -49,10 +51,26 @@ export class AuthService {
                                    currentUser: localStorage.getItem('currentUser') ?? {},
                                    code: this._statesDict.UNDEFINED.code,
                                    messageText: this._statesDict.UNDEFINED.message};
+  private _userCollection: string = 'users';
+  private user: IAccountUser = {
+    email: '',
+    firstName: null,
+    lastName: null,
+    street: null,
+    zip: null,
+    city: null,
+    country: null,
+    phone: null,
+    accountNumber: null
+  }
 
   public loggedInState$ = new BehaviorSubject<IAuthState>(this._response);
 
-  constructor(private _db: Firestore) {}
+  get currentUser(): any {
+    return localStorage.getItem('currentUser');
+  }
+
+  constructor(private _dbExt: DatabaseService) {}
 
   async createAccount(email: string, password: string): Promise<IAuthState> {
     const auth = getAuth();
@@ -73,6 +91,20 @@ export class AuthService {
           this._response.messageText = error.message;
       }
     });
+    if(success) {
+      success = false;
+      this.user.email = this._response.currentUser.email;
+      await this._dbExt.createDoc<IAccountUser>(this._userCollection,
+                                                this.user)
+      .then(() => {
+        success = true;
+      })
+      .catch((error) => {
+        success = false;
+        this._response.code = error.code;
+        this._response.messageText = error.message;
+      })
+    }
     if(success) {
       await sendEmailVerification(this._response.currentUser)
       .then(() => {

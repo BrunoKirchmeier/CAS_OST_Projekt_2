@@ -44,6 +44,7 @@ export class AccountCreateComponent implements OnInit {
       })
       .catch((error) => {
         this.isSpinnerActive = false;
+        console.log(error)
       });
     }
   }

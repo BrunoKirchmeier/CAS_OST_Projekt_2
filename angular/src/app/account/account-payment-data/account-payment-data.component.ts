@@ -11,8 +11,7 @@ import { CompareValidator } from '../../shared/helpers/form-validators';
 })
 export class AccountPaymentDataComponent implements OnInit {
 
-  constructor(private _authService: AuthService,
-              private _snackBar: MatSnackBar) { }
+  constructor(private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {}
 

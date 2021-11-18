@@ -17,7 +17,7 @@ export class OfferService {
   private _subscriptions: Subscription[] = [];
   private _unSubscriptions: Unsubscribe[] = [];
 
-  constructor(private _db: Firestore,
+  constructor(private _db: Firestore,                 /////////////   _dbExt: DatabaseService ////////////////////////////////////////////////////////////////
               private _authService: AuthService) {}
 
   ngOnInit(): void {
@@ -39,6 +39,7 @@ export class OfferService {
   }
 
   async createOffer(data: any): Promise<any> {
+    /*
     const offer: IOffer = {id: null,
                            cardName: data.cardName,
                            providerUid: this._currentUser.uid,
@@ -60,13 +61,16 @@ export class OfferService {
         reject(error);
       });
     }
+    */
     return new Promise((resolve) => {
       resolve(true);
     });
   }
 
   async readDoc<T>(query: any | null = null): Promise<any> {
+
     let data: T[] = [];
+    /*
     try {
       if(query !== null) {
         const ret: QuerySnapshot<DocumentData> = await getDocs(query);
@@ -93,6 +97,7 @@ export class OfferService {
         reject(error);
       });
     }
+    */
     return new Promise((resolve) => {
       resolve(data);
     });

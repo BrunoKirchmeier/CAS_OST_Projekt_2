@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { CompareValidator } from '../../shared/helpers/form-validators';
 import { AccountService } from '../shared/services/account.service';
 
 @Component({
@@ -12,10 +11,18 @@ import { AccountService } from '../shared/services/account.service';
 })
 export class AccountPersonalDataComponent implements OnInit {
 
-  constructor(private _accountService: AccountService,
-              private _snackBar: MatSnackBar) { }
+  constructor(private _snackBar: MatSnackBar,
+              private _accountService: AccountService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._accountService.getUser()
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
 
   ngOnDestroy(): void {
     this._subscriptions.forEach((element: Subscription) => {
@@ -24,7 +31,6 @@ export class AccountPersonalDataComponent implements OnInit {
   }
 
   private _subscriptions: Subscription[] = [];
-  private _userData: any = {};
 
   public form = new FormGroup({
     firstName: new FormControl('', Validators.compose([])),
@@ -39,15 +45,24 @@ export class AccountPersonalDataComponent implements OnInit {
   public isSpinnerActive: boolean = false;
 
 
-
-
-
-
-
   onSubmitForm() {
-
+    this._accountService.updateUser({email: 'bruno_churchi@gmx.ch',
+                                     firstName:  null,
+                                     lastName: null,
+                                     street: null,
+                                     zip: null,
+                                     city: null,
+                                     country: null,
+                                     phone:  null,
+                                     accountNumber: null
+                                    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   }
-
 
   closeSnackBar() {
     this._snackBar.dismiss();
@@ -56,3 +71,6 @@ export class AccountPersonalDataComponent implements OnInit {
 
 
 }
+
+
+
