@@ -61,10 +61,10 @@ export interface IAccountUser {
   email: string;
   firstName: string | null;
   lastName: string | null;
-  street: string | null;
+  address: string | null;
   zip: number | null;
   city: string | null;
   country: string | null;
-  phone: number | null;
-  accountNumber: string | null;
+  phone: string | null;
+  iban: string | null;
 }

@@ -31,9 +31,8 @@ export class ErrorHandlerService extends ErrorHandler {
       }
     }
     this._logger.createLog(logData);
-    super.handleError(exception);
     this._dialog.confirm('Unerwarteter Fehler', 'Es ist ein unerwarteter Fehler aufgetreten.');
-
+    super.handleError(exception);
   }
 }
 

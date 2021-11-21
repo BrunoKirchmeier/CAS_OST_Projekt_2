@@ -28,13 +28,13 @@
 
       <mat-form-field appearance="outline"
             class="form-field">
-        <mat-label for="street">Strasse: </mat-label>
+        <mat-label for="address">Strasse: </mat-label>
         <input  matInput
-                id="street"
-                name="street"
+                id="address"
+                name="address"
                 type="text"
-                formControlName="street">
-        <mat-error *ngIf="form.get('street')?.errors">
+                formControlName="address">
+        <mat-error *ngIf="form.get('address')?.errors">
           <span>Die Strasse darf nicht leer sein</span>
         </mat-error>
       </mat-form-field>
@@ -66,6 +66,21 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline"
+                      class="form-field">
+        <mat-label for="country">Land: </mat-label>
+        <mat-select id="country"
+                    name="country"
+                    formControlName="country">
+          <mat-option *ngFor="let country of countries"
+                [value]="country.iso">
+                {{country.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+
+      <mat-form-field appearance="outline"
                     class="form-field">
         <mat-label for="phone">Tel: </mat-label>
         <input  matInput
@@ -77,13 +92,13 @@
 
       <mat-form-field appearance="outline"
                       class="form-field">
-        <mat-label for="accountNumber">Kontonummer: </mat-label>
+        <mat-label for="iban">Kontonummer: </mat-label>
         <input  matInput
-            id="accountNumber"
-            name="accountNumber"
+            id="iban"
+            name="iban"
             type="text"
-            formControlName="accountNumber">
-        <mat-error *ngIf="form.get('accountNumber')?.errors">
+            formControlName="iban">
+        <mat-error *ngIf="form.get('iban')?.errors">
           <span>Die Kontonummer ist nicht gültig</span>
         </mat-error>
       </mat-form-field>

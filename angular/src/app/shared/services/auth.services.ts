@@ -84,12 +84,12 @@ export class AuthService {
         email: this._response.currentUser.email,
         firstName: null,
         lastName: null,
-        street: null,
+        address: null,
         zip: null,
         city: null,
         country: null,
         phone: null,
-        accountNumber: null
+        iban: null
       }
       await this._dbExt.createDoc<IAccountUser>(this._userCollection,
                                                 user)
