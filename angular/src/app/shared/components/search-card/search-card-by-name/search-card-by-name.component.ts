@@ -33,23 +33,25 @@ export class SearchCardByNameComponent implements OnInit {
   constructor(private _scryfall: ApiScryfallService) {}
 
   ngOnInit(): void {
-    this._subscriptions.push(this._scryfall.getAllEditionNames()
-    .subscribe({ next: data => this.editionNameList = data,
-                 error: err => console.log(`ERR... ${err}`),
-              }));
+    this._subscriptions.push(
+      this._scryfall.getAllEditionNames()
+      .subscribe({ next: data => this.editionNameList = data,
+                })
+    );
 
-    this._subscriptions.push(this._scryfall.getAllCardNames()
-    .subscribe({  next: (data: ICardName[]) => {
-                    this.cardNameListScroll$.pipe(
-                        scan((acc: ICardName[], curr: ICardName[]) => {
-                          return [...acc, ...curr];
-                      }, [])
-                  );
-                  this.cardNameList = data;
-                  this.getLimitedPartOfCardNames();
-                },
-                error: err => console.log(`ERR... ${err}`),
-              }));
+    this._subscriptions.push(
+      this._scryfall.getAllCardNames()
+      .subscribe({  next: (data: ICardName[]) => {
+                      this.cardNameListScroll$.pipe(
+                          scan((acc: ICardName[], curr: ICardName[]) => {
+                            return [...acc, ...curr];
+                        }, [])
+                    );
+                    this.cardNameList = data;
+                    this.getLimitedPartOfCardNames();
+                  },
+                })
+    );
 
     this._subscriptions.push(
       this.cardNameSearch.valueChanges.pipe(

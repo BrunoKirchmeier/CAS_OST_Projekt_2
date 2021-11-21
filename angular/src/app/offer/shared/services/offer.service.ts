@@ -22,7 +22,7 @@ export class OfferService {
 
   ngOnInit(): void {
     this._subscriptions.push(
-      this._authService.loggedInState$.subscribe({
+      this._authService.onChangeloggedInState$.subscribe({
         next: (data) => { this._currentUser = JSON.parse(data.currentUser);},
       })
     );

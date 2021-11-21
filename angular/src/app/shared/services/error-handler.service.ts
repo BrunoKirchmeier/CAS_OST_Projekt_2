@@ -1,6 +1,7 @@
 import { ErrorHandler, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.services';
+import { DialogService } from './dialog.service';
 import { ErrorLoggerService } from './error-logger.service';
 
 @Injectable()
@@ -8,7 +9,8 @@ export class ErrorHandlerService extends ErrorHandler {
 
   constructor(private _authService: AuthService,
               private _router: Router,
-              private _logger: ErrorLoggerService) {
+              private _logger: ErrorLoggerService,
+              private _dialog: DialogService) {
     super();
   }
 
@@ -30,6 +32,8 @@ export class ErrorHandlerService extends ErrorHandler {
     }
     this._logger.createLog(logData);
     super.handleError(exception);
+    this._dialog.confirm('Unerwarteter Fehler', 'Es ist ein unerwarteter Fehler aufgetreten.');
+
   }
 }
 

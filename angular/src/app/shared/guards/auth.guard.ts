@@ -12,7 +12,7 @@ export class AuthGuard implements CanActivate {
   constructor(private _router: Router,
               private _authService: AuthService) {
     this._subscriptions.push(
-      this._authService.loggedInState$.subscribe({
+      this._authService.onChangeloggedInState$.subscribe({
         next: data => this._isLoggedIn = data.loginState,
       })
     );

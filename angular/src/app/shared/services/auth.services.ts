@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { collection, CollectionReference } from '@angular/fire/firestore';
 import { getAuth,
-         signInAnonymously, signInWithEmailAndPassword, signOut,
+         signInWithEmailAndPassword, signOut,
          createUserWithEmailAndPassword,
          sendEmailVerification,
          sendPasswordResetEmail } from "firebase/auth";
@@ -52,19 +51,8 @@ export class AuthService {
                                    code: this._statesDict.UNDEFINED.code,
                                    messageText: this._statesDict.UNDEFINED.message};
   private _userCollection: string = 'users';
-  private user: IAccountUser = {
-    email: '',
-    firstName: null,
-    lastName: null,
-    street: null,
-    zip: null,
-    city: null,
-    country: null,
-    phone: null,
-    accountNumber: null
-  }
 
-  public loggedInState$ = new BehaviorSubject<IAuthState>(this._response);
+  public onChangeloggedInState$ = new BehaviorSubject<IAuthState>(this._response);
 
   get currentUser(): any {
     return localStorage.getItem('currentUser');
@@ -87,22 +75,26 @@ export class AuthService {
           this._response.messageText = this._statesDict.ALLREADY_CREATED.message;
           break;
         default:
-          this._response.code = error.code;
-          this._response.messageText = error.message;
+          throw(error);
       }
     });
     if(success) {
       success = false;
-      this.user.email = this._response.currentUser.email;
+      const user: IAccountUser = {
+        email: this._response.currentUser.email,
+        firstName: null,
+        lastName: null,
+        street: null,
+        zip: null,
+        city: null,
+        country: null,
+        phone: null,
+        accountNumber: null
+      }
       await this._dbExt.createDoc<IAccountUser>(this._userCollection,
-                                                this.user)
+                                                user)
       .then(() => {
         success = true;
-      })
-      .catch((error) => {
-        success = false;
-        this._response.code = error.code;
-        this._response.messageText = error.message;
       })
     }
     if(success) {
@@ -146,12 +138,11 @@ export class AuthService {
           this._response.messageText = this._statesDict.WRONG_PASSWORD.message;
           break;
         default:
-          this._response.code = error.code;
-          this._response.messageText = error.message;
+          throw(error);
       }
     });
     return new Promise((resolve) => {
-      this.loggedInState$.next(this._response);
+      this.onChangeloggedInState$.next(this._response);
       resolve(this._response);
     });
   }
@@ -179,8 +170,7 @@ export class AuthService {
           this._response.messageText = this._statesDict.WRONG_PASSWORD.message;
           break;
         default:
-          this._response.code = error.code;
-          this._response.messageText = error.message;
+          throw(error);
       }
     });
     if(success) {
@@ -191,7 +181,7 @@ export class AuthService {
       })
     }
     return new Promise((resolve) => {
-      this.loggedInState$.next(this._response);
+      this.onChangeloggedInState$.next(this._response);
       resolve(this._response);
     });
   }
@@ -199,7 +189,7 @@ export class AuthService {
   async sendPasswordResetEmail(email: string): Promise<IAuthState> {
     const auth = getAuth();
     await sendPasswordResetEmail(auth, email)
-    .then((res) => {
+    .then(() => {
       this._response.code = this._statesDict.EMAIL_PW_RESET.code;
       this._response.messageText = this._statesDict.EMAIL_PW_RESET.message;
     })
@@ -215,7 +205,7 @@ export class AuthService {
     this._response.loginState = false;
     this._response.code = this._statesDict.EMAIL_VALIDATION_SUCCESS.code;
     this._response.messageText = this._statesDict.EMAIL_VALIDATION_SUCCESS.message;
-    this.loggedInState$.next(this._response);
+    this.onChangeloggedInState$.next(this._response);
     return new Promise((resolve) => {
       resolve(this._response);
     });
@@ -229,7 +219,3 @@ export interface IAuthState {
   code: string;
   messageText: string;
 }
-
-
-
-// https://stackoverflow.com/questions/37841721/wait-for-multiple-promises-to-finish

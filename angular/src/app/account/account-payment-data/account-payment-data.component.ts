@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from 'src/app/shared/services/auth.services';
-import { CompareValidator } from '../../shared/helpers/form-validators';
 
 @Component({
   selector: 'app-account-payment-data',

@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
       })
     );
     this._subscriptions.push(
-      this._authService.loggedInState$.subscribe({
+      this._authService.onChangeloggedInState$.subscribe({
         next: data => this._isLoggedIn = data.loginState,
       })
     );
@@ -61,28 +61,19 @@ export class LoginComponent implements OnInit {
           this._router.navigate([this._redirectUrl]);
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
     }
   }
 
   resetPassword() {
     const email = this.form.get('email')?.value;
-
     if(email) {
       this._authService.sendPasswordResetEmail(email)
       .then((res: IAuthState) => {
         this._snackBar.open(res.messageText);
       })
-      .catch((error) => {
-        console.log(error);
-      });
-
     } else {
       this._snackBar.open('Bitte gültige E-Mail Adresse angeben');
     }
-
   }
 
   closeSnackBar() {

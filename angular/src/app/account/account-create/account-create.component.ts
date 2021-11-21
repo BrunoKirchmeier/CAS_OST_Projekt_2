@@ -40,12 +40,7 @@ export class AccountCreateComponent implements OnInit {
       .then((res: IAuthState) => {
         this.isSpinnerActive = false;
         this._snackBar.open(res.messageText);
-        console.log(res);
       })
-      .catch((error) => {
-        this.isSpinnerActive = false;
-        console.log(error)
-      });
     }
   }
 
@@ -63,9 +58,6 @@ export class AccountCreateComponent implements OnInit {
         this.isSpinnerActive = false;
         this._snackBar.open(res.messageText);
       })
-      .catch((error) => {
-        this.isSpinnerActive = false;
-      });
     } else {
       this._snackBar.open('E-Mail und Passwortfeld ausfüllen');
     }

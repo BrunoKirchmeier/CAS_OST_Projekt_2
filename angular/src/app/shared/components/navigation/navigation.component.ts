@@ -38,11 +38,10 @@ export class NavigationComponent implements OnInit {
       })
     );
     this._subscriptions.push(
-      this._authService.loggedInState$.subscribe({
+      this._authService.onChangeloggedInState$.subscribe({
         next: data => this.isLoggedIn = data.loginState,
       })
     );
-
   }
 
   ngOnDestroy(): void {

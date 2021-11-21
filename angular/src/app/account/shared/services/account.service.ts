@@ -27,13 +27,8 @@ export class AccountService {
   }
 
   async getUser(): Promise<any> {
-    let success: boolean = true;
     let accountData: IAccountUser;
-    let err: any;
-    let activUser: any = {};
-    try {
-      activUser = JSON.parse(this._authService.currentUser);
-    } catch (error) {}
+    let activUser: any = JSON.parse(this._authService.currentUser);
     let q = query(collection(this._db, this._userCollection),
                   where('email', '==', activUser.email));
     await this._dbExt.readDoc<IAccountUser>(q)
@@ -42,42 +37,18 @@ export class AccountService {
           accountData = doc as any;
         })
       })
-      .catch((error) => {
-        success = false;
-        err = error;
-      })
-    if(success) {
-      return new Promise((resolve) => {
-        resolve(accountData);
-      });
-    } else {
-      return new Promise((resolve, reject) => {
-        reject(err);
-      });
-    }
+    return new Promise((resolve) => {
+      resolve(accountData);
+    });
   }
 
-
   async updateUser(user: IAccountUser): Promise<any> {
-    let success: boolean = true;
-    let err: any;
     let q = query(collection(this._db, this._userCollection),
                   where('email', '==', user.email));
     await this._dbExt.updateDoc<IAccountUser>(q, user)
-    .catch((error) => {
-      success = false;
-      err = error;
-    })
-    if(success) {
-      return new Promise((resolve) => {
-        resolve(true);
-      });
-    } else {
-      return new Promise((resolve, reject) => {
-        reject(err);
-      });
-    }
-
+    return new Promise((resolve) => {
+      resolve(true);
+    });
   }
 
 

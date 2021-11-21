@@ -44,7 +44,7 @@ export class OfferCreateComponent implements OnInit {
 
   ngOnDestroy(): void {}
 
-  ngOnChanges(changes: any) {
+  ngOnChanges() {
     this.currentCardName = null;
     this.borderActive = false;
   }
@@ -62,8 +62,6 @@ export class OfferCreateComponent implements OnInit {
                                       deliveryMode: deliveryMode,
                                       additionInfo: additionInfo})
         .then(() => { this._snackBar.open('Das Angebot wurde eröffnet'); })
-        .catch((error) => { console.log(error);
-      });
     }
   }
 

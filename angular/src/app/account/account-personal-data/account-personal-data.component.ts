@@ -57,10 +57,6 @@ export class AccountPersonalDataComponent implements OnInit {
                                      accountNumber: null
                                     })
     .then((res) => {
-      console.log(res);
-    })
-    .catch((error) => {
-      console.log(error);
     })
   }
 
