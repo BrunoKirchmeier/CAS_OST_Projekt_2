@@ -2,7 +2,7 @@
 import { environment } from 'src/environments/environment';
 
 // System Modules
-import { ErrorHandler, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { NoPreloading, RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { AppComponent } from './app.component';

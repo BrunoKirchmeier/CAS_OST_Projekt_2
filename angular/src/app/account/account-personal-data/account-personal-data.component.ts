@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth.services';
+import { CountryFinderService } from 'src/app/shared/services/address-finder.service';
 import { AccountService, IAccountUser } from '../shared/services/account.service';
+import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-account-personal-data',
@@ -12,6 +14,7 @@ import { AccountService, IAccountUser } from '../shared/services/account.service
 })
 export class AccountPersonalDataComponent implements OnInit {
 
+  private _subscriptions: Subscription[] = [];
   private _activUser: any;
   private _personalData: IAccountUser = {
     email: '',
@@ -26,28 +29,6 @@ export class AccountPersonalDataComponent implements OnInit {
   }
 
   public countries: any[] = [{iso: 'CH', description: 'Schweiz'}]
-
-  constructor(private _snackBar: MatSnackBar,
-              private _authService: AuthService,
-              private _accountService: AccountService) {
-    this._activUser = JSON.parse(this._authService.currentUser);
-    this._personalData.email = this._activUser.email;
-  }
-
-  ngOnInit(): void {
-    this._accountService.getUser()
-    .then((res) => {
-    })
-  }
-
-  ngOnDestroy(): void {
-    this._subscriptions.forEach((element: Subscription) => {
-      element.unsubscribe();
-    });
-  }
-
-  private _subscriptions: Subscription[] = [];
-
   public form = new FormGroup({
     firstName: new FormControl('', Validators.compose([])),
     lastName: new FormControl('', Validators.compose([])),
@@ -59,7 +40,38 @@ export class AccountPersonalDataComponent implements OnInit {
     iban: new FormControl('', Validators.compose([])),
   });
   public isSpinnerActive: boolean = false;
+  public filteredCityOptions$: Observable<string[]> | undefined = new Observable;
+  public filteredZipOptions$: Observable<string[]> | undefined = new Observable;
 
+  constructor(private _snackBar: MatSnackBar,
+              private _authService: AuthService,
+              private _accountService: AccountService,
+              private _countryFinder: CountryFinderService) {
+    this._activUser = JSON.parse(this._authService.currentUser);
+    this._personalData.email = this._activUser.email;
+  }
+
+  ngOnInit(): void {
+    this._accountService.getUser()
+    .then((res) => {
+    })
+    this.filteredCityOptions$ = this.form.get('city')?.valueChanges.pipe(
+      debounceTime(250),
+      map((city) => {
+        return this._countryFinder.getCities(city) })
+    );
+    this.filteredZipOptions$ = this.form.get('zip')?.valueChanges.pipe(
+      debounceTime(250),
+      map((zip) => {
+        return this._countryFinder.getPlz(zip) })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.forEach((element: Subscription) => {
+      element.unsubscribe();
+    });
+  }
 
   onSubmitForm() {
     if(this.form.valid) {
@@ -75,6 +87,9 @@ export class AccountPersonalDataComponent implements OnInit {
 
 
 
+
+    // CountryFinderService
+
     // IAccountUser
 
 
@@ -86,7 +101,6 @@ export class AccountPersonalDataComponent implements OnInit {
   closeSnackBar() {
     this._snackBar.dismiss();
   }
-
 
 
 }

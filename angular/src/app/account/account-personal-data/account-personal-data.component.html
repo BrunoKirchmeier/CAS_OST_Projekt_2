@@ -27,7 +27,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline"
-            class="form-field">
+                      class="form-field">
         <mat-label for="address">Strasse: </mat-label>
         <input  matInput
                 id="address"
@@ -46,7 +46,13 @@
                 id="zip"
                 name="zip"
                 type="number"
-                formControlName="zip">
+                formControlName="zip"
+                [matAutocomplete]="autoZip">
+        <mat-autocomplete #autoZip="matAutocomplete">
+          <mat-option *ngFor="let option of filteredZipOptions$ | async" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
         <mat-error *ngIf="form.get('zip')?.errors">
           <span>Keine gültige Postleitzahl</span>
         </mat-error>
@@ -59,11 +65,21 @@
                 id="city"
                 name="city"
                 type="text"
-                formControlName="city">
+                formControlName="city"
+                [matAutocomplete]="autoCity">
+        <mat-autocomplete #autoCity="matAutocomplete">
+          <mat-option *ngFor="let option of filteredCityOptions$ | async" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
         <mat-error *ngIf="form.get('city')?.errors">
           <span>Der Ort darf nicht leer sein</span>
         </mat-error>
       </mat-form-field>
+
+
+
+
 
       <mat-form-field appearance="outline"
                       class="form-field">
@@ -77,8 +93,6 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-
-
 
       <mat-form-field appearance="outline"
                     class="form-field">

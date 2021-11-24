@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule} from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -38,6 +39,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatSelectModule,
     NgxMatSelectSearchModule,
     MatSelectInfiniteScrollModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatProgressSpinnerModule,
   ],
