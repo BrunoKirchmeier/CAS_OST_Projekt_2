@@ -26,11 +26,11 @@ export class AccountService {
     });
   }
 
-  async getUser(): Promise<any> {
+  async getUser(email: string): Promise<any> {
     let accountData: IAccountUser;
     let activUser: any = JSON.parse(this._authService.currentUser);
     let q = query(collection(this._db, this._userCollection),
-                  where('email', '==', activUser.email));
+                  where('email', '==', email));
     await this._dbExt.readDoc<IAccountUser>(q)
       .then((snapshot: QuerySnapshot<DocumentData>) => {
         snapshot.forEach(doc => {
