@@ -9,7 +9,6 @@
         <mat-select id="cardName"
                     name="cardName"
                     formControlName="cardName"
-                    (valueChange)="onChangeSelectCardName($event)"
                     msInfiniteScroll
                     (infiniteScroll)="getLimitedPartOfCardNames()"
                     [complete]="cardNameListOffset === cardNameList.length">

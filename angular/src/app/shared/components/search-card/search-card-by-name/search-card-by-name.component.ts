@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
-import { ApiScryfallService, ICardName, IEditionName, ICardDetails } from '../../../services/scryfallApi.service';
+import { ApiScryfallService, ICardName, ICardDetails } from '../../../services/scryfallApi.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, scan } from 'rxjs/operators';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -20,7 +20,6 @@ export class SearchCardByNameComponent implements OnInit, OnDestroy {
   private _cardNameListSearchLimit: number = 20;
   private _cardDetailsList: ICardDetails[] = [];
 
-  public editionNameList: IEditionName[] = [];
   public cardNameList: ICardName[] = [];
   public cardNameListOffset: number = 0;
   public cardNameListScroll$: BehaviorSubject<ICardName[]> = new BehaviorSubject<ICardName[]>([]);
@@ -33,12 +32,6 @@ export class SearchCardByNameComponent implements OnInit, OnDestroy {
   constructor(private _scryfall: ApiScryfallService) {}
 
   ngOnInit(): void {
-    this._subscriptions.push(
-      this._scryfall.getAllEditionNames()
-      .subscribe({ next: data => this.editionNameList = data,
-                })
-    );
-
     this._subscriptions.push(
       this._scryfall.getAllCardNames()
       .subscribe({  next: (data: ICardName[]) => {
@@ -70,26 +63,18 @@ export class SearchCardByNameComponent implements OnInit, OnDestroy {
     });
   }
 
-  onChangeSelectCardEdition(element: string): void {
-    this.searchForm.patchValue({
-      cardEdition: element
-    })
-  }
-
-  onChangeSelectCardName(element: string): void {}
-
   onSubmitSearchForm(): void {
-    const edition = this.searchForm.get('cardEdition')?.value;
     const cardName = this.searchForm.get('cardName')?.value;
-
-    this._subscriptions.push(this._scryfall.getCardDetailsByName(cardName)
-    .subscribe({  next: (data: ICardDetails) => {
-                  this._cardDetailsList = [];
-                  this._cardDetailsList.push(data);
-                  this.onChangeSearchResults.emit(this._cardDetailsList);
-                  }
-              })
-    );
+    if(cardName !== '') {
+      this._subscriptions.push(this._scryfall.getCardDetailsByName(cardName)
+      .subscribe({  next: (data: ICardDetails) => {
+                    this._cardDetailsList = [];
+                    this._cardDetailsList.push(data);
+                    this.onChangeSearchResults.emit(this._cardDetailsList);
+                    }
+                })
+      );
+    }
   }
 
   getLimitedPartOfCardNames() {
