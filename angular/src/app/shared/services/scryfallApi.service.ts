@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +8,6 @@ import { Observable } from 'rxjs';
 
 export class ApiScryfallService {
 
-  private _errorCounter: number = 0;
   private _cardNameList: ICardName[] = [];
   private _editionNameList: IEditionName[] = [];
 
@@ -60,7 +58,7 @@ export class ApiScryfallService {
         const obj: ICardDetails =
         {
           _id: res.id,
-          name: res.name,
+          cardName: res.name,
           cardText: res.oracle_text,
           cardImageUri: uri,
           manaCost: res.mana_cost,
@@ -96,7 +94,7 @@ export interface IEditionName {
   id: string;
   code: string;
   tcgplayer_id: number;
-  name: string;
+  cardName: string;
   uri: string;
   scryfall_uri: string;
   search_uri: string;
@@ -114,7 +112,7 @@ export interface IEditionName {
 */
 export interface ICardDetails {
   _id: string;
-  name: string;
+  cardName: string;
   cardText: string;
   cardImageUri: string;
   manaCost: string;

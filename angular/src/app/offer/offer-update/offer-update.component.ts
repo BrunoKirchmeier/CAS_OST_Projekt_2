@@ -17,9 +17,20 @@ export class OfferUpdateComponent implements OnInit {
   ngOnInit(): void {}
 
 
+test() {
+  let test: any;
+  this._offerService.getMyOffers()
+   .then((a) => { console.log(a); })
+
+}
+
 
   closeSnackBar() {
     this._snackBar.dismiss();
+
+
+    this.test();
+    console.log('RTRTTRRT');
   }
 
 }

@@ -41,7 +41,7 @@ export class OfferService {
                                         offer)
     const cardDetail: ICardDetails = {
       _id: '',
-      name: data.cardDetails.name,
+      cardName: data.cardDetails.cardName,
       cardText: data.cardDetails.cardText,
       cardImageUri: data.cardDetails.cardImageUri,
       manaCost: data.cardDetails.manaCost,
@@ -54,8 +54,9 @@ export class OfferService {
     });
   }
 
-  async getMyOffers(): Promise<IOffer[]> {
-    let offers: Array<IOffer>;
+  async getMyOffers(): Promise<any[]> {
+    let offers: Array<IOffer> = [];
+    let offersExtended: Array<any> = [];
     let q = query(collection(this._db, this._offersCollection),
                   where('providerUid', '==', this._currentUser.uid));
     await this._dbExt.readDoc<IOffer>(q)
@@ -65,8 +66,15 @@ export class OfferService {
           offers.push(offer);
         })
       })
+      for (let i=0; i < offers.length; i++) {
+        let q = query(collection(this._db, this._cardDetailCollection),
+                      where('cardName', '==', offers[i].cardName));
+        let cardDetails = await this._dbExt.readDoc<IOffer>(q)
+        offersExtended[i] = offers[i];
+        offersExtended[i].cardDetails = cardDetails[0];
+      }
     return new Promise((resolve) => {
-      resolve(offers);
+      resolve(offersExtended);
     });
   }
 

@@ -50,7 +50,7 @@ export class OfferCreateComponent {
   }
 
   async onSubmit(): Promise<any> {
-
+    console.log(this.currentCardName);
     if(this.form.valid) {
       const cardName =  this.currentCardName as string;
       const unitPrice = this.form.get('offerPrice')?.value;
