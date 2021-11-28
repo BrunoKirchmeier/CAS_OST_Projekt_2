@@ -1,24 +1,33 @@
 .page {
   &-container {
     display: inline-block;
-    padding: 20px;
-    margin-top: 20px;
     text-align: center;
   }
 }
 
-.offer {
+.item {
   &-container {
-    width: 80%;
+    max-width: 80%;
     display: inline-block;
     text-align: center;
   }
 
   &-img {
     max-width: 100%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin-top: 20px;
   }
 
+  &-detail {
+    display: inline-block;
+    padding-top: 10px;
+    text-align: center;
+  }
+}
+
+.isHalfSize {
+  width: 50%;
+}
+
+.isFullSize {
+  width: 100%;
 }

@@ -2,24 +2,22 @@
 <ng-container>
   <div class="page-container"
       (click)="closeSnackBar()"
-      [ngClass]="borderActive ? 'create-offer-border' : '' "
       *ngIf="cardDetails !== null && cardDetails !== undefined">
 
     <img src="{{cardDetails.cardImageUri}}"
       data-id="{{cardDetails._id}}"
       data-name="{{cardDetails.cardName}}"
       (loaded)="onLoaded(cardDetails.cardName)"
-      class="create-offer-img isFullSize">
+      class="item-img">
 
-    <div class="create-offer-field-container"
+    <div class="item-detail"
         *ngIf="currentCardName !== null">
 
       <form [formGroup]="form"
-            (ngSubmit)="onSubmit()"
-            class="create-offer-form">
+            (ngSubmit)="onSubmit()">
 
         <mat-form-field appearance="outline"
-                        class="pad-mar-1 create-offer-price isHalfSize">
+                        class="pad-mar-1 isHalfSize">
           <mat-label for="offerPrice">Preis in CHF: </mat-label>
           <input  matInput
                   id="offerPrice"
@@ -29,7 +27,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline"
-                        class="pad-mar-1 create-offer-amount isHalfSize">
+                        class="pad-mar-1 isHalfSize">
           <mat-label for="cardAmount">Anzahl: </mat-label>
           <input  matInput
                   id="cardAmount"

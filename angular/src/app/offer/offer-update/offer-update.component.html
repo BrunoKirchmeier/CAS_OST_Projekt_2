@@ -2,12 +2,83 @@
   <div class="page-container"
       (click)="closeSnackBar()">
     <div *ngFor="let offer of offerList$ | async"
-         class="offer-container">
+         class="item-container"
+         data-id="{{offer?._id}}">
       <img src="{{offer.cardDetails?.cardImageUri}}"
-           data-id="{{offer.cardDetails?._id}}"
-           data-name="{{offer.cardDetails?.cardName}}"
-           class="offer-img"
-           (click)="showOfferDetails()">
+            data-id="{{offer.cardDetails?._id}}"
+            class="item-img"
+            (click)="showOfferDetails(offer)">
+      <div class="item-detail"
+            *ngIf="offer.cardDetails !== null && activeOfferDetails == offer.cardDetails?._id">
+        <form [formGroup]="form"
+              (ngSubmit)="onSubmit()">
+
+          <mat-form-field appearance="outline"
+                          class="pad-mar-1 isHalfSize">
+            <mat-label for="offerPrice">Preis in CHF: </mat-label>
+            <input  matInput
+                    id="offerPrice"
+                    name="offerPrice"
+                    type="number"
+                    formControlName="offerPrice">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline"
+                          class="pad-mar-1 isHalfSize">
+            <mat-label for="cardAmount">Anzahl: </mat-label>
+            <input  matInput
+                    id="cardAmount"
+                    name="cardAmount"
+                    type="number"
+                    min="1"
+                    formControlName="cardAmount">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline"
+                          class="pad-mar-1 isFullSize">
+            <mat-label for="deliveryMode">Lieferart: </mat-label>
+            <mat-select id="deliveryMode"
+                        name="deliveryMode"
+                        formControlName="deliveryMode">
+              <mat-option *ngFor="let mode of deliveryModes"
+                          [value]="mode.name">
+                          {{mode.description}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline"
+                          class="pad-mar-1 isFullSize">
+            <mat-label for="paymentMode">Bezahlung: </mat-label>
+            <mat-select id="paymentMode"
+                        name="paymentMode"
+                        formControlName="paymentMode">
+              <mat-option *ngFor="let mode of paymentModes"
+                      [value]="mode.name">
+                      {{mode.description}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline"
+                          class="pad-mar-1 isFullSize">
+            <mat-label for="additionInfo">Zusatz Informationen: </mat-label>
+            <textarea matInput
+                      id="additionInfo"
+                      name="additionInfo"
+                      placeholder="Freier Text"
+                      formControlName="additionInfo">
+            </textarea>
+          </mat-form-field>
+
+          <button mat-raised-button
+                  type="submit"
+                  color="primary"
+                  class="isFullSize">Hinzufügen
+          </button>
+
+        </form>
+      </div>
     </div>
   </div>
 </ng-container>
