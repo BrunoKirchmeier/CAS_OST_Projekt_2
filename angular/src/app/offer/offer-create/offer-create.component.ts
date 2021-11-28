@@ -1,15 +1,14 @@
-import { Component, HostListener, Output, EventEmitter, ElementRef, Input } from '@angular/core';
+import { Component, OnChanges, HostListener, Output, EventEmitter, ElementRef, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IDeliveryModes, IPaymentModes, OfferService } from '../shared/services/offer.service';
 import { ApiScryfallService, ICardDetails } from '../../shared/services/scryfallApi.service';
-
 @Component({
   selector: 'app-offer-create, img[loaded]',
   templateUrl: './offer-create.component.html',
   styleUrls: ['./offer-create.component.scss']
 })
-export class OfferCreateComponent {
+export class OfferCreateComponent implements OnChanges {
 
   public currentCardName: string | null = null;
   public imgIsResized: boolean = false;
@@ -50,7 +49,6 @@ export class OfferCreateComponent {
   }
 
   async onSubmit(): Promise<any> {
-    console.log(this.currentCardName);
     if(this.form.valid) {
       const cardName =  this.currentCardName as string;
       const unitPrice = this.form.get('offerPrice')?.value;
@@ -67,7 +65,9 @@ export class OfferCreateComponent {
                                       additionInfo: additionInfo,
                                       cardDetails: cardDetails
                                     })
-        .then(() => { this._snackBar.open('Das Angebot wurde eröffnet'); })
+        .then(() => {
+          this._snackBar.open('Das Angebot wurde eröffnet');
+        })
     }
   }
 

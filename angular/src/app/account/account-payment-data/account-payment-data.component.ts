@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -7,11 +7,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './account-payment-data.component.html',
   styleUrls: ['./account-payment-data.component.scss']
 })
-export class AccountPaymentDataComponent implements OnInit {
+export class AccountPaymentDataComponent {
 
   constructor(private _snackBar: MatSnackBar) { }
-
-  ngOnInit(): void {}
 
   public form = new FormGroup({
     firstName: new FormControl('', Validators.compose([])),
@@ -25,24 +23,10 @@ export class AccountPaymentDataComponent implements OnInit {
   });
   public isSpinnerActive: boolean = false;
 
-
-
-
-
-
-
-
-
-
-  onSubmitForm() {
-
-  }
-
+  onSubmitForm() {}
 
   closeSnackBar() {
     this._snackBar.dismiss();
   }
-
-
 
 }

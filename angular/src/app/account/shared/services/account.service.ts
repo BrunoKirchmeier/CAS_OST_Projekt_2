@@ -38,10 +38,6 @@ export class AccountService {
     });
   }
 
-
-
-
-
 }
 
 export interface IAccountUser {

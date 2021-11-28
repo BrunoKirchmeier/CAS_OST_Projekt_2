@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, IAuthState } from 'src/app/shared/services/auth.services';
@@ -9,7 +9,7 @@ import { CompareValidator } from '../../shared/helpers/form-validators';
   templateUrl: './account-create.component.html',
   styleUrls: ['./account-create.component.scss']
 })
-export class AccountCreateComponent implements OnInit {
+export class AccountCreateComponent {
 
   public form = new FormGroup({
     email: new FormControl('', Validators.compose([Validators.required,
@@ -28,8 +28,6 @@ export class AccountCreateComponent implements OnInit {
 
   constructor(private _authService: AuthService,
               private _snackBar: MatSnackBar) { }
-
-  ngOnInit() {}
 
   onSubmitForm(): void {
     if(this.form.valid) {

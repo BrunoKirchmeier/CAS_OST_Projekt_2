@@ -31,7 +31,6 @@ export class CountryFinderService implements OnDestroy {
                                                 })
                             .subscribe(res => {
                               res.records.forEach((element: any) => {
-                                // response.push(element?.fields?.ortbez18);
                                 response.push(element?.fields?.ortbez27);
                               });
                             })
@@ -62,9 +61,6 @@ export class CountryFinderService implements OnDestroy {
       {iso: 'CH',
        description: 'Schweiz',
        countryPhonePrefix: '+41'},
-      {iso: 'CH2',
-       description: 'Schweiz2',
-       countryPhonePrefix: '+42'}
     ];
     return countries;
   }

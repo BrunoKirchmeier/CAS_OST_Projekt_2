@@ -1,13 +1,13 @@
 <ng-container>
   <div class="page-container"
       (click)="closeSnackBar()">
-
-test
-
-    <div *ngFor="let offer of offerList">
-
-
-
+    <div *ngFor="let offer of offerList$ | async"
+         class="offer-container">
+      <img src="{{offer.cardDetails?.cardImageUri}}"
+           data-id="{{offer.cardDetails?._id}}"
+           data-name="{{offer.cardDetails?.cardName}}"
+           class="offer-img"
+           (click)="showOfferDetails()">
     </div>
   </div>
 </ng-container>

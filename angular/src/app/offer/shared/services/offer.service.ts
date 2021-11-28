@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, query, collection, where, QuerySnapshot, Timestamp } from '@angular/fire/firestore';
 import { DocumentData } from 'rxfire/firestore/interfaces';
+import { Subject } from 'rxjs';
 import { DatabaseService } from 'src/app/shared/services/database.service';
 import { ICardDetails } from 'src/app/shared/services/scryfallApi.service';
 import { AuthService } from '../../../shared/services/auth.services';
@@ -15,16 +16,25 @@ export class OfferService {
   private _offersCollection: string = 'offers';
   private _cardDetailCollection: string = 'cardDetails';
 
+  public onChangeOwnerOffer$: Subject<IOffer[]> = new Subject<IOffer[]>();
+
   constructor(private _authService: AuthService,
               private _dbExt: DatabaseService,
               private _db: Firestore) {
     this._currentUser = JSON.parse(this._authService.currentUser);
+    this.init();
+  }
+
+  async init() {
+    let offers: IOffer[] = await this.getMyOffers();
+    this.onChangeOwnerOffer$.next(offers);
   }
 
   async createOffer(data: any): Promise<any> {
     const offer: IOffer = {
       _id: null,
       cardName: data.cardName,
+      cardDetails: null,
       providerUid: this._currentUser.uid,
       providerEmail: this._currentUser.email,
       buyerUid: null,
@@ -49,14 +59,16 @@ export class OfferService {
     };
     await this._dbExt.createDoc<ICardDetails>(this._cardDetailCollection,
                                               cardDetail)
+    let offers: IOffer[] = await this.getMyOffers();
+    this.onChangeOwnerOffer$.next(offers);
     return new Promise((resolve) => {
       resolve(true);
     });
   }
 
-  async getMyOffers(): Promise<any[]> {
+  async getMyOffers(): Promise<IOffer[]> {
     let offers: Array<IOffer> = [];
-    let offersExtended: Array<any> = [];
+    let offersExtended: Array<IOffer> = [];
     let q = query(collection(this._db, this._offersCollection),
                   where('providerUid', '==', this._currentUser.uid));
     await this._dbExt.readDoc<IOffer>(q)
@@ -97,6 +109,7 @@ export class OfferService {
 export interface IOffer {
   _id: string | null;
   cardName: string;
+  cardDetails: ICardDetails | null,
   providerUid: string;
   providerEmail: string ;
   buyerUid: string | null;
