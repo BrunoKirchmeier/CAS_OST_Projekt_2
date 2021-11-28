@@ -1,34 +1,21 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Firestore, query, collection, where, QuerySnapshot } from '@angular/fire/firestore';
 import { DocumentData } from 'rxfire/firestore/interfaces';
-import { Subscription } from 'rxjs';
 import { DatabaseService } from 'src/app/shared/services/database.service';
-import { AuthService } from '../../../shared/services/auth.services';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class AccountService implements OnDestroy{
+export class AccountService {
 
-  private _subscriptions: Subscription[] = [];
   private _userCollection: string = 'users';
 
-  constructor(private _authService: AuthService,
-              private _dbExt: DatabaseService,
+  constructor(private _dbExt: DatabaseService,
               private _db: Firestore) {}
-
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    this._subscriptions.forEach((element: Subscription) => {
-      element.unsubscribe();
-    });
-  }
 
   async getUser(email: string): Promise<any> {
     let accountData: IAccountUser;
-    let activUser: any = JSON.parse(this._authService.currentUser);
     let q = query(collection(this._db, this._userCollection),
                   where('email', '==', email));
     await this._dbExt.readDoc<IAccountUser>(q)
