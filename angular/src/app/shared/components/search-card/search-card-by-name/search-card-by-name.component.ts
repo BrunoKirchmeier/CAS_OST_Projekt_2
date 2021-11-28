@@ -18,7 +18,6 @@ export class SearchCardByNameComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription[] = [];
   private _cardNameListLimit: number = 1000;
   private _cardNameListSearchLimit: number = 20;
-  private _cardDetailsList: ICardDetails[] = [];
 
   public cardNameList: ICardName[] = [];
   public cardNameListOffset: number = 0;
@@ -54,7 +53,6 @@ export class SearchCardByNameComponent implements OnInit, OnDestroy {
         this.searchOfCardNamesChanged(element);
       })
     );
-
   }
 
   ngOnDestroy(): void {
@@ -63,18 +61,17 @@ export class SearchCardByNameComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSubmitSearchForm(): void {
+  async onSubmitSearchForm(): Promise<void> {
     const cardName = this.searchForm.get('cardName')?.value;
     if(cardName !== '') {
-      this._subscriptions.push(this._scryfall.getCardDetailsByName(cardName)
-      .subscribe({  next: (data: ICardDetails) => {
-                    this._cardDetailsList = [];
-                    this._cardDetailsList.push(data);
-                    this.onChangeSearchResults.emit(this._cardDetailsList);
-                    }
-                })
-      );
+      await this._scryfall.getCardDetailsByName(cardName)
+        .then((res) => {
+          this.onChangeSearchResults.emit(res);
+        })
     }
+    return new Promise((resolve) => {
+      resolve();
+    });
   }
 
   getLimitedPartOfCardNames() {

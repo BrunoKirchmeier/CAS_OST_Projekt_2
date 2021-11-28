@@ -3,90 +3,86 @@
   <div class="page-container"
       (click)="closeSnackBar()"
       [ngClass]="borderActive ? 'create-offer-border' : '' "
-      *ngIf="cardDetailsList.length > 0">
-    <div *ngFor="let cardDetail of cardDetailsList"
-          class="create-offer-img-container">
-      <img src="{{cardDetail.cardImageUri}}"
-          data-id="{{cardDetail.id}}"
-          data-name="{{cardDetail.name}}"
-          class="create-offer-img"
-          (click)="resizeImg()"
-          (loaded)="onLoaded(cardDetail.name)"
-          [ngClass]="imgIsResized ? 'isFullSize' : 'isSmallSize'">
+      *ngIf="cardDetails !== null && cardDetails !== undefined">
 
-      <div class="create-offer-field-container"
-          *ngIf="currentCardName !== null">
+    <img src="{{cardDetails.cardImageUri}}"
+      data-id="{{cardDetails._id}}"
+      data-name="{{cardDetails.name}}"
+      (loaded)="onLoaded(cardDetails.name)"
+      class="create-offer-img isFullSize">
 
-        <form [formGroup]="form"
-              (ngSubmit)="onSubmit()"
-              class="create-offer-form">
+    <div class="create-offer-field-container"
+        *ngIf="currentCardName !== null">
 
-          <mat-form-field appearance="outline"
-                          class="pad-mar-1 create-offer-price isHalfSize">
-            <mat-label for="offerPrice">Preis in CHF: </mat-label>
-            <input  matInput
-                    id="offerPrice"
-                    name="offerPrice"
-                    type="number"
-                    formControlName="offerPrice">
-          </mat-form-field>
+      <form [formGroup]="form"
+            (ngSubmit)="onSubmit()"
+            class="create-offer-form">
 
-          <mat-form-field appearance="outline"
-                          class="pad-mar-1 create-offer-amount isHalfSize">
-            <mat-label for="cardAmount">Anzahl: </mat-label>
-            <input  matInput
-                    id="cardAmount"
-                    name="cardAmount"
-                    type="number"
-                    min="1"
-                    formControlName="cardAmount">
-          </mat-form-field>
+        <mat-form-field appearance="outline"
+                        class="pad-mar-1 create-offer-price isHalfSize">
+          <mat-label for="offerPrice">Preis in CHF: </mat-label>
+          <input  matInput
+                  id="offerPrice"
+                  name="offerPrice"
+                  type="number"
+                  formControlName="offerPrice">
+        </mat-form-field>
 
-          <mat-form-field appearance="outline"
-                          class="pad-mar-1 isFullSize">
-            <mat-label for="deliveryMode">Lieferart: </mat-label>
-            <mat-select id="deliveryMode"
-                        name="deliveryMode"
-                        formControlName="deliveryMode">
-              <mat-option *ngFor="let mode of deliveryModes"
-                          [value]="mode.name">
-                          {{mode.description}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field appearance="outline"
+                        class="pad-mar-1 create-offer-amount isHalfSize">
+          <mat-label for="cardAmount">Anzahl: </mat-label>
+          <input  matInput
+                  id="cardAmount"
+                  name="cardAmount"
+                  type="number"
+                  min="1"
+                  formControlName="cardAmount">
+        </mat-form-field>
 
-          <mat-form-field appearance="outline"
-                          class="pad-mar-1 isFullSize">
-            <mat-label for="paymentMode">Bezahlung: </mat-label>
-            <mat-select id="paymentMode"
-                        name="paymentMode"
-                        formControlName="paymentMode">
-              <mat-option *ngFor="let mode of paymentModes"
-                      [value]="mode.name">
-                      {{mode.description}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field appearance="outline"
+                        class="pad-mar-1 isFullSize">
+          <mat-label for="deliveryMode">Lieferart: </mat-label>
+          <mat-select id="deliveryMode"
+                      name="deliveryMode"
+                      formControlName="deliveryMode">
+            <mat-option *ngFor="let mode of deliveryModes"
+                        [value]="mode.name">
+                        {{mode.description}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-form-field appearance="outline"
-                          class="pad-mar-1 isFullSize">
-            <mat-label for="additionInfo">Zusatz Informationen: </mat-label>
-            <textarea matInput
-                      id="additionInfo"
-                      name="additionInfo"
-                      placeholder="Freier Text"
-                      formControlName="additionInfo">
-            </textarea>
-          </mat-form-field>
+        <mat-form-field appearance="outline"
+                        class="pad-mar-1 isFullSize">
+          <mat-label for="paymentMode">Bezahlung: </mat-label>
+          <mat-select id="paymentMode"
+                      name="paymentMode"
+                      formControlName="paymentMode">
+            <mat-option *ngFor="let mode of paymentModes"
+                    [value]="mode.name">
+                    {{mode.description}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <button mat-raised-button
-                  type="submit"
-                  color="primary"
-                  class="isFullSize">Hinzufügen
-          </button>
+        <mat-form-field appearance="outline"
+                        class="pad-mar-1 isFullSize">
+          <mat-label for="additionInfo">Zusatz Informationen: </mat-label>
+          <textarea matInput
+                    id="additionInfo"
+                    name="additionInfo"
+                    placeholder="Freier Text"
+                    formControlName="additionInfo">
+          </textarea>
+        </mat-form-field>
 
-        </form>
-      </div>
+        <button mat-raised-button
+                type="submit"
+                color="primary"
+                class="isFullSize">Hinzufügen
+        </button>
+
+      </form>
     </div>
   </div>
 </ng-container>

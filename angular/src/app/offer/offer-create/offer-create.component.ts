@@ -1,15 +1,15 @@
-import { Component, HostListener, OnInit, Output, EventEmitter, ElementRef, Input, OnDestroy } from '@angular/core';
+import { Component, HostListener, Output, EventEmitter, ElementRef, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IDeliveryModes, IPaymentModes, OfferService } from '../shared/services/offer.service';
-import { ICardDetails } from '../../shared/services/scryfallApi.service';
+import { ApiScryfallService, ICardDetails } from '../../shared/services/scryfallApi.service';
 
 @Component({
   selector: 'app-offer-create, img[loaded]',
   templateUrl: './offer-create.component.html',
   styleUrls: ['./offer-create.component.scss']
 })
-export class OfferCreateComponent implements OnInit, OnDestroy {
+export class OfferCreateComponent {
 
   public currentCardName: string | null = null;
   public imgIsResized: boolean = false;
@@ -24,7 +24,7 @@ export class OfferCreateComponent implements OnInit, OnDestroy {
   public deliveryModes: Array<IDeliveryModes> = [];
   public paymentModes: Array<IPaymentModes> = [];
 
-  @Input() cardDetailsList: ICardDetails[] = [];
+  @Input() cardDetails: any = null;
 
   @Output() loaded = new EventEmitter();
 
@@ -35,7 +35,8 @@ export class OfferCreateComponent implements OnInit, OnDestroy {
 
   constructor(private _elRef: ElementRef<HTMLImageElement>,
               private _offerService: OfferService,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private _scryfall: ApiScryfallService) {
     if (this._elRef.nativeElement.complete) {
       this.loaded.emit();
     }
@@ -43,35 +44,31 @@ export class OfferCreateComponent implements OnInit, OnDestroy {
     this.paymentModes = this._offerService.getPaymentModes();
   }
 
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {}
-
   ngOnChanges() {
     this.currentCardName = null;
     this.borderActive = false;
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<any> {
+
     if(this.form.valid) {
-      const cardName =  this.currentCardName;
+      const cardName =  this.currentCardName as string;
       const unitPrice = this.form.get('offerPrice')?.value;
       const quantity = this.form.get('cardAmount')?.value;
       const deliveryMode = this.form.get('deliveryMode')?.value;
       const paymentMode = this.form.get('paymentMode')?.value;
       const additionInfo = this.form.get('additionInfo')?.value;
+      const cardDetails: ICardDetails = await this._scryfall.getCardDetailsByName(cardName);
       this._offerService.createOffer({cardName: cardName,
                                       unitPrice: unitPrice,
                                       quantity: quantity,
                                       deliveryMode: deliveryMode,
                                       paymentMode: paymentMode,
-                                      additionInfo: additionInfo})
+                                      additionInfo: additionInfo,
+                                      cardDetails: cardDetails
+                                    })
         .then(() => { this._snackBar.open('Das Angebot wurde eröffnet'); })
     }
-  }
-
-  resizeImg() {
-    this.imgIsResized = !this.imgIsResized;
   }
 
   onLoaded(cardName: string) {

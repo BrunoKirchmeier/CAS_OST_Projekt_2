@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { IOffer, OfferService } from '../shared/services/offer.service';
 
 @Component({
   selector: 'app-offer-update',
@@ -7,8 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OfferUpdateComponent implements OnInit {
 
-  constructor() { }
+  public offerList: Array<IOffer> = [];
+
+  constructor(private _offerService: OfferService,
+              private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {}
+
+
+
+  closeSnackBar() {
+    this._snackBar.dismiss();
+  }
 
 }

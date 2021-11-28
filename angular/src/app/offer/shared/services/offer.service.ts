@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Firestore, query, collection, where, QuerySnapshot, Timestamp } from '@angular/fire/firestore';
 import { DocumentData } from 'rxfire/firestore/interfaces';
 import { DatabaseService } from 'src/app/shared/services/database.service';
+import { ICardDetails } from 'src/app/shared/services/scryfallApi.service';
 import { AuthService } from '../../../shared/services/auth.services';
 
 @Injectable({
@@ -12,6 +13,7 @@ export class OfferService {
 
   private _currentUser: any = null;
   private _offersCollection: string = 'offers';
+  private _cardDetailCollection: string = 'cardDetails';
 
   constructor(private _authService: AuthService,
               private _dbExt: DatabaseService,
@@ -33,9 +35,20 @@ export class OfferService {
       paymentMode: data.paymentMode,
       additionInfo: data.additionInfo,
       creationDate : Timestamp.now(),
-      saleDate : null};
+      saleDate : null
+    };
     await this._dbExt.createDoc<IOffer>(this._offersCollection,
                                         offer)
+    const cardDetail: ICardDetails = {
+      _id: '',
+      name: data.cardDetails.name,
+      cardText: data.cardDetails.cardText,
+      cardImageUri: data.cardDetails.cardImageUri,
+      manaCost: data.cardDetails.manaCost,
+      cardLanguageIso: data.cardDetails.cardLanguageIso
+    };
+    await this._dbExt.createDoc<ICardDetails>(this._cardDetailCollection,
+                                              cardDetail)
     return new Promise((resolve) => {
       resolve(true);
     });

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,15 +26,6 @@ export class ApiScryfallService {
                 i++;
               });
               return this._cardNameList;
-            }),
-            catchError((error,src) => {
-              console.log('Exeption geworfen!!!!')
-              this._errorCounter++;
-              if (this._errorCounter < 2) {
-                return src;
-              } else {
-                throw new Error(error)
-              }
             })
         )
   }
@@ -46,53 +38,42 @@ export class ApiScryfallService {
                 this._editionNameList.push(obj);
               });
               return this._editionNameList;
-            }),
-            catchError((error,src) => {
-              console.log('Exeption geworfen!!!!')
-              this._errorCounter++;
-              if (this._errorCounter < 2) {
-                return src;
-              } else {
-                throw new Error(error)
-              }
             })
       )
   }
 
-  public getCardDetailsByName(cardName: string,
-                              format: CardPictureFormat = CardPictureFormat.NORMAL) {
+  async getCardDetailsByName(cardName: string,
+                              format: CardPictureFormat = CardPictureFormat.NORMAL): Promise<any> {
+    let cardDetails: ICardDetails;
+    let test: any;
     const urlParams = new HttpParams()
       .set('fuzzy', cardName);
 
-    return this._http.get<any>('https://api.scryfall.com/cards/named', {params: urlParams})
-      .pipe(map((res: any) => {
-              let uri: string = '';
-              if(typeof res === 'object' &&
-                res.hasOwnProperty('image_uris') &&
-                res.image_uris.hasOwnProperty(format)) {
-                  uri = res.image_uris[format];
-              }
-              const obj: ICardDetails =
-              {
-                id: res.id,
-                name: res.name,
-                text: res.oracle_text,
-                cardImageUri: uri,
-                manaCost: res.mana_cost
-              }
-              return obj;
-            }),
-            catchError((error,src) => {
-              console.log('Exeption geworfen!!!!')
-              this._errorCounter++;
-              if (this._errorCounter < 2) {
-                return src;
-              } else {
-                throw new Error(error)
-              }
-            })
-        )
+    await this._http.get<any>('https://api.scryfall.com/cards/named', {params: urlParams}).toPromise()
+      .then((res: any) => {
+        let uri: string = '';
+        if(typeof res === 'object' &&
+          res.hasOwnProperty('image_uris') &&
+          res.image_uris.hasOwnProperty(format)) {
+            uri = res.image_uris[format];
+        }
+        const obj: ICardDetails =
+        {
+          _id: res.id,
+          name: res.name,
+          cardText: res.oracle_text,
+          cardImageUri: uri,
+          manaCost: res.mana_cost,
+          cardLanguageIso: res.lang
+        }
+        cardDetails = obj as any;
+      })
+      return new Promise((resolve) => {
+        resolve(cardDetails);
+      });
   }
+
+}
 
 /*
 https://api.scryfall.com
@@ -100,8 +81,6 @@ We kindly ask that you insert 50 – 100 milliseconds of delay between the reque
 HTTP 429 Too Many Requests status code. Continuing to overload the API after this point may result in a temporary or permanent ban of your IP address.
 For example, if you are submitting a request to a method that requires Application authorization, you must submit an HTTP header like Authorization: Bearer X where X is your client_secret token, including the cs- prefix.
 */
-
-}
 export interface IScryfallApiResList {
   object: string;
   uri: string;
@@ -134,11 +113,12 @@ export interface IEditionName {
   Datatyp: API Scryfall ICardDetails
 */
 export interface ICardDetails {
-  id: string;
+  _id: string;
   name: string;
-  text: string;
+  cardText: string;
   cardImageUri: string;
   manaCost: string;
+  cardLanguageIso: string;
 }
 
 
