@@ -1,42 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth.services';
-import { CountryFinderService } from 'src/app/account/shared/services/address-finder.service';
+import { CountryFinderService, ICountry } from 'src/app/account/shared/services/address-finder.service';
 import { AccountService, IAccountUser } from '../shared/services/account.service';
 import { debounceTime, map } from 'rxjs/operators';
 import { IbanValidatorService } from '../shared/services/iban-validator.service';
+import { IbanFormatterPipe } from '../shared/pipes/iban-formatter.pipe'
 
 @Component({
   selector: 'app-account-personal-data',
   templateUrl: './account-personal-data.component.html',
   styleUrls: ['./account-personal-data.component.scss']
 })
-export class AccountPersonalDataComponent implements OnInit {
+export class AccountPersonalDataComponent implements OnInit, OnDestroy {
 
   private _subscriptions: Subscription[] = [];
   private _activUser: any;
   private _personalData: IAccountUser = {
     email: '',
-    firstName: null,
-    lastName: null,
-    address: null,
-    zip: null,
-    city: null,
-    country: null,
-    phone: null,
-    iban: null,
+    firstName: '',
+    lastName: '',
+    address: '',
+    zip: '',
+    city: '',
+    countryIso: '',
+    phone: '',
+    iban: '',
   }
 
-  public countries: any[] = [{iso: 'CH', description: 'Schweiz'}]
+  public countries: Array<ICountry> = [];
   public form = new FormGroup({
     firstName: new FormControl('', Validators.compose([])),
     lastName: new FormControl('', Validators.compose([])),
     address: new FormControl('', Validators.compose([])),
     zip: new FormControl('', Validators.compose([])),
     city: new FormControl('', Validators.compose([])),
-    country: new FormControl('CH', Validators.compose([])),
+    countryIso: new FormControl('', Validators.compose([])),
+    phonePrefix: new FormControl('', Validators.compose([])),
     phone: new FormControl('', Validators.compose([])),
     iban: new FormControl('', Validators.compose([])),
   });
@@ -48,33 +50,20 @@ export class AccountPersonalDataComponent implements OnInit {
               private _authService: AuthService,
               private _accountService: AccountService,
               private _countryFinderService: CountryFinderService,
-              private _ibanValidatorService: IbanValidatorService) {
+              private _ibanValidatorService: IbanValidatorService,
+              private _IbanFormatterPipe: IbanFormatterPipe) {
     this._activUser = JSON.parse(this._authService.currentUser);
     this._personalData.email = this._activUser.email;
+    this.countries = this._countryFinderService.getCountries();
   }
 
   ngOnInit(): void {
     this._accountService.getUser(this._personalData.email)
-    .then((res) => {
-      if(res !== undefined) {
-        this._personalData.firstName = res.firstName;
-        this._personalData.lastName = res.lastName;
-        this._personalData.address = res.address;
-        this._personalData.zip = res.zip;
-        this._personalData.city = res.city;
-        this._personalData.country = res.country;
-        this._personalData.phone = res.phone;
-        this._personalData.iban = res.iban;
-        this.form.setValue({
-          firstName: res.firstName,
-          lastName: res.lastName,
-          address: res.address,
-          zip: res.zip,
-          city: res.city,
-          country: res.country,
-          phone: res.phone,
-          iban: res.iban
-       });
+    .then((val) => {
+      if(val !== undefined && val !== null) {
+        const phonePrefix: string = this.searchPhonePrefix(val.countryIso);
+        val.phonePrefix = phonePrefix;
+        this.setFormValues(val);
       }
     })
     this.filteredCityOptions$ = this.form.get('city')?.valueChanges.pipe(
@@ -87,6 +76,15 @@ export class AccountPersonalDataComponent implements OnInit {
       map((zip) => {
         return this._countryFinderService.getPlz(zip) })
     );
+    this._subscriptions.push(
+      this.form.valueChanges.subscribe((val) => {
+        if(val !== undefined && val !== null) {
+          const phonePrefix: string = this.searchPhonePrefix(val.countryIso);
+          val.phonePrefix = phonePrefix;
+          this.setFormValues(val);
+        }
+      })
+    )
   }
 
   ngOnDestroy(): void {
@@ -98,34 +96,10 @@ export class AccountPersonalDataComponent implements OnInit {
   async onSubmitForm() {
     if(this.form.valid) {
       this.isSpinnerActive = true;
-
-      if(this.form.get('firstName')) {
-        this._personalData.firstName = this.form.get('firstName')?.value;
-      }
-      if(this.form.get('lastName')) {
-        this._personalData.lastName = this.form.get('lastName')?.value;
-      }
-      if(this.form.get('address')) {
-        this._personalData.address = this.form.get('address')?.value;
-      }
-      if(this.form.get('zip')) {
-        this._personalData.zip = this.form.get('zip')?.value;
-      }
-      if(this.form.get('city')) {
-        this._personalData.city = this.form.get('city')?.value;
-      }
-      if(this.form.get('country')) {
-        this._personalData.country = this.form.get('country')?.value;
-      }
-      if(this.form.get('phone')) {
-        this._personalData.phone = this.form.get('phone')?.value;
-      }
-      if(this.form.get('iban')) {
-        this._personalData.iban = this.form.get('iban')?.value;
-      }
       // IBAN Validation
       const iban = this._personalData.iban as string;
       let isValidIban: boolean = true;
+      console.log(iban);
       if(iban !== '') {
         await this._ibanValidatorService.checkIban(iban)
           .then((res) => {
@@ -154,11 +128,41 @@ export class AccountPersonalDataComponent implements OnInit {
     this._snackBar.dismiss();
   }
 
+  searchPhonePrefix(iso: string) {
+    const countryElement: any = this.countries.find(i => i.iso == iso);
+    const phonePrefix: string = countryElement === undefined
+                              ? ''
+                              : countryElement.countryPhonePrefix;
+    return phonePrefix;
+  }
+
+  setFormValues(form: any) {
+    // Raw Values witout formations
+    this._personalData.firstName = form.firstName;
+    this._personalData.lastName = form.lastName;
+    this._personalData.address = form.address;
+    this._personalData.zip = form.zip;
+    this._personalData.city = form.city;
+    this._personalData.countryIso = form.countryIso;
+    this._personalData.phone = form.phone;
+    this._personalData.iban = this._IbanFormatterPipe.rawValue(form.iban);
+    // Formatted Values for View
+    this.form.setValue({
+      firstName: form.firstName,
+      lastName: form.lastName,
+      address: form.address,
+      zip: form.zip,
+      city: form.city,
+      countryIso: form.countryIso,
+      phonePrefix: form.phonePrefix,
+      phone: form.phone,
+      iban: this._IbanFormatterPipe.transform(form.iban)
+    },
+    { emitEvent: false });
+  }
+
   async checkIban(iban: string) {
     return await this._ibanValidatorService.checkIban(iban);
   }
 
 }
-
-
-

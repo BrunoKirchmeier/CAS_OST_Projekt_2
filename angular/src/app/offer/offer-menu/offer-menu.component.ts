@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ICardDetails } from '../../shared/services/scryfallApi.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { ICardDetails } from '../../shared/services/scryfallApi.service';
   templateUrl: './offer-menu.component.html',
   styleUrls: ['./offer-menu.component.scss']
 })
-export class OfferMenuComponent implements OnInit {
+export class OfferMenuComponent implements OnInit, OnDestroy {
 
   public cardDetailsList: ICardDetails[] = [];
 

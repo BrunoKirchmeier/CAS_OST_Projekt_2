@@ -82,14 +82,14 @@ export class AuthService {
       success = false;
       const user: IAccountUser = {
         email: this._response.currentUser.email,
-        firstName: null,
-        lastName: null,
-        address: null,
-        zip: null,
-        city: null,
-        country: null,
-        phone: null,
-        iban: null
+        firstName: '',
+        lastName: '',
+        address: '',
+        zip: '',
+        city: '',
+        countryIso: '',
+        phone: '',
+        iban: ''
       }
       await this._dbExt.createDoc<IAccountUser>(this._userCollection,
                                                 user)

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Firestore, query, collection, where, QuerySnapshot } from '@angular/fire/firestore';
 import { DocumentData } from 'rxfire/firestore/interfaces';
 import { Subscription } from 'rxjs';
@@ -9,7 +9,7 @@ import { AuthService } from '../../../shared/services/auth.services';
   providedIn: 'root'
 })
 
-export class AccountService {
+export class AccountService implements OnDestroy{
 
   private _subscriptions: Subscription[] = [];
   private _userCollection: string = 'users';
@@ -59,12 +59,12 @@ export class AccountService {
 
 export interface IAccountUser {
   email: string;
-  firstName: string | null;
-  lastName: string | null;
-  address: string | null;
-  zip: number | null;
-  city: string | null;
-  country: string | null;
-  phone: string | null;
-  iban: string | null;
+  firstName: string;
+  lastName: string;
+  address: string;
+  zip: string;
+  city: string;
+  countryIso: string;
+  phone: string;
+  iban: string;
 }

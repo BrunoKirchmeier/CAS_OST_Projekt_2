@@ -1,12 +1,12 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment.prod'
 
 @Injectable({
   providedIn: 'root'
 })
-export class CountryFinderService {
+export class CountryFinderService implements OnDestroy {
 
   private _subscriptions: Subscription[] = [];
   private _httpHeaders = new HttpHeaders({'Authorization': 'Apikey ' + environment.postApiKey});
@@ -57,4 +57,22 @@ export class CountryFinderService {
     return response;
   }
 
+  public getCountries(): Array<ICountry> {
+    const countries: Array<ICountry> = [
+      {iso: 'CH',
+       description: 'Schweiz',
+       countryPhonePrefix: '+41'},
+      {iso: 'CH2',
+       description: 'Schweiz2',
+       countryPhonePrefix: '+42'}
+    ];
+    return countries;
+  }
+
+}
+
+export interface ICountry {
+  iso: string;
+  description: string;
+  countryPhonePrefix: string;
 }

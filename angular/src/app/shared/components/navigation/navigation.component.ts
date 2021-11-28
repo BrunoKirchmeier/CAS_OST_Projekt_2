@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
 import { AuthService } from '../../services/auth.services';
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit, OnDestroy {
 
   @ViewChild('drawer', { static: true }) public matDrawer!: MatSidenav;
 
@@ -68,7 +68,7 @@ export class NavigationComponent implements OnInit {
 
   logout() {
     this._authService.logout()
-    .then(() => {})
+    .then(() => { window.location.reload(); })
   }
 
 }

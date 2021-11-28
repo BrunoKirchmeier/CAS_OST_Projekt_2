@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, Output, EventEmitter, ElementRef, Input } from '@angular/core';
+import { Component, HostListener, OnInit, Output, EventEmitter, ElementRef, Input, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OfferService } from '../shared/services/offer.service';
@@ -9,7 +9,7 @@ import { ICardDetails } from '../../shared/services/scryfallApi.service';
   templateUrl: './offer-create.component.html',
   styleUrls: ['./offer-create.component.scss']
 })
-export class OfferCreateComponent implements OnInit {
+export class OfferCreateComponent implements OnInit, OnDestroy {
 
   public currentCardName: string | null = null;
   public imgIsResized: boolean = false;

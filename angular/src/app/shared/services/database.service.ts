@@ -11,10 +11,6 @@ export class DatabaseService {
 
   constructor (private _db: Firestore) {}
 
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {}
-
   async createDoc<T>(path: string,
                      data: T): Promise<any> {
     const docRef: DocumentReference<DocumentData> = await addDoc(collection(this._db, path), data);

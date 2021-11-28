@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { accountRoutesModule } from './account.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// Custom Modules
+// Custom Components
 import { AccountCreateComponent } from './account-create/account-create.component';
 import { AccountMenuComponent } from './account-menu/account-menu.component';
 import { AccountPersonalDataComponent } from './account-personal-data/account-personal-data.component';
 import { AccountPaymentDataComponent } from './account-payment-data/account-payment-data.component';
+import { IbanFormatterPipe } from './shared/pipes/iban-formatter.pipe'
 
 // Material Desing
 import { MatTabsModule } from '@angular/material/tabs';
@@ -26,7 +27,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     AccountCreateComponent,
     AccountMenuComponent,
     AccountPersonalDataComponent,
-    AccountPaymentDataComponent
+    AccountPaymentDataComponent,
+    IbanFormatterPipe
   ],
   imports: [
     CommonModule,
@@ -43,7 +45,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatButtonModule,
     MatProgressSpinnerModule,
   ],
-  providers: [],
+  providers: [IbanFormatterPipe],
   bootstrap: []
 })
 export class AccountModule {}

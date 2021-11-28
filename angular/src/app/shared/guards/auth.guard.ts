@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.services';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, OnDestroy {
 
   private _isLoggedIn: boolean = false;
   private _subscriptions: Subscription[] = [];

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { ApiScryfallService, ICardName, IEditionName, ICardDetails } from '../../../services/scryfallApi.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, scan } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
   styleUrls: ['./search-card-by-name.component.scss'],
 })
 
-export class SearchCardByNameComponent implements OnInit {
+export class SearchCardByNameComponent implements OnInit, OnDestroy {
 
   @Output() onChangeSearchResults = new EventEmitter();
   @Input() resetForm = () => this.searchForm.reset();

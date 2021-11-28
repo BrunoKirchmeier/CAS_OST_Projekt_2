@@ -1,5 +1,5 @@
 import { AnimationQueryMetadata, query } from '@angular/animations';
-import { Injectable, Query } from '@angular/core';
+import { Injectable, OnDestroy, Query } from '@angular/core';
 import { Firestore, CollectionReference, doc, Timestamp } from '@angular/fire/firestore';
 import { addDoc, collection, DocumentReference, DocumentSnapshot, getDoc, getDocs, onSnapshot, QueryDocumentSnapshot, QuerySnapshot, setDoc } from '@firebase/firestore';
 import { Unsubscribe } from '@firebase/util';
@@ -11,7 +11,7 @@ import { AuthService } from '../../../shared/services/auth.services';
   providedIn: 'root'
 })
 
-export class OfferService {
+export class OfferService implements OnDestroy {
 
   private _currentUser: any = null;
   private _subscriptions: Subscription[] = [];

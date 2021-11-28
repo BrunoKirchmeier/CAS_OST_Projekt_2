@@ -29,6 +29,19 @@
   text-decoration: none;
 }
 
+.phone {
+  &-container {
+    width: 100%;
+    display: flex;
+  }
+  &-element-1 {
+    width: 30%;
+  }
+  &-element-2 {
+    width: 70%;
+  }
+}
+
 .spinner {
   display: inline-block;
 }
