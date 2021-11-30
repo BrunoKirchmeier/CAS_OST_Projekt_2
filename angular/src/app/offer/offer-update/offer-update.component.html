@@ -9,29 +9,29 @@
             class="item-img"
             (click)="showOfferDetails(offer)">
       <div class="item-detail"
-            *ngIf="offer.cardDetails !== null && activeOfferDetails == offer.cardDetails?._id">
+            *ngIf="offer.cardDetails !== null && activeOffer == offer?._id">
         <form [formGroup]="form"
               (ngSubmit)="onSubmit()">
 
           <mat-form-field appearance="outline"
                           class="pad-mar-1 isHalfSize">
-            <mat-label for="offerPrice">Preis in CHF: </mat-label>
+            <mat-label for="priceTotal">Preis in CHF: </mat-label>
             <input  matInput
-                    id="offerPrice"
-                    name="offerPrice"
+                    id="priceTotal"
+                    name="priceTotal"
                     type="number"
-                    formControlName="offerPrice">
+                    formControlName="priceTotal">
           </mat-form-field>
 
           <mat-form-field appearance="outline"
                           class="pad-mar-1 isHalfSize">
-            <mat-label for="cardAmount">Anzahl: </mat-label>
+            <mat-label for="quantity">Anzahl: </mat-label>
             <input  matInput
-                    id="cardAmount"
-                    name="cardAmount"
+                    id="quantity"
+                    name="quantity"
                     type="number"
                     min="1"
-                    formControlName="cardAmount">
+                    formControlName="quantity">
           </mat-form-field>
 
           <mat-form-field appearance="outline"
@@ -74,7 +74,7 @@
           <button mat-raised-button
                   type="submit"
                   color="primary"
-                  class="isFullSize">Hinzufügen
+                  class="isFullSize">Aktualisieren
           </button>
 
         </form>

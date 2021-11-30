@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { DatabaseService } from 'src/app/shared/services/database.service';
 import { ICardDetails } from 'src/app/shared/services/scryfallApi.service';
 import { AuthService } from '../../../shared/services/auth.services';
+import { OfferCreateComponent } from '../../offer-create/offer-create.component';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,7 @@ export class OfferService {
       providerEmail: this._currentUser.email,
       buyerUid: null,
       buyerEmail: null,
-      unitPrice: data.unitPrice,
+      priceTotal: data.priceTotal,
       quantity: data.quantity,
       deliveryMode: data.deliveryMode,
       paymentMode: data.paymentMode,
@@ -51,11 +52,11 @@ export class OfferService {
                                         offer)
     const cardDetail: ICardDetails = {
       _id: '',
-      cardName: data.cardDetails.cardName,
-      cardText: data.cardDetails.cardText,
-      cardImageUri: data.cardDetails.cardImageUri,
-      manaCost: data.cardDetails.manaCost,
-      cardLanguageIso: data.cardDetails.cardLanguageIso
+      cardName: data.cardDetails?.cardName,
+      cardText: data.cardDetails?.cardText,
+      cardImageUri: data.cardDetails?.cardImageUri,
+      manaCost: data.cardDetails?.manaCost,
+      cardLanguageIso: data.cardDetails?.cardLanguageIso
     };
     await this._dbExt.createDoc<ICardDetails>(this._cardDetailCollection,
                                               cardDetail)
@@ -90,6 +91,25 @@ export class OfferService {
     });
   }
 
+  async getOffer(id: string): Promise<IOffer> {
+    let offer: any;
+    let q = query(collection(this._db, this._offersCollection),
+                  where('_id', '==', id));
+    await this._dbExt.readDoc<IOffer>(q)
+      .then((snapshot: QuerySnapshot<DocumentData>) => {
+        snapshot.forEach(doc => {
+          offer = doc as any;
+        })
+      })
+      let q2 = query(collection(this._db, this._cardDetailCollection),
+                     where('cardName', '==', offer.cardName));
+      let cardDetails = await this._dbExt.readDoc<IOffer>(q2)
+      offer.cardDetails = cardDetails;
+    return new Promise((resolve) => {
+      resolve(offer);
+    });
+  }
+
   getDeliveryModes() {
     const options: Array<IDeliveryModes> = [
       {name: 'collection', description: 'Abholung'},
@@ -114,7 +134,7 @@ export interface IOffer {
   providerEmail: string ;
   buyerUid: string | null;
   buyerEmail: string | null;
-  unitPrice: number;
+  priceTotal: number;
   quantity: number;
   deliveryMode: string;
   paymentMode: string;

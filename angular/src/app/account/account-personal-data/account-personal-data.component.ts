@@ -148,14 +148,14 @@ export class AccountPersonalDataComponent implements OnInit, OnDestroy {
     this._personalData.iban = this._IbanFormatterPipe.rawValue(form.iban);
     // Formatted Values for View
     this.form.setValue({
-      firstName: form.firstName,
-      lastName: form.lastName,
-      address: form.address,
-      zip: form.zip,
-      city: form.city,
-      countryIso: form.countryIso,
-      phonePrefix: form.phonePrefix,
-      phone: form.phone,
+      firstName: form.firstName ?? '',
+      lastName: form.lastName ?? '',
+      address: form.address ?? '',
+      zip: form.zip ?? 0,
+      city: form.city ?? '',
+      countryIso: form.countryIso ?? '',
+      phonePrefix: form.phonePrefix ?? '',
+      phone: form.phone ?? '',
       iban: this._IbanFormatterPipe.transform(form.iban)
     },
     { emitEvent: false });

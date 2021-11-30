@@ -112,11 +112,11 @@ export interface IEditionName {
 */
 export interface ICardDetails {
   _id: string;
-  cardName: string;
-  cardText: string;
-  cardImageUri: string;
-  manaCost: string;
-  cardLanguageIso: string;
+  cardName: string | undefined;
+  cardText: string | undefined;
+  cardImageUri: string | undefined;
+  manaCost: string | undefined;
+  cardLanguageIso: string | undefined;
 }
 
 

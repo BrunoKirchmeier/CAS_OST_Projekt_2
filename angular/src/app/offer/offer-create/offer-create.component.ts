@@ -14,10 +14,10 @@ export class OfferCreateComponent implements OnChanges {
   public imgIsResized: boolean = false;
   public borderActive: boolean = false;
   public form = new FormGroup({
-    offerPrice: new FormControl('', [Validators.required]),
+    priceTotal: new FormControl('', [Validators.required]),
     deliveryMode: new FormControl('shipping', [Validators.required]),
     paymentMode: new FormControl('transfer', [Validators.required]),
-    cardAmount: new FormControl('', [Validators.required]),
+    quantity: new FormControl('', [Validators.required]),
     additionInfo: new FormControl('')
   });
   public deliveryModes: Array<IDeliveryModes> = [];
@@ -51,14 +51,14 @@ export class OfferCreateComponent implements OnChanges {
   async onSubmit(): Promise<any> {
     if(this.form.valid) {
       const cardName =  this.currentCardName as string;
-      const unitPrice = this.form.get('offerPrice')?.value;
-      const quantity = this.form.get('cardAmount')?.value;
+      const priceTotal = this.form.get('priceTotal')?.value;
+      const quantity = this.form.get('quantity')?.value;
       const deliveryMode = this.form.get('deliveryMode')?.value;
       const paymentMode = this.form.get('paymentMode')?.value;
       const additionInfo = this.form.get('additionInfo')?.value;
       const cardDetails: ICardDetails = await this._scryfall.getCardDetailsByName(cardName);
       this._offerService.createOffer({cardName: cardName,
-                                      unitPrice: unitPrice,
+                                      priceTotal: priceTotal,
                                       quantity: quantity,
                                       deliveryMode: deliveryMode,
                                       paymentMode: paymentMode,

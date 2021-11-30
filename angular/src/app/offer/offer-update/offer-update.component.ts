@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { IDeliveryModes, IOffer, IPaymentModes, OfferService } from '../shared/services/offer.service';
 
 @Component({
@@ -12,14 +12,21 @@ import { IDeliveryModes, IOffer, IPaymentModes, OfferService } from '../shared/s
 export class OfferUpdateComponent implements OnDestroy {
 
   private _subscriptions: Subscription[] = [];
+  private _offerData: any = {
+    priceTotal: null,
+    quantity: null,
+    deliveryMode: null,
+    paymentMode: null,
+    additionInfo: null,
+  };
 
   public offerList$: Subject<IOffer[]> = new Subject();
-  public activeOfferDetails: string = '';
+  public activeOffer: string = '';
   public form = new FormGroup({
-    offerPrice: new FormControl('', [Validators.required]),
+    priceTotal: new FormControl('', [Validators.required]),
     deliveryMode: new FormControl('', [Validators.required]),
     paymentMode: new FormControl('', [Validators.required]),
-    cardAmount: new FormControl('', [Validators.required]),
+    quantity: new FormControl('', [Validators.required]),
     additionInfo: new FormControl('')
   });
   public deliveryModes: Array<IDeliveryModes> = [];
@@ -51,16 +58,22 @@ export class OfferUpdateComponent implements OnDestroy {
   }
 
   showOfferDetails(value: IOffer) {
-    this.activeOfferDetails = value.cardDetails !== null && value.cardDetails !== undefined &&
-                              value.cardDetails._id !== null && value.cardDetails._id !== undefined
-                            ? value.cardDetails._id
-                            : '';
+    this.activeOffer = value._id !== null && value._id !== undefined
+                     ? value._id
+                     : '';
+                            console.log(this.activeOffer)
+    this._offerService.getOffer(this.activeOffer)
+    .then((val) => {
+      if(val !== undefined && val !== null) {
+        this.setFormValues(val);
+      }
+    })
   }
 
   async onSubmit(): Promise<any> {
     if(this.form.valid) {
-      const unitPrice = this.form.get('offerPrice')?.value;
-      const quantity = this.form.get('cardAmount')?.value;
+      const unitPrice = this.form.get('priceTotal')?.value;
+      const quantity = this.form.get('quantity')?.value;
       const deliveryMode = this.form.get('deliveryMode')?.value;
       const paymentMode = this.form.get('paymentMode')?.value;
       const additionInfo = this.form.get('additionInfo')?.value;
@@ -68,6 +81,28 @@ export class OfferUpdateComponent implements OnDestroy {
 
     }
   }
+
+  setFormValues(form: any) {
+    console.log(form);
+    // Raw Values witout formations
+    this._offerData.priceTotal = form.priceTotal;
+    this._offerData.quantity = form.quantity;
+    this._offerData.deliveryMode = form.deliveryMode;
+    this._offerData.paymentMode = form.paymentMode;
+    this._offerData.additionInfo = form.additionInfo;
+
+    // Formatted Values for View
+    this.form.setValue({
+      priceTotal: form.priceTotal ?? 0,
+      quantity: form.quantity ?? 0,
+      deliveryMode: form.deliveryMode ?? '',
+      paymentMode: form.paymentMode ?? '',
+      additionInfo: form.additionInfo ?? ''
+    },
+    { emitEvent: false });
+  }
+
+
 
   closeSnackBar() {
     this._snackBar.dismiss();
