@@ -57,7 +57,6 @@ export class ApiScryfallService {
         }
         const obj: ICardDetails =
         {
-          _id: res.id,
           cardName: res.name,
           cardText: res.oracle_text,
           cardImageUri: uri,
@@ -111,12 +110,11 @@ export interface IEditionName {
   Datatyp: API Scryfall ICardDetails
 */
 export interface ICardDetails {
-  _id: string;
-  cardName: string | undefined;
-  cardText: string | undefined;
-  cardImageUri: string | undefined;
-  manaCost: string | undefined;
-  cardLanguageIso: string | undefined;
+  cardName: string | null;
+  cardText: string | null;
+  cardImageUri: string | null;
+  manaCost: string | null;
+  cardLanguageIso: string | null;
 }
 
 

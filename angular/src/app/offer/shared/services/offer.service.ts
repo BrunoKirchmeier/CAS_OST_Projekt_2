@@ -35,7 +35,13 @@ export class OfferService {
     const offer: IOffer = {
       _id: null,
       cardName: data.cardName,
-      cardDetails: null,
+      cardDetails: {
+        cardName: data.cardDetails?.cardName,
+        cardText: data.cardDetails?.cardText,
+        cardImageUri: data.cardDetails?.cardImageUri,
+        manaCost: data.cardDetails?.manaCost,
+        cardLanguageIso: data.cardDetails?.cardLanguageIso
+      },
       providerUid: this._currentUser.uid,
       providerEmail: this._currentUser.email,
       buyerUid: null,
@@ -48,28 +54,17 @@ export class OfferService {
       creationDate : Timestamp.now(),
       saleDate : null
     };
-    await this._dbExt.createDoc<IOffer>(this._offersCollection,
-                                        offer)
-    const cardDetail: ICardDetails = {
-      _id: '',
-      cardName: data.cardDetails?.cardName,
-      cardText: data.cardDetails?.cardText,
-      cardImageUri: data.cardDetails?.cardImageUri,
-      manaCost: data.cardDetails?.manaCost,
-      cardLanguageIso: data.cardDetails?.cardLanguageIso
-    };
-    await this._dbExt.createDoc<ICardDetails>(this._cardDetailCollection,
-                                              cardDetail)
+    const offerId = await this._dbExt.createDoc<IOffer>(this._offersCollection,
+                                                        offer)
     let offers: IOffer[] = await this.getMyOffers();
     this.onChangeOwnerOffer$.next(offers);
     return new Promise((resolve) => {
-      resolve(true);
+      resolve(offerId);
     });
   }
 
   async getMyOffers(): Promise<IOffer[]> {
     let offers: Array<IOffer> = [];
-    let offersExtended: Array<IOffer> = [];
     let q = query(collection(this._db, this._offersCollection),
                   where('providerUid', '==', this._currentUser.uid));
     await this._dbExt.readDoc<IOffer>(q)
@@ -79,15 +74,8 @@ export class OfferService {
           offers.push(offer);
         })
       })
-      for (let i=0; i < offers.length; i++) {
-        let q = query(collection(this._db, this._cardDetailCollection),
-                      where('cardName', '==', offers[i].cardName));
-        let cardDetails = await this._dbExt.readDoc<IOffer>(q)
-        offersExtended[i] = offers[i];
-        offersExtended[i].cardDetails = cardDetails[0];
-      }
     return new Promise((resolve) => {
-      resolve(offersExtended);
+      resolve(offers);
     });
   }
 
@@ -101,12 +89,26 @@ export class OfferService {
           offer = doc as any;
         })
       })
-      let q2 = query(collection(this._db, this._cardDetailCollection),
-                     where('cardName', '==', offer.cardName));
-      let cardDetails = await this._dbExt.readDoc<IOffer>(q2)
-      offer.cardDetails = cardDetails;
     return new Promise((resolve) => {
       resolve(offer);
+    });
+  }
+
+  async updateOffer(id: string, data: any): Promise<boolean> {
+    let q = query(collection(this._db, this._offersCollection),
+                  where('_id', '==', id));
+    await this._dbExt.updateDoc<IOffer>(q, data);
+    return new Promise((resolve) => {
+      resolve(true);
+    });
+  }
+
+  async deleteOffer(id: string): Promise<boolean> {
+    let q = query(collection(this._db, this._offersCollection),
+                  where('_id', '==', id));
+    await this._dbExt.deleteDoc<IOffer>(q);
+    return new Promise((resolve) => {
+      resolve(true);
     });
   }
 

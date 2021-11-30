@@ -5,7 +5,6 @@
          class="item-container"
          data-id="{{offer?._id}}">
       <img src="{{offer.cardDetails?.cardImageUri}}"
-            data-id="{{offer.cardDetails?._id}}"
             class="item-img"
             (click)="showOfferDetails(offer)">
       <div class="item-detail"
@@ -78,6 +77,12 @@
           </button>
 
         </form>
+
+        <button mat-raised-button
+                color="primary"
+                class="item-button-delete isFullSize"
+                (click)="deleteOffer()">Löschen
+        </button>
       </div>
     </div>
   </div>

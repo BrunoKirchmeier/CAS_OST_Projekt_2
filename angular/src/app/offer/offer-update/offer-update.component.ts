@@ -63,27 +63,38 @@ export class OfferUpdateComponent implements OnDestroy {
                      : '';
                             console.log(this.activeOffer)
     this._offerService.getOffer(this.activeOffer)
-    .then((val) => {
-      if(val !== undefined && val !== null) {
-        this.setFormValues(val);
-      }
-    })
+      .then((val) => {
+        if(val !== undefined && val !== null) {
+          this.setFormValues(val);
+        }
+      })
   }
 
   async onSubmit(): Promise<any> {
     if(this.form.valid) {
-      const unitPrice = this.form.get('priceTotal')?.value;
-      const quantity = this.form.get('quantity')?.value;
-      const deliveryMode = this.form.get('deliveryMode')?.value;
-      const paymentMode = this.form.get('paymentMode')?.value;
-      const additionInfo = this.form.get('additionInfo')?.value;
+      const data: any = {
+        priceTotal: this.form.get('priceTotal')?.value,
+        quantity: this.form.get('quantity')?.value,
+        deliveryMode: this.form.get('deliveryMode')?.value,
+        paymentMode: this.form.get('paymentMode')?.value,
+        additionInfo: this.form.get('additionInfo')?.value
+      }
 
-
+      this._offerService.updateOffer(this.activeOffer, data)
+        .then((val) => {
+          if(val === true) {
+            this._snackBar.open('Daten wurden erfolgreich aktualisiert');
+          }
+        })
     }
   }
 
+  async deleteOffer() {
+    this._offerService.deleteOffer(this.activeOffer)
+      .then(() => { window.location.reload(); })
+  }
+
   setFormValues(form: any) {
-    console.log(form);
     // Raw Values witout formations
     this._offerData.priceTotal = form.priceTotal;
     this._offerData.quantity = form.quantity;
@@ -101,8 +112,6 @@ export class OfferUpdateComponent implements OnDestroy {
     },
     { emitEvent: false });
   }
-
-
 
   closeSnackBar() {
     this._snackBar.dismiss();
