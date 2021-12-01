@@ -1,5 +1,5 @@
-import { Component, OnChanges, HostListener, Output, EventEmitter, ElementRef, Input } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnChanges, HostListener, Output, EventEmitter, ElementRef, Input, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IDeliveryModes, IPaymentModes, OfferService } from '../shared/services/offer.service';
 import { ApiScryfallService, ICardDetails } from '../../shared/services/scryfallApi.service';
@@ -10,13 +10,15 @@ import { ApiScryfallService, ICardDetails } from '../../shared/services/scryfall
 })
 export class OfferCreateComponent implements OnChanges {
 
+  @ViewChild('formDirective') formDirective: any;
+
   public currentCardName: string | null = null;
   public imgIsResized: boolean = false;
   public borderActive: boolean = false;
   public form = new FormGroup({
     priceTotal: new FormControl('', [Validators.required]),
-    deliveryMode: new FormControl('shipping', [Validators.required]),
-    paymentMode: new FormControl('transfer', [Validators.required]),
+    deliveryMode: new FormControl('', [Validators.required]),
+    paymentMode: new FormControl('', [Validators.required]),
     quantity: new FormControl('', [Validators.required]),
     additionInfo: new FormControl('')
   });
@@ -35,7 +37,7 @@ export class OfferCreateComponent implements OnChanges {
   constructor(private _elRef: ElementRef<HTMLImageElement>,
               private _offerService: OfferService,
               private _snackBar: MatSnackBar,
-              private _scryfall: ApiScryfallService) {
+              private _scryfall: ApiScryfallService,) {
     if (this._elRef.nativeElement.complete) {
       this.loaded.emit();
     }
@@ -66,6 +68,7 @@ export class OfferCreateComponent implements OnChanges {
                                       cardDetails: cardDetails
                                     })
         .then(() => {
+          this.formDirective.resetForm();
           this._snackBar.open('Das Angebot wurde eröffnet');
         })
     }
@@ -78,6 +81,18 @@ export class OfferCreateComponent implements OnChanges {
 
   closeSnackBar() {
     this._snackBar.dismiss();
+  }
+
+  resetForm() {
+
+    // this.form.markAsUntouched();
+    this.form.reset();
+    /*
+    for (let control in this.form.controls) {
+      this.form.controls[control].setErrors(null);
+    }
+    */
+    // this.form.updateValueAndValidity();
   }
 
 }

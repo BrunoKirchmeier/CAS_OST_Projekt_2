@@ -5,7 +5,6 @@ import { Subject } from 'rxjs';
 import { DatabaseService } from 'src/app/shared/services/database.service';
 import { ICardDetails } from 'src/app/shared/services/scryfallApi.service';
 import { AuthService } from '../../../shared/services/auth.services';
-import { OfferCreateComponent } from '../../offer-create/offer-create.component';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,6 @@ export class OfferService {
 
   private _currentUser: any = null;
   private _offersCollection: string = 'offers';
-  private _cardDetailCollection: string = 'cardDetails';
 
   public onChangeOwnerOffer$: Subject<IOffer[]> = new Subject<IOffer[]>();
 
@@ -107,6 +105,8 @@ export class OfferService {
     let q = query(collection(this._db, this._offersCollection),
                   where('_id', '==', id));
     await this._dbExt.deleteDoc<IOffer>(q);
+    let offers: IOffer[] = await this.getMyOffers();
+    this.onChangeOwnerOffer$.next(offers);
     return new Promise((resolve) => {
       resolve(true);
     });

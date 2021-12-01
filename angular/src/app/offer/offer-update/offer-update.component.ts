@@ -19,7 +19,7 @@ export class OfferUpdateComponent implements OnDestroy {
     paymentMode: null,
     additionInfo: null,
   };
-
+// @ViewChild('form', { static: true })
   public offerList$: Subject<IOffer[]> = new Subject();
   public activeOffer: string = '';
   public form = new FormGroup({
@@ -79,7 +79,6 @@ export class OfferUpdateComponent implements OnDestroy {
         paymentMode: this.form.get('paymentMode')?.value,
         additionInfo: this.form.get('additionInfo')?.value
       }
-
       this._offerService.updateOffer(this.activeOffer, data)
         .then((val) => {
           if(val === true) {
@@ -90,8 +89,7 @@ export class OfferUpdateComponent implements OnDestroy {
   }
 
   async deleteOffer() {
-    this._offerService.deleteOffer(this.activeOffer)
-      .then(() => { window.location.reload(); })
+    this._offerService.deleteOffer(this.activeOffer);
   }
 
   setFormValues(form: any) {
