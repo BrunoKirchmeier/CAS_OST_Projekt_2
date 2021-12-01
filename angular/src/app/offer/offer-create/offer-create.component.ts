@@ -83,16 +83,4 @@ export class OfferCreateComponent implements OnChanges {
     this._snackBar.dismiss();
   }
 
-  resetForm() {
-
-    // this.form.markAsUntouched();
-    this.form.reset();
-    /*
-    for (let control in this.form.controls) {
-      this.form.controls[control].setErrors(null);
-    }
-    */
-    // this.form.updateValueAndValidity();
-  }
-
 }

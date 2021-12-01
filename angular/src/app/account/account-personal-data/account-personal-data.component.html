@@ -22,9 +22,6 @@
                 name="lastName"
                 type="text"
                 formControlName="lastName">
-        <mat-error *ngIf="form.get('lastName')?.errors">
-          <span>Der Nachname darf nicht leer sein</span>
-        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline"
@@ -35,9 +32,6 @@
                 name="address"
                 type="text"
                 formControlName="address">
-        <mat-error *ngIf="form.get('address')?.errors">
-          <span>Die Strasse darf nicht leer sein</span>
-        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline"
@@ -54,9 +48,6 @@
             {{option}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="form.get('zip')?.errors">
-          <span>Keine gültige Postleitzahl</span>
-        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline"
@@ -73,9 +64,6 @@
             {{option}}
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="form.get('city')?.errors">
-          <span>Der Ort darf nicht leer sein</span>
-        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline"

@@ -16,6 +16,7 @@ import { AuthModule } from '@angular/fire/auth/';
 import { SharedModule } from './shared/shared.module';
 import { AccountModule } from './account/account.module';
 import { OfferModule } from './offer/offer.module';
+import { SalesModule } from './sales/sales.module';
 
 // Custom Components
 import { NavigationComponent } from './shared/components/navigation/navigation.component';
@@ -51,6 +52,7 @@ import { MatIconModule} from '@angular/material/icon';
     SharedModule,
     AccountModule,
     OfferModule,
+    SalesModule,
     MatToolbarModule,
     MatMenuModule,
     MatButtonModule,

@@ -25,6 +25,9 @@
                   name="priceTotal"
                   type="number"
                   formControlName="priceTotal">
+          <mat-error *ngIf="form.get('priceTotal')?.errors">
+            <span>Eingabe ist zwingend</span>
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline"
@@ -36,6 +39,9 @@
                   type="number"
                   min="1"
                   formControlName="quantity">
+          <mat-error *ngIf="form.get('quantity')?.errors">
+            <span>Eingabe ist zwingend</span>
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline"
@@ -49,6 +55,9 @@
                         {{mode.description}}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="form.get('deliveryMode')?.errors">
+            <span>Eingabe ist zwingend</span>
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline"
@@ -62,6 +71,9 @@
                     {{mode.description}}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="form.get('paymentMode')?.errors">
+            <span>Eingabe ist zwingend</span>
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline"

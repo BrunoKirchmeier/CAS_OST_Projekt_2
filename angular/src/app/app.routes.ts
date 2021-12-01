@@ -6,6 +6,7 @@ import { AccountCreateComponent } from './account/account-create/account-create.
 import { AccountMenuComponent } from './account/account-menu/account-menu.component';
 import { LoginComponent } from './shared/components/login/login.component';
 import { OfferMenuComponent } from './offer/offer-menu/offer-menu.component';
+import { SalesMenuComponent } from './sales/sales-menu/sales-menu.component';
 
 export const appRoutes: Routes = [
 
@@ -32,6 +33,14 @@ export const appRoutes: Routes = [
   {
     path: 'offer',
     component: OfferMenuComponent, canActivate: [AuthGuard],
-    data: { title: 'Angebote Menue'}
+    data: { title: 'Angebote Erstellen Menü'}
   },
+  {
+    path: 'sales',
+    component: SalesMenuComponent, canActivate: [AuthGuard],
+    data: { title: 'Angebote Suchen Menü'}
+  },
+
+
+
 ];

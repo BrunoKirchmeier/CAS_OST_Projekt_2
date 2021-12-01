@@ -19,7 +19,7 @@ export class OfferUpdateComponent implements OnDestroy {
     paymentMode: null,
     additionInfo: null,
   };
-// @ViewChild('form', { static: true })
+
   public offerList$: Subject<IOffer[]> = new Subject();
   public activeOffer: string = '';
   public form = new FormGroup({
