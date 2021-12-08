@@ -42,15 +42,12 @@ export class OfferService {
       },
       providerUid: this._currentUser.uid,
       providerEmail: this._currentUser.email,
-      buyerUid: null,
-      buyerEmail: null,
       priceTotal: data.priceTotal,
       quantity: data.quantity,
       deliveryMode: data.deliveryMode,
       paymentMode: data.paymentMode,
       additionInfo: data.additionInfo,
-      creationDate : Timestamp.now(),
-      saleDate : null
+      creationDate : Timestamp.now()
     };
     const offerId = await this._dbExt.createDoc<IOffer>(this._offersCollection,
                                                         offer)
@@ -134,15 +131,12 @@ export interface IOffer {
   cardDetails: ICardDetails | null,
   providerUid: string;
   providerEmail: string ;
-  buyerUid: string | null;
-  buyerEmail: string | null;
   priceTotal: number;
   quantity: number;
   deliveryMode: string;
   paymentMode: string;
   additionInfo: string | null;
   creationDate : Timestamp;
-  saleDate : Timestamp | null;
 }
 export interface IDeliveryModes {
   name: string;

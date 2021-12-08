@@ -37,7 +37,7 @@ export class OfferCreateComponent implements OnChanges {
   constructor(private _elRef: ElementRef<HTMLImageElement>,
               private _offerService: OfferService,
               private _snackBar: MatSnackBar,
-              private _scryfall: ApiScryfallService,) {
+              private _scryfall: ApiScryfallService) {
     if (this._elRef.nativeElement.complete) {
       this.loaded.emit();
     }

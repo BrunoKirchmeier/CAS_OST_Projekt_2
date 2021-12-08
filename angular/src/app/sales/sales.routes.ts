@@ -3,7 +3,7 @@ import { AuthGuard } from '../shared/guards/auth.guard';
 
 import { SalesSearchComponent } from '../sales/sales-search/sales-search.component';
 
-const offerRoutes = [
+const salesRoutes = [
 
   { path: '', redirectTo: 'home', pathMatch: 'full'},
   {
@@ -13,4 +13,4 @@ const offerRoutes = [
   },
 ];
 
-export const offerRoutesModule = RouterModule.forChild(offerRoutes);
+export const salesRoutesModule = RouterModule.forChild(salesRoutes);

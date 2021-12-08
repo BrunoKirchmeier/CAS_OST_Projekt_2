@@ -40,10 +40,36 @@ export class ApiScryfallService {
       )
   }
 
+  async cardTextSearch(searchText: string): Promise<ICardName[]> {
+    let splitt: Array<string> = [];
+    let queryString = '(';
+    splitt = searchText.split(' ');
+    splitt.forEach((element: any) => {
+      queryString += 'oracle:' + element + '+';
+    });
+    queryString = queryString.slice(0, -1);
+    queryString += ')';
+    const urlParams = new HttpParams()
+      .set('q', encodeURI(queryString))
+    await this._http.get<IScryfallApiResList>('https://api.scryfall.com/cards/search',
+                                              { params: urlParams }).toPromise()
+      .then((res: IScryfallApiResList) => {
+        let i: number = 0;
+        res.data.forEach((element: any) => {
+          const cardName: ICardName = {index: i,
+                                       name: element.name};
+          this._cardNameList.push(cardName);
+          i++;
+        });
+      });
+    return new Promise((resolve) => {
+      resolve(this._cardNameList);
+    });
+}
+
   async getCardDetailsByName(cardName: string,
-                              format: CardPictureFormat = CardPictureFormat.NORMAL): Promise<any> {
+                             format: CardPictureFormat = CardPictureFormat.NORMAL): Promise<any> {
     let cardDetails: ICardDetails;
-    let test: any;
     const urlParams = new HttpParams()
       .set('fuzzy', cardName);
 
