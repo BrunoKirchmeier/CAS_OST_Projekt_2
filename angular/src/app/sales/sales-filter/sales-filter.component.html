@@ -1,6 +1,73 @@
 <div>
   <h2 mat-dialog-title>Filter setzen</h2>
   <mat-dialog-content>
+
+    <form [formGroup]="form"
+          class="form">
+      <mat-form-field appearance="outline"
+                      class="form-field">
+        <mat-label for="cardText">Kartentextsuche: </mat-label>
+        <input  matInput
+                id="cardText"
+                name="cardText"
+                type="text"
+                formControlName="cardText"
+                value=""
+                (change)="setFilterCardText()">
+      </mat-form-field>
+    </form>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Editionen:
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+          <div *ngFor="let cardEdition of filtersOptionsEditions">
+            <section>
+              <mat-checkbox (change)="setFilterEdition($event, cardEdition)">{{cardEdition.name}}</mat-checkbox>
+            </section>
+          </div>
+      </ng-template>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Kartentypen:
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+          <div *ngFor="let cardTyp of filtersOptionsCardTypes">
+            <section>
+              <mat-checkbox (change)="setFilterCardType($event, cardTyp)">{{cardTyp.description}}</mat-checkbox>
+            </section>
+          </div>
+      </ng-template>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Farben:
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+          <div *ngFor="let cardColor of filtersOptionsCardColors">
+            <section>
+              <mat-checkbox (change)="setFilterCardColor($event, cardColor)">{{cardColor.description}}</mat-checkbox>
+            </section>
+          </div>
+      </ng-template>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+
   </mat-dialog-content>
   <button mat-button [mat-dialog-close]="activeFilters">
     Filter Anwenden

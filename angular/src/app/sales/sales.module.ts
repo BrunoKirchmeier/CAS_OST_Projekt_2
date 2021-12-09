@@ -20,6 +20,8 @@ import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule} from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { MatIconModule} from '@angular/material/icon';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    MatExpansionModule,
+    MatCheckboxModule,
   ],
   providers: [
     { provide: MatDialogRef,

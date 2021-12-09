@@ -13,6 +13,30 @@ export class ApiScryfallService {
 
   constructor(private _http: HttpClient) {}
 
+  get cardColors(): IFilterOption[] {
+    const colors = [
+      { code: 'W', description: 'Weiss'},
+      { code: 'U', description: 'Blau'},
+      { code: 'B', description: 'Schwarz'},
+      { code: 'R', description: 'Rot'},
+      { code: 'G', description: 'Grün'},
+    ];
+    return colors;
+  }
+
+  get cardTypes(): IFilterOption[] {
+    const cardTypes = [
+      { code: 'artifact', description: 'Artefakte'},
+      { code: 'creature', description: 'Kreaturen'},
+      { code: 'planeswalker', description: 'Planeswalker'},
+      { code: 'enchantment', description: 'Verzauberungen'},
+      { code: 'instant', description: 'Spontanzauber'},
+      { code: 'sorcery', description: 'Hexereien'},
+      { code: 'land', description: 'Länder'},
+    ];
+    return cardTypes;
+  }
+
   public getAllCardNames() {
     return this._http.get<IScryfallApiResList>('https://api.scryfall.com/catalog/card-names')
       .pipe(map((res: IScryfallApiResList) => {
@@ -120,6 +144,7 @@ export interface IEditionName {
   code: string;
   tcgplayer_id: number;
   cardName: string;
+  name: string;
   uri: string;
   scryfall_uri: string;
   search_uri: string;
@@ -143,6 +168,11 @@ export interface ICardDetails {
   cardLanguageIso: string | null;
 }
 
+
+export interface IFilterOption {
+  code: string,
+  description: string,
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Enum Values
