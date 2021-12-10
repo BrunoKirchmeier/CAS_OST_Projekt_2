@@ -3,8 +3,7 @@ import { Firestore, query, collection, where, QuerySnapshot, Timestamp } from '@
 import { DocumentData } from 'rxfire/firestore/interfaces';
 import { IOffer } from 'src/app/offer/shared/services/offer.service';
 import { DatabaseService } from 'src/app/shared/services/database.service';
-import { ApiScryfallService, ICardDetails } from 'src/app/shared/services/scryfallApi.service';
-import { AuthService } from '../../shared/services/auth.services';
+import { ApiScryfallService, ICardDetails, IFilter } from 'src/app/shared/services/scryfallApi.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +37,16 @@ export class SalesService {
     });
   }
 
+  async getCardsByFilter(filter: IFilter): Promise<any[]> {
+    let offers: any[] = [];
+    let scryfallMatches = await this._scryfall.getCardsByFilter(filter);
 
+
+
+    return new Promise((resolve) => {
+      resolve(scryfallMatches);
+    });
+  }
 
 
 }

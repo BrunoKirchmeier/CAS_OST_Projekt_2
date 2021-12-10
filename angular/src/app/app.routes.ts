@@ -37,7 +37,7 @@ export const appRoutes: Routes = [
   },
   {
     path: 'sales',
-    component: SalesMenuComponent, canActivate: [AuthGuard],
+    component: SalesMenuComponent,
     data: { title: 'Angebote Suchen Menü'}
   },
 

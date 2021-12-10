@@ -8,9 +8,6 @@ import { map } from 'rxjs/operators';
 
 export class ApiScryfallService {
 
-  private _cardNameList: ICardName[] = [];
-  private _editionNameList: IEditionName[] = [];
-
   constructor(private _http: HttpClient) {}
 
   get cardColors(): IFilterOption[] {
@@ -40,31 +37,34 @@ export class ApiScryfallService {
   public getAllCardNames() {
     return this._http.get<IScryfallApiResList>('https://api.scryfall.com/catalog/card-names')
       .pipe(map((res: IScryfallApiResList) => {
+              let cardNameList: ICardName[] = [];
               let i: number = 0;
               res.data.forEach(element => {
                 const cardName: ICardName = {index: i,
                                              name: element};
-                this._cardNameList.push(cardName);
+                cardNameList.push(cardName);
                 i++;
               });
-              return this._cardNameList;
+              return cardNameList;
             })
         )
   }
 
-  public getAllEditionNames() {
+  public getAllEditions() {
     return this._http.get<IScryfallApiResList>('https://api.scryfall.com/sets')
       .pipe(map((res: IScryfallApiResList) => {
+              let editionNameList: IEdition[] = [];
               res.data.forEach((element: any) => {
-                const obj: IEditionName = element;
-                this._editionNameList.push(obj);
+                const obj: IEdition = element;
+                editionNameList.push(obj);
               });
-              return this._editionNameList;
+              return editionNameList;
             })
       )
   }
 
   async cardTextSearch(searchText: string): Promise<ICardName[]> {
+    let cardNameList: ICardName[] = [];
     let splitt: Array<string> = [];
     let queryString = '(';
     splitt = searchText.split(' ');
@@ -82,14 +82,14 @@ export class ApiScryfallService {
         res.data.forEach((element: any) => {
           const cardName: ICardName = {index: i,
                                        name: element.name};
-          this._cardNameList.push(cardName);
+          cardNameList.push(cardName);
           i++;
         });
       });
     return new Promise((resolve) => {
-      resolve(this._cardNameList);
+      resolve(cardNameList);
     });
-}
+  }
 
   async getCardDetailsByName(cardName: string,
                              format: CardPictureFormat = CardPictureFormat.NORMAL): Promise<any> {
@@ -120,6 +120,89 @@ export class ApiScryfallService {
       });
   }
 
+  async getCardsByFilter(filter: IFilter): Promise<ICardName[]> {
+    let cardNameList: ICardName[] = [];
+    let url: string = 'https://api.scryfall.com/catalog/card-names';
+    let urlParams = new HttpParams()
+    let queryString: string = '';
+
+    if(filter?.cardText !== null &&
+       filter?.cardText !== undefined) {
+      queryString += queryString == '' ? '': '+';
+      queryString += '(';
+      let splitt: Array<string> = [];
+      splitt = filter.cardText.split(' ');
+      splitt.forEach((element: any) => {
+        if(element !== '') {
+          queryString += 'oracle:' + element + '+';
+        }
+      });
+      queryString = queryString.slice(0, -1);
+      queryString += ')';
+    }
+
+    if(filter?.cardColors !== null &&
+       filter?.cardColors !== undefined &&
+       filter.cardColors.length > 0) {
+      queryString += queryString == '' ? '': '+';
+      queryString += 'color=';
+      filter.cardColors.forEach((element: any) => {
+        if(element !== '') {
+          queryString += element;
+        }
+      });
+    }
+
+    if(filter?.cardEditions !== null &&
+       filter?.cardEditions !== undefined &&
+       filter.cardEditions.length > 0 ) {
+      queryString += queryString == '' ? '': '+';
+      queryString += '(';
+      filter.cardEditions.forEach((element: any) => {
+        if(element !== '') {
+          queryString += 'set:' + element + '+OR+';
+        }
+      });
+      queryString = queryString.slice(0, -4);
+      queryString += ')';
+    }
+
+    if(filter?.cardTypes !== null &&
+       filter?.cardTypes !== undefined &&
+       filter.cardTypes.length > 0 ) {
+      queryString += queryString == '' ? '': '+';
+      queryString += '(';
+      filter.cardTypes.forEach((element: any) => {
+        if(element !== '') {
+          queryString += 'type:' + element + '+';
+        }
+      });
+      queryString = queryString.slice(0, -4);
+      queryString += ')';
+    }
+
+    if(queryString !== '') {
+      urlParams = urlParams.set('q', encodeURI(queryString));
+      url = 'https://api.scryfall.com/cards/search';
+    }
+    await this._http.get<IScryfallApiResList>(url,
+                                              { params: urlParams }).toPromise()
+      .then((res: IScryfallApiResList) => {
+        let i: number = 0;
+        console.log(res.data);
+        res.data.forEach((element: any) => {
+          const cardName: ICardName = {index: i,
+                                       name: element.name};
+          cardNameList.push(cardName);
+          i++;
+        });
+      })
+      .catch((err: any) => {})
+    return new Promise((resolve) => {
+      resolve(cardNameList);
+    });
+  }
+
 }
 
 /*
@@ -138,7 +221,7 @@ export interface ICardName {
   index: number;
   name: string;
 }
-export interface IEditionName {
+export interface IEdition {
   object: string;
   id: string;
   code: string;
@@ -172,6 +255,14 @@ export interface ICardDetails {
 export interface IFilterOption {
   code: string,
   description: string,
+}
+
+export interface IFilter {
+  cardTypes: string[],
+  cardColors: string[],
+  cardEditions: string[],
+  cardText: string | null,
+  cardName: string | null
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

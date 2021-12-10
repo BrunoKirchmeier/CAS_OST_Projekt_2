@@ -1,21 +1,20 @@
 <div>
   <h2 mat-dialog-title>Filter setzen</h2>
+  <h5 mat-dialog-title>Anzahl Treffer: {{offersFiltert.length}}</h5>
   <mat-dialog-content>
 
-    <form [formGroup]="form"
-          class="form">
-      <mat-form-field appearance="outline"
-                      class="form-field">
-        <mat-label for="cardText">Kartentextsuche: </mat-label>
-        <input  matInput
-                id="cardText"
-                name="cardText"
-                type="text"
-                formControlName="cardText"
-                value=""
-                (change)="setFilterCardText()">
-      </mat-form-field>
-    </form>
+    <mat-form-field appearance="outline"
+                    class="form-field">
+      <mat-label for="cardText">Kartentextsuche: </mat-label>
+      <input  matInput
+              id="cardText"
+              name="cardText"
+              type="text"
+              [formControl]="inputCardText"
+              value=""
+              (change)="setFilterCardText()">
+    </mat-form-field>
+
     <mat-accordion>
       <mat-expansion-panel>
         <mat-expansion-panel-header>
@@ -23,6 +22,18 @@
             Editionen:
           </mat-panel-title>
         </mat-expansion-panel-header>
+
+          <mat-form-field appearance="outline"
+                          class="form-field">
+            <mat-label for="cardEditionSearch">Editionssuche: </mat-label>
+            <input  matInput
+                    id="cardEditionSearch"
+                    name="cardEditionSearch"
+                    type="text"
+                    [formControl]="inputCardEdition"
+                    value="">
+          </mat-form-field>
+
         <ng-template matExpansionPanelContent>
           <div *ngFor="let cardEdition of filtersOptionsEditions">
             <section>
