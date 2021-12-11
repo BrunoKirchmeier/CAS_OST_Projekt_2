@@ -177,10 +177,11 @@ export class ApiScryfallService {
           queryString += 'type:' + element + '+';
         }
       });
-      queryString = queryString.slice(0, -4);
+      queryString = queryString.slice(0, -1);
       queryString += ')';
     }
-
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+console.log(queryString);
     if(queryString !== '') {
       urlParams = urlParams.set('q', encodeURI(queryString));
       url = 'https://api.scryfall.com/cards/search';
@@ -189,7 +190,6 @@ export class ApiScryfallService {
                                               { params: urlParams }).toPromise()
       .then((res: IScryfallApiResList) => {
         let i: number = 0;
-        console.log(res.data);
         res.data.forEach((element: any) => {
           const cardName: ICardName = {index: i,
                                        name: element.name};

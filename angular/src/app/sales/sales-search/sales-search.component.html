@@ -6,9 +6,26 @@
     <div class="filter-container">
       <button mat-raised-button
               color="primary"
-              class="filter-button"
-              (click)="openFilterDialog()">Filter
+              class="filter-button set"
+              (click)="openFilterDialog()">Filter setzen
       </button>
+
+      <button mat-raised-button
+              color="primary"
+              class="filter-button reset"
+              (click)="filterReset()">Filter zurücksetzen
+      </button>
+    </div>
+
+    <div *ngFor="let offer of offerList$ | async"
+         class="offer-container">
+      <div class="offer-item"
+           data-id="{{offer?._id}}">
+           <div class="item-container">
+              <img src="{{offer.cardDetails?.cardImageUri}}"
+                   class="item-img">
+           </div>
+      </div>
     </div>
 
 
@@ -32,6 +49,8 @@
 
             </div>
           </div>
+
+          offersFiltert
 -->
 
 

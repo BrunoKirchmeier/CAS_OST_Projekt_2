@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { IOffer } from 'src/app/offer/shared/services/offer.service';
 import { ApiScryfallService, IEdition, IFilterOption, IFilter, ICardName } from 'src/app/shared/services/scryfallApi.service';
 import { SalesService } from '../shared/sales.service ';
 
@@ -29,13 +30,13 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
   public filtersOptionsEditions: IEdition[] = [];
   public inputCardText: FormControl = new FormControl();
   public inputCardEdition: FormControl = new FormControl();
-  public offersFiltert: ICardName[] = [];
+  public offersFiltert: IOffer[] = [];
 
   constructor( private _scryfall: ApiScryfallService,
                private _salesService: SalesService,
                public filterDialog: MatDialog,
                public filterDialogRef: MatDialogRef<DialogFilterComponent> ) {
-    this.setFilterCardText();
+    this.getCards();
   }
 
   ngOnInit(): void {
@@ -98,12 +99,12 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
   }
 
   getAllEditionsThatContain(element: string): IEdition[] {
-    const results: IEdition[] = this.filtersOptionsEditions.filter((i) => i.name.indexOf(element) > -1);
+    const results: IEdition[] = this.filtersOptionsEditions.filter((i) => i.name.toLowerCase().indexOf(element.toLowerCase()) > -1);
     return results;
   }
 
   getCards() {
-    this._salesService.getCardsByFilter(this.activeFilters)
+    this._salesService.getOffersByFilter(this.activeFilters)
      .then((res) => { this.offersFiltert = res }
     )
   }

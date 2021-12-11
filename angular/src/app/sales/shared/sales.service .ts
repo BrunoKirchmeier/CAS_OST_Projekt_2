@@ -37,49 +37,40 @@ export class SalesService {
     });
   }
 
-  async getCardsByFilter(filter: IFilter): Promise<any[]> {
-    let offers: any[] = [];
+  async getOffersByFilter(filter: IFilter): Promise<IOffer[]> {
+    let offers: IOffer[] = [];
+    let dbMatches: IOffer[] = [];
     let scryfallMatches = await this._scryfall.getCardsByFilter(filter);
-
-
-
-    return new Promise((resolve) => {
-      resolve(scryfallMatches);
-    });
-  }
-
-
-}
-
-
-
-
-/*
-
-  async searchOffersByCardText(value: string): Promise<IOffer[]> {
-    let offers: IOffer[] = []
-    const scryfallMatches = await this._scryfall.cardTextSearch(value);
-    for (let i = 0; i < scryfallMatches.length; i++) {
-      let offer: IOffer;
-      let q = query(collection(this._db, this._offersCollection),
-                    where('cardName', '==', scryfallMatches[i].name.replace('"', '')));
-      await this._dbExt.readDoc<IOffer>(q)
-        .then((snapshot: QuerySnapshot<DocumentData>) => {
-          snapshot.forEach(doc => {
-            offer = doc as any;
-            offers.push(offer);
-          })
+    let q = query(collection(this._db, this._offersCollection));
+    await this._dbExt.readDoc<IOffer>(q)
+      .then((snapshot: QuerySnapshot<DocumentData>) => {
+        snapshot.forEach(doc => {
+          let offer = doc as any;
+          dbMatches.push(offer);
         })
-    }
+      })
+    offers = dbMatches.filter(o1 => scryfallMatches.some(o2 => o1.cardName === o2.name));
     return new Promise((resolve) => {
       resolve(offers);
     });
   }
 
+  async getAllOffers(): Promise<IOffer[]> {
+    let offers: IOffer[] = [];
+    let q = query(collection(this._db, this._offersCollection));
+    await this._dbExt.readDoc<IOffer>(q)
+      .then((snapshot: QuerySnapshot<DocumentData>) => {
+        snapshot.forEach(doc => {
+          let offer = doc as any;
+          offers.push(offer);
+        })
+      })
+    return new Promise((resolve) => {
+      resolve(offers);
+    });
+  }
 
-*/
-
-
+}
 
 
 export interface ISales {

@@ -1,3 +1,9 @@
+.page {
+  &-container {
+    text-align: center;
+  }
+}
+
 .filter {
   &-container {
     text-align: center;
@@ -5,5 +11,29 @@
   }
   &-button {
     width: 90%;
+    margin-top: 10px;
+  }
+}
+
+.item {
+  &-container {
+    max-width: 60%;
+    display: inline-block;
+    text-align: center;
+  }
+
+  &-img {
+    max-width: 100%;
+    margin-top: 20px;
+  }
+
+  &-detail {
+    display: inline-block;
+    padding-top: 10px;
+    text-align: center;
+  }
+
+  &-button-delete {
+    margin-top: 10px;
   }
 }
