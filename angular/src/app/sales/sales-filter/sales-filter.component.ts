@@ -31,12 +31,16 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
   public inputCardText: FormControl = new FormControl();
   public inputCardEdition: FormControl = new FormControl();
   public offersFiltert: IOffer[] = [];
+  public dialogButtonIsDisabled: boolean = false;
+  public offers: IOffer[] = [];
 
   constructor( private _scryfall: ApiScryfallService,
                private _salesService: SalesService,
                public filterDialog: MatDialog,
                public filterDialogRef: MatDialogRef<DialogFilterComponent> ) {
     this.getCards();
+    this._salesService.getAllOffers()
+    .then((res) => { this.offers = res; })
   }
 
   ngOnInit(): void {
@@ -65,6 +69,11 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
       element.unsubscribe();
     });
   }
+
+  dialogCancel() {
+    this.filterDialogRef.close([]);
+  }
+
 
   setFilterCardText() {
     this.activeFilters.cardText = this.inputCardText?.value;
@@ -104,8 +113,12 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
   }
 
   getCards() {
+    this.dialogButtonIsDisabled = true;
     this._salesService.getOffersByFilter(this.activeFilters)
-     .then((res) => { this.offersFiltert = res }
+     .then((res) => {
+       this.offersFiltert = res;
+       this.dialogButtonIsDisabled = false;
+      }
     )
   }
 

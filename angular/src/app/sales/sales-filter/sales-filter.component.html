@@ -1,7 +1,7 @@
 <div>
   <h2 mat-dialog-title>Filter setzen</h2>
   <h5 mat-dialog-title>Anzahl Treffer: {{offersFiltert.length}}</h5>
-  <mat-dialog-content>
+  <mat-dialog-content class="dialog-container pad-bottom">
 
     <mat-form-field appearance="outline"
                     class="form-field">
@@ -77,11 +77,16 @@
       </ng-template>
       </mat-expansion-panel>
     </mat-accordion>
-
-
   </mat-dialog-content>
-  <button mat-button [mat-dialog-close]="offersFiltert">
+
+  <button mat-button
+          [mat-dialog-close]="offersFiltert"
+          [disabled]="dialogButtonIsDisabled">
     Filter Anwenden
+  </button>
+  <button mat-button
+          [mat-dialog-close]="offers">
+    Abbrechen
   </button>
 </div>
 

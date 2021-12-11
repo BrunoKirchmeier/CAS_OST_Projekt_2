@@ -123,7 +123,6 @@ export class ApiScryfallService {
   async getCardsByFilter(filter: IFilter): Promise<ICardName[]> {
     let cardNameList: ICardName[] = [];
     let url: string = 'https://api.scryfall.com/catalog/card-names';
-    let urlParams = new HttpParams()
     let queryString: string = '';
 
     if(filter?.cardText !== null &&
@@ -180,24 +179,51 @@ export class ApiScryfallService {
       queryString = queryString.slice(0, -1);
       queryString += ')';
     }
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-console.log(queryString);
+
     if(queryString !== '') {
-      urlParams = urlParams.set('q', encodeURI(queryString));
+      let paginationHasMore: Boolean = true;
+      let paginationPage: number = 1;
       url = 'https://api.scryfall.com/cards/search';
+      while(paginationHasMore === true)  {
+        let urlParams = new HttpParams()
+        urlParams = urlParams.set('q', encodeURI(queryString));
+        urlParams = urlParams.set('page', paginationPage);
+
+
+console.log(urlParams);
+
+
+        await this._http.get<IScryfallApiResList>(url,
+                                                  { params: urlParams }).toPromise()
+          .then((res: IScryfallApiResList) => {
+            paginationHasMore = res.has_more;
+            let i: number = 0;
+            res.data.forEach((element: any) => {
+              const cardName: ICardName = {index: i,
+                                          name: element.name};
+              cardNameList.push(cardName);
+              i++;
+            })
+          })
+          .catch((err: any) => {})
+        paginationPage++;
+      }
+    } else {
+      let urlParams = new HttpParams()
+      urlParams = urlParams.set('q', encodeURI(queryString));
+      await this._http.get<IScryfallApiResList>(url,
+                                                { params: urlParams }).toPromise()
+        .then((res: IScryfallApiResList) => {
+          let i: number = 0;
+          res.data.forEach((element: any) => {
+            const cardName: ICardName = {index: i,
+                                        name: element};
+            cardNameList.push(cardName);
+            i++;
+          })
+        })
+        .catch((err: any) => {})
     }
-    await this._http.get<IScryfallApiResList>(url,
-                                              { params: urlParams }).toPromise()
-      .then((res: IScryfallApiResList) => {
-        let i: number = 0;
-        res.data.forEach((element: any) => {
-          const cardName: ICardName = {index: i,
-                                       name: element.name};
-          cardNameList.push(cardName);
-          i++;
-        });
-      })
-      .catch((err: any) => {})
     return new Promise((resolve) => {
       resolve(cardNameList);
     });
@@ -212,6 +238,7 @@ HTTP 429 Too Many Requests status code. Continuing to overload the API after thi
 For example, if you are submitting a request to a method that requires Application authorization, you must submit an HTTP header like Authorization: Bearer X where X is your client_secret token, including the cs- prefix.
 */
 export interface IScryfallApiResList {
+  has_more: boolean;
   object: string;
   uri: string;
   total_values: number;

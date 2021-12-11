@@ -51,21 +51,26 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* mat-form */
 mat-form-field {
   &.pad-mar-0 {
-    .mat-form-field-wrapper {
+    &.mat-form-field-wrapper {
       padding-bottom: 0;
       margin: 0;
     }
   }
 
   &.pad-mar-1 {
-    .mat-form-field-wrapper {
+    &.mat-form-field-wrapper {
       padding-bottom: 0;
       margin: 5;
     }
   }
-
-
-
-
-
 }
+
+/* mat-dialog */
+mat-dialog-content {
+  &.pad-bottom {
+    &.mat-dialog-content.dialog-container {
+      padding-bottom: 10px;
+    }
+  }
+}
+
