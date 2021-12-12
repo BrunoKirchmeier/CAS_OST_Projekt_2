@@ -3,7 +3,7 @@ import { Firestore, query, collection, where, QuerySnapshot, Timestamp } from '@
 import { DocumentData } from 'rxfire/firestore/interfaces';
 import { IOffer } from 'src/app/offer/shared/services/offer.service';
 import { DatabaseService } from 'src/app/shared/services/database.service';
-import { ApiScryfallService, ICardDetails, IFilter } from 'src/app/shared/services/scryfallApi.service';
+import { ApiScryfallService, ICardDetails, IFilter, IFilterOption } from 'src/app/shared/services/scryfallApi.service';
 
 @Injectable({
   providedIn: 'root'
@@ -70,8 +70,70 @@ export class SalesService {
     });
   }
 
-}
+  async getAllUsedFilterValues(): Promise<IFilter> {
+    let filter: IFilter = {
+      cardTypes: [],
+      cardColors: [],
+      cardEditions: [],
+      cardNamesInOffers: [],
+      cardNameSearch: null,
+      cardTextSearch: null
+    }
+    let q = query(collection(this._db, this._offersCollection));
+    await this._dbExt.readDoc<IOffer>(q)
+      .then((snapshot: QuerySnapshot<DocumentData>) => {
+        snapshot.forEach((doc: any) => {
+          doc.cardDetails?.cardColors.forEach((color: any) => {
+            let option: IFilterOption = {
+              code: color,
+              description: '',
+              state: false
+            }
+            if(color === 'W') { option.description = 'Weiss'};
+            if(color === 'U') { option.description = 'Blau'};
+            if(color === 'B') { option.description = 'Schwarz'};
+            if(color === 'R') { option.description = 'Rot'};
+            if(color === 'G') { option.description = 'Grün'};
+            let result = filter.cardColors.find(x => x.code === color);
+            if(result === undefined) {
+              filter.cardColors.push(option);
+            }
+          });
+          let result = filter.cardEditions.find(x => x.code === doc.cardDetails?.cardEditionCode);
+          if(result === undefined) {
+            let option: IFilterOption = {
+              code: doc.cardDetails?.cardEditionCode,
+              description: doc.cardDetails?.cardEditionName,
+              state: false
+            }
+            filter.cardEditions.push(option);
+          }
+          doc.cardDetails?.cardType.split(' — ')
+            .forEach((types: string) => {
+              types.split(' ').forEach((type: string) => {
+                let option: IFilterOption = {
+                  code: type,
+                  description: type,
+                  state: false
+                }
+                let result = filter.cardTypes.find(x => x.code === type);
+                if(result === undefined) {
+                  filter.cardTypes.push(option);
+                }
+              })
+            })
+          let exist = filter.cardNamesInOffers.includes(doc.cardDetails?.cardName);
+          if(exist === false) {
+            filter.cardNamesInOffers.push(doc.cardDetails?.cardName);
+          }
+        })
+      })
+    return new Promise((resolve) => {
+      resolve(filter);
+    });
+  }
 
+}
 
 export interface ISales {
   _id: string | null;
@@ -89,4 +151,9 @@ export interface ISales {
   additionInfo: string | null;
   creationDate : Timestamp;
   saleDate : Timestamp;
+}
+
+export interface IDialogData {
+  results: IOffer[],
+  filter: IFilter | null,
 }

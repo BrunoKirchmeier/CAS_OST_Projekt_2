@@ -9,10 +9,11 @@ import { SharedModule } from '../shared/shared.module'
 import { SalesMenuComponent } from './sales-menu/sales-menu.component';
 import { SalesSearchComponent } from './sales-search/sales-search.component';
 import { DialogFilterComponent } from './sales-filter/sales-filter.component';
+import { SalesFilterDialogService } from './shared/sales-filter-dialog.service'
 
 // Material Desing
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -48,9 +49,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatCheckboxModule,
   ],
   providers: [
+    MatDialog,
     { provide: MatDialogRef,
       useValue: {}
-    }
+    },
+    SalesFilterDialogService,
   ],
   bootstrap: []
 })
