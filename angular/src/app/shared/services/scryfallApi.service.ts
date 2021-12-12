@@ -68,6 +68,13 @@ export class ApiScryfallService {
           res.image_uris.hasOwnProperty(format)) {
             uri = res.image_uris[format];
         }
+        const cardTypes: string[] = []
+        res.type_line.split(' — ')
+        .forEach((types: string) => {
+          types.split(' ').forEach((type: string) => {
+            cardTypes.push(type);
+          })
+        })
         const obj: ICardDetails =
         {
           cardName: res.name,
@@ -75,7 +82,7 @@ export class ApiScryfallService {
           cardImageUri: uri,
           manaCost: res.mana_cost,
           cardLanguageIso: res.lang,
-          cardType: res.type_line,
+          cardTypes: cardTypes,
           cardColors: res.colors,
           cardEditionCode: res.set,
           cardEditionName: res.set_name,
@@ -230,7 +237,7 @@ export interface ICardDetails {
   cardImageUri: string;
   manaCost: string;
   cardLanguageIso: string;
-  cardType: string,
+  cardTypes: string[],
   cardColors: string[],
   cardEditionCode: string,
   cardEditionName: string,

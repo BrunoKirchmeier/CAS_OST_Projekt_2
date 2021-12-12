@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import { ApiScryfallService, IEdition, IFilterOption, IFilter } from 'src/app/shared/services/scryfallApi.service';
+import { Subscription } from 'rxjs';
+import { IFilterOption, IFilter } from 'src/app/shared/services/scryfallApi.service';
 import { SalesFilterDialogService } from '../shared/sales-filter-dialog.service';
 import { IDialogData, SalesService } from '../shared/sales.service ';
 
@@ -15,42 +14,30 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
 
   private _subscriptions: Subscription[] = [];
 
-  public activeFilters: IFilter = {
-    cardTypes: [],
-    cardColors: [],
-    cardEditions: [],
-    cardNamesInOffers: [],
-    cardNameSearch: null,
-    cardTextSearch: null
-  }
-  public filtersOptionsCardColors: IFilterOption[] = [];
-  public filtersOptionsCardTypes: IFilterOption[] = [];
-  public filtersOptionsEditions: IFilterOption[] = [];
   public inputCardText: FormControl = new FormControl();
   public inputCardEdition: FormControl = new FormControl();
   public useFilterButtonIsDisabled: boolean = false;
   public dialogData: IDialogData = {
     results: [],
-    filter: this.activeFilters
+    filter: {
+      cardTypes: [],
+      cardColors: [],
+      cardEditions: [],
+      cardNamesInOffers: [],
+      cardNameSearch: null,
+      cardTextSearch: null
+    }
   };
 
-  constructor(private _scryfall: ApiScryfallService,
-              private _salesService: SalesService,
+  constructor(private _salesService: SalesService,
               private _salesFilterDialogService: SalesFilterDialogService) {
   }
 
   ngOnInit(): void {
     this._subscriptions.push(
       this._salesFilterDialogService.dialogData$
-        .subscribe((res: IDialogData | null) => {
-          if(res !== null) {
-            this.dialogData = res;
-            this.filtersOptionsCardColors = res.filter?.cardColors ?? [];
-            this.filtersOptionsCardTypes = res.filter?.cardTypes ?? [];
-            this.filtersOptionsEditions = res.filter?.cardEditions ?? [];
-
-            console.log(res);
-          }
+        .subscribe((res: IDialogData) => {
+          this.dialogData = res;
         })
     );
   }
@@ -63,11 +50,46 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
 
   setFilterCardText(){}
 
-  setFilterEdition(e: any, cardEdition: IFilterOption) {}
+  setFilterCardColor(e: any, cardColor: IFilterOption) {
+    let data = this.dialogData.filter.cardColors;
+    let index = data.findIndex((item => item.code === cardColor.code));
+    if(index >= 0) {
+      data[index].state = e.checked;
+      this.dialogData.filter.cardColors = data;
+    }
+    this.searchFiltertCards();
+  }
 
-  setFilterCardColor(e: any, cardColor: IFilterOption) {}
+  setFilterCardType(e: any, cardTyp: IFilterOption) {
+    let data = this.dialogData.filter.cardTypes;
+    let index = data.findIndex((item => item.code === cardTyp.code));
+    if(index >= 0) {
+      data[index].state = e.checked;
+      this.dialogData.filter.cardTypes = data;
+    }
+    this.searchFiltertCards();
+  }
 
-  setFilterCardType(e: any, cardTyp: IFilterOption) {}
+  setFilterEdition(e: any, cardEdition: IFilterOption) {
+    let data = this.dialogData.filter.cardEditions;
+    let index = data.findIndex((item => item.code === cardEdition.code));
+    if(index >= 0) {
+      data[index].state = e.checked;
+      this.dialogData.filter.cardEditions = data;
+    }
+    this.searchFiltertCards();
+  }
+
+  searchFiltertCards() {
+    let test: IFilter = this.dialogData.filter;
+    this.useFilterButtonIsDisabled = true;
+    this._salesService.getOffersByFilter(test)
+     .then((res) => {
+       this.dialogData.results = res;
+       this.useFilterButtonIsDisabled = false;
+      }
+    )
+  }
 
 }
 

@@ -14,6 +14,7 @@ export class OfferService {
 
   private _currentUser: any = null;
   private _offersCollection: string = 'offers';
+  private _filterCollection: string = 'offerFilters';
 
   public onChangeOwnerOffer$: Subject<IOffer[]> = new Subject<IOffer[]>();
 
@@ -30,6 +31,7 @@ export class OfferService {
   }
 
   async createOffer(data: any): Promise<any> {
+    // Create the Offer in the DB
     const offer: IOffer = {
       _id: null,
       cardName: data.cardName,
@@ -39,7 +41,7 @@ export class OfferService {
         cardImageUri: data.cardDetails?.cardImageUri ?? '',
         manaCost: data.cardDetails?.manaCost ?? '',
         cardLanguageIso: data.cardDetails?.cardLanguageIso ?? '',
-        cardType: data.cardDetails?.cardType ?? '',
+        cardTypes: data.cardDetails?.cardTypes ?? [],
         cardColors: data.cardDetails?.cardColors ?? [],
         cardEditionCode: data.cardDetails?.cardEditionCode ?? '',
         cardEditionName: data.cardDetails?.cardEditionName ?? '',
@@ -57,6 +59,28 @@ export class OfferService {
                                                         offer)
     let offers: IOffer[] = await this.getMyOffers();
     this.onChangeOwnerOffer$.next(offers);
+    // Create a Table for Joing filtering Values by showing Offers
+    data.cardDetails?.cardTypes.forEach((type: string) => {
+      const filter: any = {
+        filterType: 'cardTypes',
+        value: type,
+        offerId: offerId,
+        cardName: data.cardDetails?.cardName ?? ''
+      }
+      this._dbExt.createDoc<any>(this._filterCollection,
+                                    filter)
+    });
+    // Create a Table for Joing filtering Values by showing Offers
+    data.cardDetails?.cardColors.forEach((color: string) => {
+      const filter: any = {
+        filterType: 'cardColors',
+        value: color,
+        offerId: offerId,
+        cardName: data.cardDetails?.cardName ?? ''
+      }
+      this._dbExt.createDoc<any>(this._filterCollection,
+                                    filter)
+    });
     return new Promise((resolve) => {
       resolve(offerId);
     });

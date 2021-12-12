@@ -8,7 +8,13 @@ import { IDialogData } from './sales.service ';
 export class SalesFilterDialogService implements OnDestroy {
 
   private _subscriptions: Subscription[] = [];
-  private _dialogData: IDialogData = {results: [], filter: null};
+  private _dialogData: IDialogData = {results: [], filter: { cardTypes: [],
+                                                             cardColors: [],
+                                                             cardEditions: [],
+                                                             cardNamesInOffers: [],
+                                                             cardNameSearch: null,
+                                                             cardTextSearch: null,
+   }};
 
   public dialogData$: Subject<IDialogData> = new Subject();
 
@@ -21,8 +27,8 @@ export class SalesFilterDialogService implements OnDestroy {
     });
   }
 
-  open(dialogData: IDialogData |null): void {
-    this._dialogData = dialogData as IDialogData;
+  open(dialogData: IDialogData): void {
+    this._dialogData = dialogData;
     this._filterDialogRef = this._filterDialog.open(DialogFilterComponent, { disableClose: true, width:'100%', data: dialogData});
     this._subscriptions.push(
       this._filterDialogRef.afterOpened()

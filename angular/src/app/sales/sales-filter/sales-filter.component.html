@@ -25,7 +25,7 @@
           </mat-expansion-panel-header>
             <mat-form-field appearance="outline"
                             class="form-field"
-                            *ngIf="filtersOptionsEditions.length > 0">
+                            *ngIf="dialogData.filter.cardEditions.length > 0">
               <mat-label for="cardEditionSearch">Editionssuche: </mat-label>
               <input  matInput
                       id="cardEditionSearch"
@@ -36,9 +36,10 @@
             </mat-form-field>
 
           <ng-template matExpansionPanelContent>
-            <div *ngFor="let cardEdition of filtersOptionsEditions">
+            <div *ngFor="let cardEdition of dialogData.filter.cardEditions">
               <section>
-                <mat-checkbox (change)="setFilterEdition($event, cardEdition)">{{cardEdition.description}}</mat-checkbox>
+                <mat-checkbox (change)="setFilterEdition($event, cardEdition)"
+                              [checked]="cardEdition.state">{{cardEdition.description}}</mat-checkbox>
               </section>
             </div>
         </ng-template>
@@ -55,9 +56,10 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <ng-template matExpansionPanelContent>
-            <div *ngFor="let cardTyp of filtersOptionsCardTypes">
+            <div *ngFor="let cardTyp of dialogData.filter.cardTypes">
               <section>
-                <mat-checkbox (change)="setFilterCardType($event, cardTyp)">{{cardTyp.description}}</mat-checkbox>
+                <mat-checkbox (change)="setFilterCardType($event, cardTyp)"
+                              [checked]="cardTyp.state">{{cardTyp.description}}</mat-checkbox>
               </section>
             </div>
         </ng-template>
@@ -74,7 +76,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <ng-template matExpansionPanelContent>
-            <div *ngFor="let cardColor of filtersOptionsCardColors">
+            <div *ngFor="let cardColor of dialogData.filter.cardColors">
               <section>
                 <mat-checkbox (change)="setFilterCardColor($event, cardColor)"
                               [checked]="cardColor.state">{{cardColor.description}}</mat-checkbox>

@@ -18,8 +18,15 @@ export class SalesSearchComponent implements OnInit, OnDestroy {
   public offerList$: Subject<IOffer[]> = new Subject();
   public dialogData: IDialogData = {
     results: [],
-    filter: null
-  }
+    filter: {
+      cardTypes: [],
+      cardColors: [],
+      cardEditions: [],
+      cardNamesInOffers: [],
+      cardNameSearch: null,
+      cardTextSearch: null
+    }
+  };
 
   constructor(private _snackBar: MatSnackBar,
               private _salesService: SalesService,
@@ -58,7 +65,14 @@ export class SalesSearchComponent implements OnInit, OnDestroy {
     this._salesService.getAllOffers()
       .then((res) => {
         this.offerList$.next(res);
-        this.dialogData.filter = null;
+        this.dialogData.filter = {
+          cardTypes: [],
+          cardColors: [],
+          cardEditions: [],
+          cardNamesInOffers: [],
+          cardNameSearch: null,
+          cardTextSearch: null
+        };
         this.dialogData.results = [];
       })
   }
