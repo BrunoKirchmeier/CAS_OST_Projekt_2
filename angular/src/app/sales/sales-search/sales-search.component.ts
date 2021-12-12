@@ -4,7 +4,7 @@ import { IDialogData, SalesService } from '../shared/sales.service ';
 import { Subject, Subscription } from 'rxjs';
 import { IOffer } from 'src/app/offer/shared/services/offer.service';
 import { SalesFilterDialogService } from '../shared/sales-filter-dialog.service';
-import { IFilter } from 'src/app/shared/services/scryfallApi.service';
+import { IFilter, IFilterOption } from 'src/app/shared/services/scryfallApi.service';
 
 @Component({
   selector: 'app-sales-search',
@@ -65,14 +65,17 @@ export class SalesSearchComponent implements OnInit, OnDestroy {
     this._salesService.getAllOffers()
       .then((res) => {
         this.offerList$.next(res);
-        this.dialogData.filter = {
-          cardTypes: [],
-          cardColors: [],
-          cardEditions: [],
-          cardNamesInOffers: [],
-          cardNameSearch: null,
-          cardTextSearch: null
-        };
+        this.dialogData.filter.cardTypes.forEach((element: IFilterOption) => {
+          element.state = false;
+        });
+        this.dialogData.filter.cardColors.forEach((element: IFilterOption) => {
+          element.state = false;
+        });
+        this.dialogData.filter.cardEditions.forEach((element: IFilterOption) => {
+          element.state = false;
+        });
+        this.dialogData.filter.cardNameSearch = null;
+        this.dialogData.filter.cardTextSearch = null;
         this.dialogData.results = [];
       })
   }
