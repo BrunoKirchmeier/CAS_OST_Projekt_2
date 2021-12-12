@@ -98,57 +98,72 @@ export class ApiScryfallService {
     let cardNameList: ICardName[] = [];
     let url: string = 'https://api.scryfall.com/catalog/card-names';
     let queryString: string = '';
-    if(filter?.cardTextSearch !== null &&
-       filter?.cardTextSearch !== undefined) {
-      queryString += queryString == '' ? '': '+';
-      queryString += '(';
-      let splitt: Array<string> = [];
-      splitt = filter.cardTextSearch.split(' ');
-      splitt.forEach((element: string) => {
-        if(element !== '') {
-          queryString += 'oracle:' + element + '+';
+    if(filter.cardTypes.length > 0) {
+      let hasMatched: boolean = false;
+      filter.cardTypes.forEach((element: IFilterOption) => {
+        if(element.state == true && element.code !== '') {
+          if(hasMatched === false) {
+            queryString += queryString == '' ? '': '+';
+            queryString += '(';
+            hasMatched = true;
+          }
+          queryString += 'type:' + element.code + '+';
         }
       });
-      queryString = queryString.slice(0, -1);
-      queryString += ')';
+      if(hasMatched) {
+        queryString = queryString.slice(0, -1);
+        queryString += ')';
+      }
     }
-    if(filter?.cardColors !== null &&
-       filter?.cardColors !== undefined &&
-       filter.cardColors.length > 0) {
-      queryString += queryString == '' ? '': '+';
-      queryString += 'color=';
+    if(filter.cardColors.length > 0) {
+      let hasMatched: boolean = false;
       filter.cardColors.forEach((element: IFilterOption) => {
-        if(element.code !== '') {
+        if(element.state == true && element.code !== '') {
+          if(hasMatched === false) {
+            queryString += queryString == '' ? '': '+';
+            queryString += 'color=';
+            hasMatched = true;
+          }
           queryString += element.code;
         }
       });
     }
-    if(filter?.cardEditions !== null &&
-       filter?.cardEditions !== undefined &&
-       filter.cardEditions.length > 0 ) {
-      queryString += queryString == '' ? '': '+';
-      queryString += '(';
+    if(filter.cardEditions.length > 0) {
+      let hasMatched: boolean = false;
       filter.cardEditions.forEach((element: IFilterOption) => {
-        if(element.code !== '') {
+        if(element.state == true && element.code !== '') {
+          if(hasMatched === false) {
+            queryString += queryString == '' ? '': '+';
+            queryString += '(';
+            hasMatched = true;
+          }
           queryString += 'set:' + element.code + '+OR+';
         }
       });
-      queryString = queryString.slice(0, -4);
-      queryString += ')';
+      if(hasMatched) {
+        queryString = queryString.slice(0, -4);
+        queryString += ')';
+      }
     }
-    if(filter?.cardTypes !== null &&
-       filter?.cardTypes !== undefined &&
-       filter.cardTypes.length > 0 ) {
-      queryString += queryString == '' ? '': '+';
-      queryString += '(';
-      filter.cardTypes.forEach((element: IFilterOption) => {
-        if(element.code !== '') {
-          queryString += 'type:' + element.code + '+';
-        }
-      });
-      queryString = queryString.slice(0, -1);
-      queryString += ')';
-    }
+
+    if(filter.cardTextSearch !== null &&
+      filter?.cardTextSearch !== undefined) {
+     queryString += queryString == '' ? '': '+';
+     queryString += '(';
+     let splitt: Array<string> = [];
+     splitt = filter.cardTextSearch.split(' ');
+     splitt.forEach((element: string) => {
+       if(element !== '') {
+         queryString += 'oracle:' + element + '+';
+       }
+     });
+     queryString = queryString.slice(0, -1);
+     queryString += ')';
+   }
+
+
+
+
     if(queryString !== '') {
       let paginationHasMore: Boolean = true;
       let paginationPage: number = 1;
@@ -174,6 +189,9 @@ export class ApiScryfallService {
           })
         paginationPage++;
       }
+
+      console.log(paginationPage);
+
     } else {
       let urlParams = new HttpParams()
       urlParams = urlParams.set('q', encodeURI(queryString));
@@ -190,6 +208,7 @@ export class ApiScryfallService {
         })
         .catch((err: any) => {})
     }
+    console.log('ENDE: ---------------------------------------------------');
     return new Promise((resolve) => {
       resolve(cardNameList);
     });

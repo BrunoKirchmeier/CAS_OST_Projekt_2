@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { IFilterOption, IFilter } from 'src/app/shared/services/scryfallApi.service';
 import { SalesFilterDialogService } from '../shared/sales-filter-dialog.service';
 import { IDialogData, SalesService } from '../shared/sales.service ';
@@ -16,6 +17,7 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
 
   public inputCardText: FormControl = new FormControl();
   public inputCardEdition: FormControl = new FormControl();
+  public allCardEditionOptions: IFilterOption[] = [];
   public useFilterButtonIsDisabled: boolean = false;
   public dialogData: IDialogData = {
     results: [],
@@ -38,7 +40,19 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
       this._salesFilterDialogService.dialogData$
         .subscribe((res: IDialogData) => {
           this.dialogData = res;
+          this.allCardEditionOptions = res.filter.cardEditions;
         })
+    );
+    this._subscriptions.push(
+      this.inputCardEdition.valueChanges.pipe(
+        debounceTime(1000),
+      )
+      .subscribe((value: string) => {
+        console.log(value);
+        this.dialogData.filter.cardEditions = value === ''
+                                    ? this.allCardEditionOptions
+                                    : this.getAllEditionsThatContain(value);
+      })
     );
   }
 
@@ -48,7 +62,10 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
     });
   }
 
-  setFilterCardText(){}
+  setFilterCardText(){
+    this.dialogData.filter.cardTextSearch = this.inputCardText?.value;
+    this.searchFiltertCards();
+  }
 
   setFilterCardColor(e: any, cardColor: IFilterOption) {
     let data = this.dialogData.filter.cardColors;
@@ -89,6 +106,10 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
        this.useFilterButtonIsDisabled = false;
       }
     )
+  }
+
+  getAllEditionsThatContain(element: string): IFilterOption[] {
+    return this.allCardEditionOptions.filter((i) => i.description.toLowerCase().indexOf(element.toLowerCase()) > -1);
   }
 
 }
