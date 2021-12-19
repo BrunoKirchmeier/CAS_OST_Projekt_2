@@ -24,7 +24,6 @@ export class SalesSearchComponent implements OnInit, OnDestroy {
       cardEditions: [],
       cardNamesInOffers: [],
       cardNameSearch: null,
-      cardTextSearch: null
     }
   };
 
@@ -75,7 +74,6 @@ export class SalesSearchComponent implements OnInit, OnDestroy {
           element.state = false;
         });
         this.dialogData.filter.cardNameSearch = null;
-        this.dialogData.filter.cardTextSearch = null;
         this.dialogData.results = [];
       })
   }

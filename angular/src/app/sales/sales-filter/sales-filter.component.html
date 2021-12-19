@@ -5,14 +5,23 @@
 
     <mat-form-field appearance="outline"
                     class="form-field">
-      <mat-label for="cardText">Kartentextsuche: </mat-label>
-      <input  matInput
-              id="cardText"
-              name="cardText"
-              type="text"
-              [formControl]="inputCardText"
-              value=""
-              (change)="setFilterCardText()">
+      <mat-label>Kartenname: </mat-label>
+      <mat-select id="cardName"
+                  name="cardName"
+                  [formControl]="inputCardName">
+        <mat-option>
+          <ngx-mat-select-search
+              placeholderLabel="search"
+              noEntriesFoundLabel="No entry matches">
+          </ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let cardName of dialogData.filter.cardNamesInOffers "
+                    data-id="cardName.index"
+                    data-name="cardName.name"
+                    [value]="cardName">
+                    {{cardName}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
 
     <div class="accordion-container">
@@ -30,18 +39,18 @@
                       id="cardEditionSearch"
                       name="cardEditionSearch"
                       type="text"
-                      [formControl]="inputCardEdition"
+                      [formControl]="inputCardEditionSearch"
                       value="">
             </mat-form-field>
-
           <ng-template matExpansionPanelContent>
             <div *ngFor="let cardEdition of dialogData.filter.cardEditions">
               <section>
-                <mat-checkbox (change)="setFilterEdition($event, cardEdition)"
-                              [checked]="cardEdition.state">{{cardEdition.description}}</mat-checkbox>
-              </section>
-            </div>
-        </ng-template>
+                  <mat-checkbox (change)="setFilterEdition($event, cardEdition)"
+                                [checked]="cardEdition.state">{{cardEdition.description}}
+                  </mat-checkbox>
+                </section>
+              </div>
+          </ng-template>
         </mat-expansion-panel>
       </mat-accordion>
     </div>

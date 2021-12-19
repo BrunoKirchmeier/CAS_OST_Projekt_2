@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { IFilterOption, IFilter } from 'src/app/shared/services/scryfallApi.service';
+import { IFilterOption } from 'src/app/shared/services/scryfallApi.service';
 import { SalesFilterDialogService } from '../shared/sales-filter-dialog.service';
 import { IDialogData, SalesService } from '../shared/sales.service ';
 
@@ -15,8 +15,8 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
 
   private _subscriptions: Subscription[] = [];
 
-  public inputCardText: FormControl = new FormControl();
-  public inputCardEdition: FormControl = new FormControl();
+  public inputCardName: FormControl = new FormControl();
+  public inputCardEditionSearch: FormControl = new FormControl();
   public allCardEditionOptions: IFilterOption[] = [];
   public useFilterButtonIsDisabled: boolean = false;
   public dialogData: IDialogData = {
@@ -27,13 +27,11 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
       cardEditions: [],
       cardNamesInOffers: [],
       cardNameSearch: null,
-      cardTextSearch: null
     }
   };
 
   constructor(private _salesService: SalesService,
-              private _salesFilterDialogService: SalesFilterDialogService) {
-  }
+              private _salesFilterDialogService: SalesFilterDialogService) {}
 
   ngOnInit(): void {
     this._subscriptions.push(
@@ -44,27 +42,29 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
         })
     );
     this._subscriptions.push(
-      this.inputCardEdition.valueChanges.pipe(
+      this.inputCardEditionSearch.valueChanges.pipe(
         debounceTime(1000),
       )
       .subscribe((value: string) => {
-        console.log(value);
         this.dialogData.filter.cardEditions = value === ''
                                     ? this.allCardEditionOptions
                                     : this.getAllEditionsThatContain(value);
       })
     );
+    this._subscriptions.push(
+      this.inputCardName.valueChanges
+      .subscribe((value: string) => {
+        this.dialogData.filter.cardNameSearch = value;
+        this.searchFiltertCards();
+      })
+    );
+
   }
 
   ngOnDestroy(): void {
     this._subscriptions.forEach((element: Subscription) => {
       element.unsubscribe();
     });
-  }
-
-  setFilterCardText(){
-    this.dialogData.filter.cardTextSearch = this.inputCardText?.value;
-    this.searchFiltertCards();
   }
 
   setFilterCardColor(e: any, cardColor: IFilterOption) {
@@ -74,6 +74,7 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
       data[index].state = e.checked;
       this.dialogData.filter.cardColors = data;
     }
+    this.dialogData.filter.cardNameSearch = null;
     this.searchFiltertCards();
   }
 
@@ -84,6 +85,7 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
       data[index].state = e.checked;
       this.dialogData.filter.cardTypes = data;
     }
+    this.dialogData.filter.cardNameSearch = null;
     this.searchFiltertCards();
   }
 
@@ -94,13 +96,13 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
       data[index].state = e.checked;
       this.dialogData.filter.cardEditions = data;
     }
+    this.dialogData.filter.cardNameSearch = null;
     this.searchFiltertCards();
   }
 
   searchFiltertCards() {
-    let test: IFilter = this.dialogData.filter;
     this.useFilterButtonIsDisabled = true;
-    this._salesService.getOffersByFilter(test)
+    this._salesService.getOffersByFilter(this.dialogData.filter)
      .then((res) => {
        this.dialogData.results = res;
        this.useFilterButtonIsDisabled = false;

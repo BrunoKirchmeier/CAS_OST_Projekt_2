@@ -26,34 +26,6 @@ export class ApiScryfallService {
         )
   }
 
-  async cardTextSearch(searchText: string): Promise<ICardName[]> {
-    let cardNameList: ICardName[] = [];
-    let splitt: Array<string> = [];
-    let queryString = '(';
-    splitt = searchText.split(' ');
-    splitt.forEach((element: any) => {
-      queryString += 'oracle:' + element + '+';
-    });
-    queryString = queryString.slice(0, -1);
-    queryString += ')';
-    const urlParams = new HttpParams()
-      .set('q', encodeURI(queryString))
-    await this._http.get<IScryfallApiResList>('https://api.scryfall.com/cards/search',
-                                              { params: urlParams }).toPromise()
-      .then((res: IScryfallApiResList) => {
-        let i: number = 0;
-        res.data.forEach((element: any) => {
-          const cardName: ICardName = {index: i,
-                                       name: element.name};
-          cardNameList.push(cardName);
-          i++;
-        });
-      });
-    return new Promise((resolve) => {
-      resolve(cardNameList);
-    });
-  }
-
   async getCardDetailsByName(cardName: string,
                              format: CardPictureFormat = CardPictureFormat.NORMAL): Promise<any> {
     let cardDetails: ICardDetails;
@@ -68,150 +40,41 @@ export class ApiScryfallService {
           res.image_uris.hasOwnProperty(format)) {
             uri = res.image_uris[format];
         }
-        const cardTypes: string[] = []
-        res.type_line.split(' — ')
-        .forEach((types: string) => {
-          types.split(' ').forEach((type: string) => {
-            cardTypes.push(type);
-          })
-        })
         const obj: ICardDetails =
         {
+          cardId: res.id,
           cardName: res.name,
           cardText: res.oracle_text,
           cardImageUri: uri,
           manaCost: res.mana_cost,
           cardLanguageIso: res.lang,
-          cardTypes: cardTypes,
+          cardTypeLine: res.type_line,
+          cardTypesMain: [],
+          cardTypesSecond: [],
           cardColors: res.colors,
           cardEditionCode: res.set,
           cardEditionName: res.set_name,
         }
+        // cardType
+        let count: number = 1;
+        res.type_line.split(' — ')
+          .forEach((types: string) => {
+            let splitt2 = types.split(' ');
+            splitt2.forEach((type: string) => {
+              if(count == 1) {
+                obj.cardTypesMain.push(type);
+
+              } else if(count > 1) {
+                obj.cardTypesSecond.push(type);
+              }
+          })
+          count++;
+        })
         cardDetails = obj as any;
       })
       return new Promise((resolve) => {
         resolve(cardDetails);
       });
-  }
-
-  async getCardsByFilter(filter: IFilter): Promise<ICardName[]> {
-    let cardNameList: ICardName[] = [];
-    let url: string = 'https://api.scryfall.com/catalog/card-names';
-    let queryString: string = '';
-    if(filter.cardTypes.length > 0) {
-      let hasMatched: boolean = false;
-      filter.cardTypes.forEach((element: IFilterOption) => {
-        if(element.state == true && element.code !== '') {
-          if(hasMatched === false) {
-            queryString += queryString == '' ? '': '+';
-            queryString += '(';
-            hasMatched = true;
-          }
-          queryString += 'type:' + element.code + '+';
-        }
-      });
-      if(hasMatched) {
-        queryString = queryString.slice(0, -1);
-        queryString += ')';
-      }
-    }
-    if(filter.cardColors.length > 0) {
-      let hasMatched: boolean = false;
-      filter.cardColors.forEach((element: IFilterOption) => {
-        if(element.state == true && element.code !== '') {
-          if(hasMatched === false) {
-            queryString += queryString == '' ? '': '+';
-            queryString += 'color=';
-            hasMatched = true;
-          }
-          queryString += element.code;
-        }
-      });
-    }
-    if(filter.cardEditions.length > 0) {
-      let hasMatched: boolean = false;
-      filter.cardEditions.forEach((element: IFilterOption) => {
-        if(element.state == true && element.code !== '') {
-          if(hasMatched === false) {
-            queryString += queryString == '' ? '': '+';
-            queryString += '(';
-            hasMatched = true;
-          }
-          queryString += 'set:' + element.code + '+OR+';
-        }
-      });
-      if(hasMatched) {
-        queryString = queryString.slice(0, -4);
-        queryString += ')';
-      }
-    }
-
-    if(filter.cardTextSearch !== null &&
-      filter?.cardTextSearch !== undefined) {
-     queryString += queryString == '' ? '': '+';
-     queryString += '(';
-     let splitt: Array<string> = [];
-     splitt = filter.cardTextSearch.split(' ');
-     splitt.forEach((element: string) => {
-       if(element !== '') {
-         queryString += 'oracle:' + element + '+';
-       }
-     });
-     queryString = queryString.slice(0, -1);
-     queryString += ')';
-   }
-
-
-
-
-    if(queryString !== '') {
-      let paginationHasMore: Boolean = true;
-      let paginationPage: number = 1;
-      url = 'https://api.scryfall.com/cards/search';
-      while(paginationHasMore === true)  {
-        let urlParams = new HttpParams()
-        urlParams = urlParams.set('q', encodeURI(queryString));
-        urlParams = urlParams.set('page', paginationPage);
-        await this._http.get<IScryfallApiResList>(url,
-                                                  { params: urlParams }).toPromise()
-          .then((res: IScryfallApiResList) => {
-            paginationHasMore = res.has_more;
-            let i: number = 0;
-            res.data.forEach((element: any) => {
-              const cardName: ICardName = {index: i,
-                                          name: element.name};
-              cardNameList.push(cardName);
-              i++;
-            })
-          })
-          .catch((err: any) => {
-            paginationHasMore = false;
-          })
-        paginationPage++;
-      }
-
-      console.log(paginationPage);
-
-    } else {
-      let urlParams = new HttpParams()
-      urlParams = urlParams.set('q', encodeURI(queryString));
-      await this._http.get<IScryfallApiResList>(url,
-                                                { params: urlParams }).toPromise()
-        .then((res: IScryfallApiResList) => {
-          let i: number = 0;
-          res.data.forEach((element: any) => {
-            const cardName: ICardName = {index: i,
-                                        name: element};
-            cardNameList.push(cardName);
-            i++;
-          })
-        })
-        .catch((err: any) => {})
-    }
-    console.log('ENDE: ---------------------------------------------------');
-    return new Promise((resolve) => {
-      resolve(cardNameList);
-    });
   }
 
 }
@@ -229,6 +92,7 @@ export interface IScryfallApiResList {
   total_values: number;
   data: string[];
 }
+
 export interface ICardName {
   index: number;
   name: string;
@@ -250,13 +114,15 @@ export interface IEdition {
   Datatyp: API Scryfall ICardDetails
 */
 export interface ICardDetails {
-  // cardId: string;
+  cardId: string;
   cardName: string;
   cardText: string;
   cardImageUri: string;
   manaCost: string;
   cardLanguageIso: string;
-  cardTypes: string[],
+  cardTypeLine: string,
+  cardTypesMain: string[],
+  cardTypesSecond: string[],
   cardColors: string[],
   cardEditionCode: string,
   cardEditionName: string,
@@ -268,7 +134,6 @@ export interface IFilter {
   cardEditions: IFilterOption[],
   cardNamesInOffers: string[],
   cardNameSearch: string | null,
-  cardTextSearch: string | null
 }
 
 export interface IFilterOption {

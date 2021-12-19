@@ -13,7 +13,6 @@ export class SalesFilterDialogService implements OnDestroy {
                                                              cardEditions: [],
                                                              cardNamesInOffers: [],
                                                              cardNameSearch: null,
-                                                             cardTextSearch: null,
    }};
 
   public dialogData$: Subject<IDialogData> = new Subject();
