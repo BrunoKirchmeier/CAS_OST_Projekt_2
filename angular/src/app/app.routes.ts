@@ -6,7 +6,8 @@ import { AccountCreateComponent } from './account/account-create/account-create.
 import { AccountMenuComponent } from './account/account-menu/account-menu.component';
 import { LoginComponent } from './shared/components/login/login.component';
 import { OfferMenuComponent } from './offer/offer-menu/offer-menu.component';
-import { SalesMenuComponent } from './sales/sales-menu/sales-menu.component';
+import { SaleCardSearchComponent } from './sale/sale-card-search/sale-card-search.component';
+import { SaleOffersComponent } from './sale/sale-offers/sale-offers.component';
 
 export const appRoutes: Routes = [
 
@@ -36,11 +37,13 @@ export const appRoutes: Routes = [
     data: { title: 'Angebote Erstellen Menü'}
   },
   {
-    path: 'sales',
-    component: SalesMenuComponent,
-    data: { title: 'Angebote Suchen Menü'}
+    path: 'sale-card-search',
+    component: SaleCardSearchComponent,
+    data: { title: 'Karten Suchen'}
   },
-
-
-
+  {
+    path: 'sale-offers/:cardName',
+    component: SaleOffersComponent,
+    data: { title: 'Angebote Suchen'}
+  },
 ];

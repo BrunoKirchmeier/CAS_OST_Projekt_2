@@ -1,15 +1,14 @@
 // System
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { salesRoutesModule } from './sales.routes';
+import { salesRoutesModule } from './sale.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Custom Modules
 import { SharedModule } from '../shared/shared.module'
-import { SalesMenuComponent } from './sales-menu/sales-menu.component';
-import { SalesSearchComponent } from './sales-search/sales-search.component';
-import { DialogFilterComponent } from './sales-filter/sales-filter.component';
-import { SalesFilterDialogService } from './shared/sales-filter-dialog.service'
+import { SaleCardSearchComponent } from './sale-card-search/sale-card-search.component';
+import { DialogFilterComponent } from './sale-filter/sale-filter.component';
+import { SaleFilterDialogService } from './shared/sale-filter-dialog.service'
 
 // Material Desing
 import { MatTabsModule } from '@angular/material/tabs';
@@ -28,8 +27,7 @@ import { HttpInterceptorService } from '../shared/Intercept/http-interceptor.ser
 
 @NgModule({
   declarations: [
-    SalesMenuComponent,
-    SalesSearchComponent,
+    SaleCardSearchComponent,
     DialogFilterComponent,
   ],
   imports: [
@@ -55,7 +53,7 @@ import { HttpInterceptorService } from '../shared/Intercept/http-interceptor.ser
     { provide: MatDialogRef,
       useValue: {}
     },
-    SalesFilterDialogService,
+    SaleFilterDialogService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorService,

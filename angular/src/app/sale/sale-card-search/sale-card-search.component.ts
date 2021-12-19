@@ -1,17 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IDialogData, SalesService } from '../shared/sales.service ';
+import { IDialogData, SaleService } from '../shared/sale.service ';
 import { Subject, Subscription } from 'rxjs';
 import { IOffer } from 'src/app/offer/shared/services/offer.service';
-import { SalesFilterDialogService } from '../shared/sales-filter-dialog.service';
+import { SaleFilterDialogService } from '../shared/sale-filter-dialog.service';
 import { IFilter, IFilterOption } from 'src/app/shared/services/scryfallApi.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sales-search',
-  templateUrl: './sales-search.component.html',
-  styleUrls: ['./sales-search.component.scss']
+  templateUrl: './sale-card-search.component.html',
+  styleUrls: ['./sale-card-search.component.scss']
 })
-export class SalesSearchComponent implements OnInit, OnDestroy {
+export class SaleCardSearchComponent implements OnInit, OnDestroy {
 
   private _subscriptions: Subscription[] = [];
 
@@ -28,9 +29,10 @@ export class SalesSearchComponent implements OnInit, OnDestroy {
   };
 
   constructor(private _snackBar: MatSnackBar,
-              private _salesService: SalesService,
-              private _salesFilterDialogService: SalesFilterDialogService) {
-    this._salesService.getAllOffers()
+              private _saleService: SaleService,
+              private _saleFilterDialogService: SaleFilterDialogService,
+              private _router: Router) {
+    this._saleService.getAllOffers()
       .then((res: IOffer[]) => {
         this.offerList$.next(res);
       })
@@ -38,13 +40,13 @@ export class SalesSearchComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
     this._subscriptions.push(
-      this._salesFilterDialogService.dialogData$
+      this._saleFilterDialogService.dialogData$
         .subscribe((res: IDialogData) => {
           this.dialogData = res;
           this.offerList$.next(res.results);
         })
     );
-    this._salesService.getAllUsedFilterValues()
+    this._saleService.getAllUsedFilterValues()
     .then((res: IFilter) => {
       this.dialogData.filter = res;
     })
@@ -57,11 +59,11 @@ export class SalesSearchComponent implements OnInit, OnDestroy {
   }
 
   openFilterDialog() {
-    this._salesFilterDialogService.open(this.dialogData);
+    this._saleFilterDialogService.open(this.dialogData);
   }
 
   filterReset() {
-    this._salesService.getAllOffers()
+    this._saleService.getAllOffers()
       .then((res) => {
         this.offerList$.next(res);
         this.dialogData.filter.cardTypes.forEach((element: IFilterOption) => {
@@ -77,6 +79,11 @@ export class SalesSearchComponent implements OnInit, OnDestroy {
         this.dialogData.results = [];
       })
   }
+
+  getAllOffersForCard(cardName: string) {
+    this._router.navigate(['sale-offers/', cardName]);
+  }
+
 
   closeSnackBar() {
     this._snackBar.dismiss();

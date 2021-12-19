@@ -3,13 +3,13 @@ import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { IFilterOption } from 'src/app/shared/services/scryfallApi.service';
-import { SalesFilterDialogService } from '../shared/sales-filter-dialog.service';
-import { IDialogData, SalesService } from '../shared/sales.service ';
+import { SaleFilterDialogService } from '../shared/sale-filter-dialog.service';
+import { IDialogData, SaleService } from '../shared/sale.service ';
 
 @Component({
     selector: 'app-filter-dialog',
-    templateUrl: './sales-filter.component.html',
-    styleUrls: ['./sales-filter.component.scss']
+    templateUrl: './sale-filter.component.html',
+    styleUrls: ['./sale-filter.component.scss']
 })
 export class DialogFilterComponent implements OnInit, OnDestroy {
 
@@ -30,12 +30,12 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
     }
   };
 
-  constructor(private _salesService: SalesService,
-              private _salesFilterDialogService: SalesFilterDialogService) {}
+  constructor(private _saleService: SaleService,
+              private _saleFilterDialogService: SaleFilterDialogService) {}
 
   ngOnInit(): void {
     this._subscriptions.push(
-      this._salesFilterDialogService.dialogData$
+      this._saleFilterDialogService.dialogData$
         .subscribe((res: IDialogData) => {
           this.dialogData = res;
           this.allCardEditionOptions = res.filter.cardEditions;
@@ -102,7 +102,7 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
 
   searchFiltertCards() {
     this.useFilterButtonIsDisabled = true;
-    this._salesService.getOffersByFilter(this.dialogData.filter)
+    this._saleService.getOffersByFilter(this.dialogData.filter)
      .then((res) => {
        this.dialogData.results = res;
        this.useFilterButtonIsDisabled = false;

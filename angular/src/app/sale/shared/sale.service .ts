@@ -10,21 +10,26 @@ import { ICardDetails, IFilter, IFilterOption } from 'src/app/shared/services/sc
   providedIn: 'root'
 })
 
-export class SalesService {
+export class SaleService {
 
-  private _currentUser: any = null;
+  private _currentUser: any = '';
+  private _currentUserUid: string = '';
   private _offersCollection: string = 'offers';
 
   constructor(private _authService: AuthService,
               private _dbExt: DatabaseService,
               private _db: Firestore) {
     this._currentUser = JSON.parse(this._authService.currentUser);
+    this._currentUserUid = this._currentUser !== null &&
+                           this._currentUser?.uid !== null
+                         ? this._currentUser.uid
+                         : '';
   }
 
   async getAllOffers(cardNameIsUnique: Boolean = true): Promise<IOffer[]> {
     let offers: IOffer[] = [];
     let q = query(collection(this._db, this._offersCollection),
-                  where('providerUid', '!=', this._currentUser.uid));
+                  where('providerUid', '!=', this._currentUserUid));
     await this._dbExt.readDoc<IOffer>(q)
       .then((snapshot: QuerySnapshot<DocumentData>) => {
         snapshot.forEach(doc => {
@@ -44,6 +49,33 @@ export class SalesService {
     });
   }
 
+
+
+
+
+
+  async getOffersByCardName(cardName: string): Promise<IOffer[]> {
+    let offers: IOffer[] = [];
+    let q = query(collection(this._db, this._offersCollection),
+                  where('cardName', '==', cardName));
+    await this._dbExt.readDoc<IOffer>(q)
+      .then((snapshot: QuerySnapshot<DocumentData>) => {
+        snapshot.forEach(doc => {
+          let offer = doc as any;
+          offers.push(offer);
+        })
+      })
+    return new Promise((resolve) => {
+      resolve(offers);
+    });
+  }
+
+
+
+
+
+
+
   async getAllUsedFilterValues(): Promise<IFilter> {
     let filter: IFilter = {
       cardTypes: [],
@@ -53,7 +85,7 @@ export class SalesService {
       cardNameSearch: null,
     }
     let q = query(collection(this._db, this._offersCollection),
-                  where('providerUid', '!=', this._currentUser.uid));
+                  where('providerUid', '!=', this._currentUserUid));
     await this._dbExt.readDoc<IOffer>(q)
       .then((snapshot: QuerySnapshot<DocumentData>) => {
         snapshot.forEach((doc: any) => {
@@ -116,7 +148,7 @@ export class SalesService {
 
     // Creator
     let queryCreator = query(collection(this._db, this._offersCollection),
-                             where('providerUid', '!=', this._currentUser.uid));
+                             where('providerUid', '!=', this._currentUserUid));
     await this._dbExt.readDoc<IOffer>(queryCreator)
     .then((snapshot: QuerySnapshot<DocumentData>) => {
       snapshot.forEach((doc: any) => {

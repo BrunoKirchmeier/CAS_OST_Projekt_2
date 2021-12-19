@@ -20,10 +20,11 @@
     <div *ngFor="let offer of offerList$ | async"
          class="offer-container">
       <div class="offer-item"
-           data-id="{{offer?._id}}">
+           data-id="{{offer._id}}">
            <div class="item-container">
               <img src="{{offer.cardDetails?.cardImageUri}}"
-                   class="item-img">
+                   class="item-img"
+                   (click)="getAllOffersForCard(offer.cardName)">
            </div>
       </div>
     </div>

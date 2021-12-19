@@ -37,7 +37,7 @@ export class OfferService {
                              ? ['colorless']
                              : data.cardDetails?.cardColors;
     const offer: IOffer = {
-      _id: null,
+      _id: '',
       cardName: data.cardName,
       cardDetails: {
         cardId: data.cardDetails?.cardId ?? '',
@@ -139,7 +139,7 @@ export class OfferService {
 
 }
 export interface IOffer {
-  _id: string | null;
+  _id: string;
   cardName: string;
   cardDetails: ICardDetails | null,
   providerUid: string;

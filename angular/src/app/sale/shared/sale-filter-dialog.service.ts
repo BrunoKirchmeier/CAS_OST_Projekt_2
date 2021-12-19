@@ -1,11 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subject, Subscription } from 'rxjs';
-import { DialogFilterComponent } from '../sales-filter/sales-filter.component';
-import { IDialogData } from './sales.service ';
+import { DialogFilterComponent } from '../sale-filter/sale-filter.component';
+import { IDialogData } from './sale.service ';
 
 @Injectable()
-export class SalesFilterDialogService implements OnDestroy {
+export class SaleFilterDialogService implements OnDestroy {
 
   private _subscriptions: Subscription[] = [];
   private _dialogData: IDialogData = {results: [], filter: { cardTypes: [],
