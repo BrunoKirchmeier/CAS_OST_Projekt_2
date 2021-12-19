@@ -21,7 +21,7 @@ export class SalesService {
     this._currentUser = JSON.parse(this._authService.currentUser);
   }
 
-  async getAllOffers(): Promise<IOffer[]> {
+  async getAllOffers(cardNameIsUnique: Boolean = true): Promise<IOffer[]> {
     let offers: IOffer[] = [];
     let q = query(collection(this._db, this._offersCollection),
                   where('providerUid', '!=', this._currentUser.uid));
@@ -29,7 +29,14 @@ export class SalesService {
       .then((snapshot: QuerySnapshot<DocumentData>) => {
         snapshot.forEach(doc => {
           let offer = doc as any;
-          offers.push(offer);
+          if(cardNameIsUnique === false) {
+            offers.push(offer);
+          } else {
+            const obj = offers.find(o2 => o2.cardName === offer.cardName );
+            if(obj === undefined) {
+              offers.push(offer);
+            }
+          }
         })
       })
     return new Promise((resolve) => {
@@ -102,7 +109,7 @@ export class SalesService {
     });
   }
 
-  async getOffersByFilter(filter: IFilter): Promise<IOffer[]> {
+  async getOffersByFilter(filter: IFilter, cardNameIsUnique: Boolean = true): Promise<IOffer[]> {
     let offers: IOffer[] = [];
     let result1: IOffer[] = [];
     let result2: IOffer[] = [];
@@ -242,6 +249,18 @@ export class SalesService {
         offers = result1.filter(() => true);
       }
       result2 = [];
+    }
+
+    // Get Each Card max once time
+    if(cardNameIsUnique === true) {
+      result1 = offers.filter(() => true);
+      offers = [];
+      result1.map(o1 => {
+        const obj = offers.find(o2 => o2.cardName === o1.cardName );
+        if(obj === undefined) {
+          offers.push(o1);
+        }
+      });
     }
 
     // return
