@@ -4,7 +4,7 @@ import { DocumentData } from 'rxfire/firestore/interfaces';
 import { IOffer } from 'src/app/offer/shared/services/offer.service';
 import { AuthService } from 'src/app/shared/services/auth.services';
 import { DatabaseService } from 'src/app/shared/services/database.service';
-import { ApiScryfallService, ICardDetails, IFilter, IFilterOption } from 'src/app/shared/services/scryfallApi.service';
+import { ICardDetails, IFilter, IFilterOption } from 'src/app/shared/services/scryfallApi.service';
 
 @Injectable({
   providedIn: 'root'
@@ -104,110 +104,146 @@ export class SalesService {
 
   async getOffersByFilter(filter: IFilter): Promise<IOffer[]> {
     let offers: IOffer[] = [];
+    let result1: IOffer[] = [];
+    let result2: IOffer[] = [];
+
+    // Creator
+    let queryCreator = query(collection(this._db, this._offersCollection),
+                             where('providerUid', '!=', this._currentUser.uid));
+    await this._dbExt.readDoc<IOffer>(queryCreator)
+    .then((snapshot: QuerySnapshot<DocumentData>) => {
+      snapshot.forEach((doc: any) => {
+        let offer: IOffer = doc as any;
+        result1.push(offer);
+      });
+    });
+    // Card Name
     if(filter.cardNameSearch !== null) {
-      /*
       let queryCardName = query(collection(this._db, this._offersCollection),
-                                where('cardName', '==', filter.cardNameSearch),
-                                where('providerUid', '!=', filter.cardNameSearch));
+                                where('cardName', '==', filter.cardNameSearch));
       await this._dbExt.readDoc<IOffer>(queryCardName)
       .then((snapshot: QuerySnapshot<DocumentData>) => {
         snapshot.forEach((doc: any) => {
           let offer: IOffer = doc as any;
-          offers.push(offer);
+          result2.push(offer);
         });
       });
-      */
+      // Get only Results that are in all Query founded
+      offers = [];
+      if(result1.length > 0 && result2.length > 0) {
+        result2.map(o1 => {
+          const obj = result1.find(o2 => o2._id === o1._id );
+          if(obj !== undefined) {
+            offers.push(obj);
+          }
+        });
+      } else if(result1.length > 0) {
+        offers = result1.filter(() => true);
+      } else {
+        offers = result2.filter(() => true);
+      }
+      result2 = [];
+
     } else {
-      let queryResultsColors: IOffer[] = [];
       // Colors
       let filterColor: string[] = [];
-      let queryColor = query(collection(this._db, this._offersCollection),
-                             where('providerUid', '!=', this._currentUser.uid));
       filter.cardColors.forEach((element: IFilterOption) => {
         if(element.state == true) {
           filterColor.push(element.code);
         }
       })
       if(filterColor.length > 0) {
-        queryColor = query(queryColor, where('cardDetails.cardColors', 'array-contains-any', filterColor));
+        let queryColor = query(collection(this._db, this._offersCollection),
+                               where('cardDetails.cardColors', 'array-contains-any', filterColor));
         await this._dbExt.readDoc<IOffer>(queryColor)
         .then((snapshot: QuerySnapshot<DocumentData>) => {
           snapshot.forEach((doc: any) => {
             let offer: IOffer = doc as any;
-            queryResultsColors.push(offer);
+            result2.push(offer);
           });
         });
       }
+      // Get only Results that are in all Query founded
+      offers = [];
+      if(result1.length > 0 && result2.length > 0) {
+        result2.map(o1 => {
+          const obj = result1.find(o2 => o2._id === o1._id );
+          if(obj !== undefined) {
+            offers.push(obj);
+          }
+        });
+      } else if(result2.length == 0) {
+        offers = result1.filter(() => true);
+      }
+      result2 = [];
+
       // Card Types
       let filterCardTypes: string[] = [];
-      let queryCardTypes = query(collection(this._db, this._offersCollection),
-                                 where('providerUid', '!=', this._currentUser.uid));
-      let queryResultsCardTypes: IOffer[] = [];
       filter.cardTypes.forEach((element: IFilterOption) => {
         if(element.state == true) {
           filterCardTypes.push(element.code);
         }
       })
       if(filterCardTypes.length > 0) {
-        queryCardTypes = query(queryCardTypes, where('cardDetails.cardTypesMain', 'array-contains-any', filterCardTypes));
+        let queryCardTypes = query(collection(this._db, this._offersCollection),
+                                   where('cardDetails.cardTypesMain', 'array-contains-any', filterCardTypes));
         await this._dbExt.readDoc<IOffer>(queryCardTypes)
         .then((snapshot: QuerySnapshot<DocumentData>) => {
           snapshot.forEach((doc: any) => {
             let offer: IOffer = doc as any;
-            queryResultsCardTypes.push(offer);
+            result2.push(offer);
           });
         });
       }
       // Get only Results that are in all Query founded
-      let resultMerged1: IOffer[] = [];
-      if(queryResultsColors.length > 0 && queryResultsCardTypes.length > 0) {
-        queryResultsColors.map(o1 => {
-          const obj = queryResultsCardTypes.find(o2 => o2._id === o1._id );
+      result1 = offers.filter(() => true);
+      offers = [];
+      if(result1.length > 0 && result2.length > 0) {
+        result2.map(o1 => {
+          const obj = result1.find(o2 => o2._id === o1._id );
           if(obj !== undefined) {
-            resultMerged1.push(obj);
+            offers.push(obj);
           }
         });
-      } else if(queryResultsColors.length > 0) {
-        resultMerged1 = queryResultsColors;
-      } else {
-        resultMerged1 = queryResultsCardTypes;
+      } else if(result2.length == 0) {
+        offers = result1.filter(() => true);
       }
+      result2 = [];
+
       // Card Editions
       let filterCardEditions: string[] = [];
-      let queryCardEditions = query(collection(this._db, this._offersCollection),
-                                    where('providerUid', '!=', this._currentUser.uid));
-      let queryResultsCardEditions: IOffer[] = [];
       filter.cardEditions.forEach((element: IFilterOption) => {
         if(element.state == true) {
           filterCardEditions.push(element.code);
         }
       })
       if(filterCardEditions.length > 0) {
-        queryCardEditions = query(queryCardEditions, where('cardDetails.cardEditionCode', 'in', filterCardEditions));
+        let queryCardEditions = query(collection(this._db, this._offersCollection),
+                                      where('cardDetails.cardEditionCode', 'in', filterCardEditions));
         await this._dbExt.readDoc<IOffer>(queryCardEditions)
         .then((snapshot: QuerySnapshot<DocumentData>) => {
           snapshot.forEach((doc: any) => {
             let offer: IOffer = doc as any;
-            queryResultsCardEditions.push(offer);
+            result2.push(offer);
           });
         });
       }
       // Get only Results that are in all Query founded
-      let resultMerged2: IOffer[] = [];
-      if(queryResultsCardEditions.length > 0 && resultMerged1.length > 0) {
-        queryResultsCardEditions.map(o1 => {
-          const obj = resultMerged1.find(o2 => o2._id === o1._id );
+      result1 = offers.filter(() => true);
+      offers = [];
+      if(result1.length > 0 && result2.length > 0) {
+        result2.map(o1 => {
+          const obj = result1.find(o2 => o2._id === o1._id );
           if(obj !== undefined) {
-            resultMerged2.push(obj);
+            offers.push(obj);
           }
         });
-      } else if(queryResultsCardEditions.length > 0) {
-        resultMerged2 = queryResultsCardEditions;
-      } else {
-        resultMerged2 = resultMerged1;
+      } else if(result2.length == 0) {
+        offers = result1.filter(() => true);
       }
-      offers = resultMerged2;
+      result2 = [];
     }
+
     // return
     return new Promise((resolve) => {
       resolve(offers);
