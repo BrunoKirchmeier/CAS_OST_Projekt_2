@@ -1,13 +1,19 @@
 :host {
   display: inline-block;
+  width: 80%;
 }
 
 .search-card {
   &-container {
     display: inline;
   }
-
   &-form {
     display: flex;
+  }
+}
+
+.form {
+  &-field {
+    width: 100%;
   }
 }

@@ -26,6 +26,7 @@ import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
 import { MatButtonModule} from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    InfiniteScrollModule,
   ],
   exports: [
     SearchCardByNameComponent,

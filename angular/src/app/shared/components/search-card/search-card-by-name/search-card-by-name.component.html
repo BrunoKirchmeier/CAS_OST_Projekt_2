@@ -1,25 +1,21 @@
 <ng-container>
   <div class="search-card-container">
     <form [formGroup]="searchForm"
-          (ngSubmit)="onSubmitSearchForm()"
           class="search-card-form">
       <mat-form-field appearance="outline"
-                      class="pad-mar-0">
+                      class="pad-mar-0 form-field">
         <mat-label>Kartenname: </mat-label>
         <mat-select id="cardName"
                     name="cardName"
-                    formControlName="cardName"
-                    msInfiniteScroll
-                    (infiniteScroll)="getLimitedPartOfCardNames()"
-                    [complete]="cardNameListOffset === cardNameList.length">
-                    <mat-option>
+                    formControlName="cardName">
+                  <mat-option>
                       <ngx-mat-select-search
                           [formControl]="cardNameSearch"
                           placeholderLabel="search"
                           noEntriesFoundLabel="No entry matches">
                       </ngx-mat-select-search>
                   </mat-option>
-            <mat-option *ngFor="let cardName of cardNameListScroll$ | async"
+            <mat-option *ngFor="let cardName of cardNameListSearch$ | async"
                         data-id="cardName.index"
                         data-name="cardName.name"
                         [value]="cardName.name">
@@ -27,10 +23,6 @@
             </mat-option>
         </mat-select>
       </mat-form-field>
-      <button mat-raised-button
-              type="submit"
-              color="primary">Suchen
-      </button>
     </form>
   </div>
 </ng-container>
