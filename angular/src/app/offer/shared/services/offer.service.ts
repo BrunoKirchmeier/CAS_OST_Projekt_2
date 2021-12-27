@@ -74,7 +74,7 @@ export class OfferService {
   async getMyOffers(): Promise<IOffer[]> {
     let offers: Array<IOffer> = [];
     let q = query(collection(this._db, this._offersCollection),
-                  where('providerUid', '==', this._currentUser.uid));
+                  where('providerUid', '==', this._currentUser?.uid ?? ''));
     await this._dbExt.readDoc<IOffer>(q)
       .then((snapshot: QuerySnapshot<DocumentData>) => {
         snapshot.forEach(doc => {

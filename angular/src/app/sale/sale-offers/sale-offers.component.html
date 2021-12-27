@@ -15,16 +15,16 @@
     <div *ngFor="let offer of offerList$ | async"
          class="item-container"
          data-id="{{offer?._id}}">
-
       <div>
         <div class="item-header">
-          <span>{{offer.providerEmail}}</span>
+          <span>{{offer.providerLastName + ' ' + offer.providerFirstName}}</span>
         </div>
         <div class="item-detail">
           <mat-form-field appearance="outline"
                           class="pad-mar-1 isHalfSize">
             <mat-label for="priceTotal">Preis in CHF: </mat-label>
             <input  matInput
+                    readonly="true"
                     id="priceTotal"
                     name="priceTotal"
                     type="number"
@@ -34,6 +34,7 @@
                           class="pad-mar-1 isHalfSize">
             <mat-label for="quantity">Anzahl: </mat-label>
             <input  matInput
+                    readonly="true"
                     id="quantity"
                     name="quantity"
                     type="number"
@@ -43,6 +44,7 @@
                           class="pad-mar-1 isFullSize">
             <mat-label for="deliveryMode">Lieferart: </mat-label>
             <input  matInput
+                    readonly="true"
                     id="deliveryMode"
                     name="deliveryMode"
                     type="text"
@@ -52,6 +54,7 @@
                           class="pad-mar-1 isFullSize">
             <mat-label for="paymentMode">Bezahlung: </mat-label>
             <input  matInput
+                    readonly="true"
                     id="paymentMode"
                     name="paymentMode"
                     type="text"
@@ -61,6 +64,7 @@
                           class="pad-mar-1 isFullSize">
             <mat-label for="additionInfo">Zusatz Informationen: </mat-label>
             <textarea matInput
+                      readonly="true"
                       id="additionInfo"
                       name="additionInfo"
                       placeholder="Freier Text"

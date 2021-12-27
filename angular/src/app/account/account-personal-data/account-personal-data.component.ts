@@ -19,6 +19,8 @@ export class AccountPersonalDataComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription[] = [];
   private _activUser: any;
   private _personalData: IAccountUser = {
+    _id: '',
+    uid: '',
     email: '',
     firstName: '',
     lastName: '',
@@ -54,6 +56,7 @@ export class AccountPersonalDataComponent implements OnInit, OnDestroy {
               private _IbanFormatterPipe: IbanFormatterPipe) {
     this._activUser = JSON.parse(this._authService.currentUser);
     this._personalData.email = this._activUser.email;
+    this._personalData.uid = this._activUser.uid;
     this.countries = this._countryFinderService.getCountries();
   }
 

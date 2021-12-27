@@ -81,6 +81,8 @@ export class AuthService {
     if(success) {
       success = false;
       const user: IAccountUser = {
+        _id: '',
+        uid: this._response.currentUser.uid,
         email: this._response.currentUser.email,
         firstName: '',
         lastName: '',

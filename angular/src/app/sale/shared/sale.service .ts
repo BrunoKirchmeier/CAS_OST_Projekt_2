@@ -24,6 +24,7 @@ export class SaleService {
                            this._currentUser?.uid !== null
                          ? this._currentUser.uid
                          : '';
+
   }
 
   async getAllOffers(cardNameIsUnique: Boolean = true): Promise<IOffer[]> {
@@ -289,6 +290,7 @@ export class SaleService {
       resolve(offers);
     });
   }
+
 
 }
 

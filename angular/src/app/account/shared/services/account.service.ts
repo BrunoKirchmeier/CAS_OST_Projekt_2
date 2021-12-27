@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Firestore, query, collection, where, QuerySnapshot } from '@angular/fire/firestore';
 import { DocumentData } from 'rxfire/firestore/interfaces';
 import { DatabaseService } from 'src/app/shared/services/database.service';
@@ -13,6 +13,20 @@ export class AccountService {
 
   constructor(private _dbExt: DatabaseService,
               private _db: Firestore) {}
+
+  async getUsers(): Promise<IAccountUser[]> {
+    let accountData: IAccountUser[] = [];
+    let q = query(collection(this._db, this._userCollection))
+    await this._dbExt.readDoc<any>(q)
+      .then((snapshot: QuerySnapshot<DocumentData>) => {
+        snapshot.forEach(doc => {
+            accountData.push(doc as any);
+        })
+      })
+    return new Promise((resolve) => {
+      resolve(accountData);
+    });
+  }
 
   async getUser(email: string): Promise<any> {
     let accountData: IAccountUser;
@@ -41,6 +55,8 @@ export class AccountService {
 }
 
 export interface IAccountUser {
+  _id: string;
+  uid: string,
   email: string;
   firstName: string;
   lastName: string;

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { AccountService, IAccountUser } from 'src/app/account/shared/services/account.service';
 import { IDeliveryMode, IOffer, IPaymentMode, OfferService } from 'src/app/offer/shared/services/offer.service';
 import { IDialogData, SaleService } from '../shared/sale.service ';
 
@@ -13,8 +14,9 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
 
   public cardImg: IOffer | undefined = undefined;
   public offerList$: Subject<any[]> = new Subject();
-  public deliveryModes: Array<IDeliveryMode> = [];
-  public paymentModes: Array<IPaymentMode> = [];
+  private _deliveryModes: Array<IDeliveryMode> = [];
+  private _paymentModes: Array<IPaymentMode> = [];
+  private _users: Array<IAccountUser> = [];
 
   public dialogData: IDialogData = {
     results: [],
@@ -29,9 +31,15 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
 
   constructor(private _offerService: OfferService,
               private _saleService: SaleService,
-              private _route: ActivatedRoute) {
-    this.deliveryModes = this._offerService.getDeliveryModes();
-    this.paymentModes = this._offerService.getPaymentModes();
+              private _accountService : AccountService,
+              private _route: ActivatedRoute,
+              private _router: Router) {
+    this._deliveryModes = this._offerService.getDeliveryModes();
+    this._paymentModes = this._offerService.getPaymentModes();
+    this._accountService.getUsers()
+      .then((res: any) => {
+        this._users = res;
+      });
   }
 
 	ngOnInit(): void {
@@ -45,11 +53,20 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
         res.forEach((element) => {
           let offerdetail: any = element;
           offerdetail = element;
-          let temp: IDeliveryMode = this.deliveryModes.find(o2 => o2.name === element.deliveryMode) ?? {name: '', description: ''};
+          let temp: any = this._deliveryModes.find(o2 => o2.name === element.deliveryMode) ?? {name: '', description: ''};
           offerdetail.deliveryModeDescription = temp.description;
 
-          temp = this.paymentModes.find(o2 => o2.name === element.paymentMode) ?? {name: '', description: ''};
+          temp = this._paymentModes.find(o2 => o2.name === element.paymentMode) ?? {name: '', description: ''};
           offerdetail.paymentModeDescription = temp.description;
+
+          temp = this._users.find(o2 => o2.uid === element.providerUid);
+          offerdetail.providerLastName = temp?.lastName;
+          offerdetail.providerFirstName = temp?.firstName;
+          if(offerdetail.providerLastName === '' &&
+             offerdetail.providerFirstName === '') {
+              offerdetail.providerLastName = 'Anonym';
+          }
+
           offerDetails.push(offerdetail);
         })
         this.offerList$.next(offerDetails);
@@ -60,7 +77,7 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   backToCardNameSearch() {
-
+    this._router.navigate(['sale-card-search']);
   }
 
 
