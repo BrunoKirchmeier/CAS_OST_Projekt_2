@@ -17,7 +17,7 @@ export class SearchCardByNameComponent implements OnInit, OnDestroy {
   @Input() resetForm = () => this.searchForm.reset();
 
   private _subscriptions: Subscription[] = [];
-  private _cardNameListLimit: number = 10;
+  private _cardNameListLimit: number = 500;
 
   public cardNameList: ICardName[] = [];
   public cardNameListSearch$: BehaviorSubject<ICardName[]> = new BehaviorSubject<ICardName[]>([]);

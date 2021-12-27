@@ -9,6 +9,7 @@ import { SharedModule } from '../shared/shared.module'
 import { SaleCardSearchComponent } from './sale-card-search/sale-card-search.component';
 import { DialogFilterComponent } from './sale-filter/sale-filter.component';
 import { SaleFilterDialogService } from './shared/sale-filter-dialog.service'
+import { SaleOffersComponent } from './sale-offers/sale-offers.component'
 
 // Material Desing
 import { MatTabsModule } from '@angular/material/tabs';
@@ -29,6 +30,7 @@ import { HttpInterceptorService } from '../shared/Intercept/http-interceptor.ser
   declarations: [
     SaleCardSearchComponent,
     DialogFilterComponent,
+    SaleOffersComponent,
   ],
   imports: [
     CommonModule,

@@ -123,7 +123,7 @@ export class OfferService {
   }
 
   getDeliveryModes() {
-    const options: Array<IDeliveryModes> = [
+    const options: Array<IDeliveryMode> = [
       {name: 'collection', description: 'Abholung'},
       {name: 'shipping', description: 'Versand'}
     ]
@@ -131,7 +131,7 @@ export class OfferService {
   }
 
   getPaymentModes() {
-    const options: Array<IPaymentModes> = [
+    const options: Array<IPaymentMode> = [
       {name: 'transfer', description: 'Kontoüberweisung'}
     ]
     return options;
@@ -151,12 +151,12 @@ export interface IOffer {
   additionInfo: string | null;
   creationDate : Timestamp;
 }
-export interface IDeliveryModes {
+export interface IDeliveryMode {
   name: string;
   description: string;
 }
 
-export interface IPaymentModes {
+export interface IPaymentMode {
   name: string;
   description: string;
 }

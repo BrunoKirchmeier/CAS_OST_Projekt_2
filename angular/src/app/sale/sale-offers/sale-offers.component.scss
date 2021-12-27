@@ -1,0 +1,40 @@
+.page {
+  &-container {
+    display: inline-block;
+    text-align: center;
+  }
+}
+
+.button-back {
+  width: 80%;
+  margin-top: 20px;
+}
+
+.img {
+  max-width: 80%;
+  margin-top: 20px;
+}
+
+.item {
+  &-container {
+    max-width: 80%;
+    display: inline-block;
+    text-align: center;
+  }
+
+  &-header {
+    background-color: brown;
+    color: white;
+    margin-top: 20px;
+    padding: 10px;
+  }
+
+}
+
+.isHalfSize {
+  width: 50%;
+}
+
+.isFullSize {
+  width: 100%;
+}

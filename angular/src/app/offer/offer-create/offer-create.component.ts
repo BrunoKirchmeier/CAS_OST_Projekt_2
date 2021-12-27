@@ -1,7 +1,7 @@
 import { Component, OnChanges, HostListener, Output, EventEmitter, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IDeliveryModes, IPaymentModes, OfferService } from '../shared/services/offer.service';
+import { IDeliveryMode, IPaymentMode, OfferService } from '../shared/services/offer.service';
 import { ApiScryfallService, ICardDetails } from '../../shared/services/scryfallApi.service';
 @Component({
   selector: 'app-offer-create, img[loaded]',
@@ -22,8 +22,8 @@ export class OfferCreateComponent implements OnChanges {
     quantity: new FormControl('', [Validators.required]),
     additionInfo: new FormControl('')
   });
-  public deliveryModes: Array<IDeliveryModes> = [];
-  public paymentModes: Array<IPaymentModes> = [];
+  public deliveryModes: Array<IDeliveryMode> = [];
+  public paymentModes: Array<IPaymentMode> = [];
 
   @Input() cardDetails: any = null;
 

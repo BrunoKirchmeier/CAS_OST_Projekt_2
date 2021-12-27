@@ -1,0 +1,74 @@
+<ng-container>
+  <div class="page-container">
+
+    <button mat-raised-button
+            color="primary"
+            class="button-back"
+            (click)="backToCardNameSearch()">Zurück
+    </button>
+
+    <div *ngIf="cardImg !== undefined">
+      <img src="{{cardImg.cardDetails?.cardImageUri}}"
+            class="img">
+    </div>
+
+    <div *ngFor="let offer of offerList$ | async"
+         class="item-container"
+         data-id="{{offer?._id}}">
+
+      <div>
+        <div class="item-header">
+          <span>{{offer.providerEmail}}</span>
+        </div>
+        <div class="item-detail">
+          <mat-form-field appearance="outline"
+                          class="pad-mar-1 isHalfSize">
+            <mat-label for="priceTotal">Preis in CHF: </mat-label>
+            <input  matInput
+                    id="priceTotal"
+                    name="priceTotal"
+                    type="number"
+                    value="{{offer.priceTotal}}">
+          </mat-form-field>
+          <mat-form-field appearance="outline"
+                          class="pad-mar-1 isHalfSize">
+            <mat-label for="quantity">Anzahl: </mat-label>
+            <input  matInput
+                    id="quantity"
+                    name="quantity"
+                    type="number"
+                    value="{{offer.quantity}}">
+          </mat-form-field>
+          <mat-form-field appearance="outline"
+                          class="pad-mar-1 isFullSize">
+            <mat-label for="deliveryMode">Lieferart: </mat-label>
+            <input  matInput
+                    id="deliveryMode"
+                    name="deliveryMode"
+                    type="text"
+                    value="{{offer.deliveryModeDescription}}">
+          </mat-form-field>
+          <mat-form-field appearance="outline"
+                          class="pad-mar-1 isFullSize">
+            <mat-label for="paymentMode">Bezahlung: </mat-label>
+            <input  matInput
+                    id="paymentMode"
+                    name="paymentMode"
+                    type="text"
+                    value="{{offer.paymentModeDescription}}">
+          </mat-form-field>
+          <mat-form-field appearance="outline"
+                          class="pad-mar-1 isFullSize">
+            <mat-label for="additionInfo">Zusatz Informationen: </mat-label>
+            <textarea matInput
+                      id="additionInfo"
+                      name="additionInfo"
+                      placeholder="Freier Text"
+                      value="{{offer.additionInfo}}">
+            </textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

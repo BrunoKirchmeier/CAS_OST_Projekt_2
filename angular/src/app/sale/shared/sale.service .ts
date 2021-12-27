@@ -49,11 +49,6 @@ export class SaleService {
     });
   }
 
-
-
-
-
-
   async getOffersByCardName(cardName: string): Promise<IOffer[]> {
     let offers: IOffer[] = [];
     let q = query(collection(this._db, this._offersCollection),
@@ -69,12 +64,6 @@ export class SaleService {
       resolve(offers);
     });
   }
-
-
-
-
-
-
 
   async getAllUsedFilterValues(): Promise<IFilter> {
     let filter: IFilter = {

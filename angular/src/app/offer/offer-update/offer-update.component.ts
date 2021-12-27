@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, Subscription } from 'rxjs';
-import { IDeliveryModes, IOffer, IPaymentModes, OfferService } from '../shared/services/offer.service';
+import { IDeliveryMode, IOffer, IPaymentMode, OfferService } from '../shared/services/offer.service';
 
 @Component({
   selector: 'app-offer-update',
@@ -29,8 +29,8 @@ export class OfferUpdateComponent implements OnDestroy {
     quantity: new FormControl('', [Validators.required]),
     additionInfo: new FormControl('')
   });
-  public deliveryModes: Array<IDeliveryModes> = [];
-  public paymentModes: Array<IPaymentModes> = [];
+  public deliveryModes: Array<IDeliveryMode> = [];
+  public paymentModes: Array<IPaymentMode> = [];
 
   constructor(private _offerService: OfferService,
               private _snackBar: MatSnackBar) {
@@ -49,6 +49,10 @@ export class OfferUpdateComponent implements OnDestroy {
           this.offerList$.next(res);
         })
     )
+    this._offerService.getMyOffers()
+      .then((res) => {
+        this.offerList$.next(res);
+      })
   }
 
   ngOnDestroy(): void {
