@@ -17,17 +17,7 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
   private _deliveryModes: Array<IDeliveryMode> = [];
   private _paymentModes: Array<IPaymentMode> = [];
   private _users: Array<IAccountUser> = [];
-
-  public dialogData: IDialogData = {
-    results: [],
-    filter: {
-      cardTypes: [],
-      cardColors: [],
-      cardEditions: [],
-      cardNamesInOffers: [],
-      cardNameSearch: null,
-    }
-  };
+  private _dialogDataEncoded: string = '';
 
   constructor(private _offerService: OfferService,
               private _saleService: SaleService,
@@ -43,10 +33,8 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
   }
 
 	ngOnInit(): void {
-    const cardName = this._route.snapshot.params !== undefined &&
-                     this._route.snapshot.params.cardName !== undefined
-                   ? this._route.snapshot.params.cardName
-                   : '';
+    this._dialogDataEncoded = this._route.snapshot.paramMap.get('dialogDataBase64?') ?? '';
+    const cardName = this._route.snapshot.paramMap.get('cardName') ?? '';
     this._saleService.getOffersByCardName(cardName)
       .then((res: IOffer[]) => {
         const offerDetails: any[] = [];
@@ -77,7 +65,7 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   backToCardNameSearch() {
-    this._router.navigate(['sale-card-search']);
+    this._router.navigate(['sale-card-search', this._dialogDataEncoded]);
   }
 
 

@@ -7,12 +7,12 @@ const salesRoutes = [
 
   { path: '', redirectTo: 'home', pathMatch: 'full'},
   {
-    path: 'sale-card-search',
+    path: 'sale-card-search/:dialogDataBase64?',
     component: SaleCardSearchComponent,
     data: { title: 'Karte suchen'}
   },
   {
-    path: 'sale-offers/:cardName',
+    path: 'sale-offers/:cardName/:dialogDataBase64?',
     component: SaleOffersComponent,
     data: { title: 'Angebote suchen'}
   },

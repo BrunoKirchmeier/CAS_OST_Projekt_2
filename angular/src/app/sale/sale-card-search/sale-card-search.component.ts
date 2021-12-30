@@ -5,7 +5,7 @@ import { Subject, Subscription } from 'rxjs';
 import { IOffer } from 'src/app/offer/shared/services/offer.service';
 import { SaleFilterDialogService } from '../shared/sale-filter-dialog.service';
 import { IFilter, IFilterOption } from 'src/app/shared/services/scryfallApi.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-sales-search',
@@ -28,14 +28,25 @@ export class SaleCardSearchComponent implements OnInit, OnDestroy {
     }
   };
 
-  constructor(private _snackBar: MatSnackBar,
-              private _saleService: SaleService,
+  constructor(private _saleService: SaleService,
               private _saleFilterDialogService: SaleFilterDialogService,
+              private _route: ActivatedRoute,
               private _router: Router) {
-    this._saleService.getAllOffers()
+    try {
+      const dialogDataBase64 = this._route.snapshot.paramMap.get('dialogDataBase64?') ?? '';
+      this.dialogData = JSON.parse(decodeURI(atob(dialogDataBase64)));
+      this._saleService.getOffersByFilter(this.dialogData.filter)
+      .then((res) => {
+        this.dialogData.results = res;
+        this.offerList$.next(res);
+       }
+     )
+    } catch(err) {
+      this._saleService.getAllOffers()
       .then((res: IOffer[]) => {
         this.offerList$.next(res);
       })
+    }
   }
 
 	ngOnInit(): void {
@@ -81,12 +92,8 @@ export class SaleCardSearchComponent implements OnInit, OnDestroy {
   }
 
   getAllOffersForCard(cardName: string) {
-    this._router.navigate(['sale-offers/', cardName]);
-  }
-
-
-  closeSnackBar() {
-    this._snackBar.dismiss();
+    const dialogDataBase64 = btoa(encodeURI(JSON.stringify(this.dialogData)));
+    this._router.navigate(['sale-offers/', cardName, dialogDataBase64]);
   }
 
 }
