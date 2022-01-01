@@ -8,6 +8,8 @@ import { LoginComponent } from './shared/components/login/login.component';
 import { OfferMenuComponent } from './offer/offer-menu/offer-menu.component';
 import { SaleCardSearchComponent } from './sale/sale-card-search/sale-card-search.component';
 import { SaleOffersComponent } from './sale/sale-offers/sale-offers.component';
+import { BasketManageComponent } from './basket/basket-manage/basket-manage.component';
+
 
 export const appRoutes: Routes = [
 
@@ -45,5 +47,10 @@ export const appRoutes: Routes = [
     path: 'sale-offers/:cardName',
     component: SaleOffersComponent,
     data: { title: 'Angebote Suchen'}
+  },
+  {
+    path: 'basket',
+    component: BasketManageComponent,
+    data: { title: 'Warenkorb'}
   },
 ];

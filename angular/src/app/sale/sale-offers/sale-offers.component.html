@@ -1,5 +1,6 @@
 <ng-container>
-  <div class="page-container">
+  <div class="page-container"
+       (click)="closeSnackBar()">
 
     <button mat-raised-button
             color="primary"
@@ -71,6 +72,14 @@
                       value="{{offer.additionInfo}}">
             </textarea>
           </mat-form-field>
+        </div>
+        <div class="item-actions">
+          <div>
+            <button class="add-to-basket"
+                    (click)="addToBasket(offer?._id)">
+              <mat-icon>shopping_cart</mat-icon>
+            </button>
+          </div>
         </div>
       </div>
     </div>

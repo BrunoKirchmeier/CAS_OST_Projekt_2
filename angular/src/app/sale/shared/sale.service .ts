@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Firestore, query, collection, where, QuerySnapshot, Timestamp,  } from '@angular/fire/firestore';
+import { Firestore, query, collection, where, QuerySnapshot } from '@angular/fire/firestore';
 import { DocumentData } from 'rxfire/firestore/interfaces';
+import { IBasketData } from 'src/app/basket/shared/basket.service ';
 import { IOffer } from 'src/app/offer/shared/services/offer.service';
 import { AuthService } from 'src/app/shared/services/auth.services';
 import { DatabaseService } from 'src/app/shared/services/database.service';
-import { ICardDetails, IFilter, IFilterOption } from 'src/app/shared/services/scryfallApi.service';
+import { IFilter, IFilterOption } from 'src/app/shared/services/scryfallApi.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,22 @@ export class SaleService {
   private _currentUser: any = '';
   private _currentUserUid: string = '';
   private _offersCollection: string = 'offers';
+  private _basketCollection: string = 'basket';
+
+  private _statesDict: { [id: string] : IResponse; } = {
+    UNDEFINED: {
+      success: false,
+      code: 'UNDEFINED',
+      message: '' },
+    LOGIN_FAILED: {
+      success: false,
+      code: 'LOGIN_FAILED',
+      message: 'Der Warenkorb kann nur im eingeloggten Zustand befüllt werden'},
+    CREATE_SUCCESS: {
+      success: true,
+      code: 'CREATE_SUCCESS',
+      message: 'Das Angebot wurde in den Warenkorb gelegt'},
+  };
 
   constructor(private _authService: AuthService,
               private _dbExt: DatabaseService,
@@ -291,27 +308,34 @@ export class SaleService {
     });
   }
 
+  async addToBasket(offerId: string): Promise<IResponse> {
+    let ret: IResponse = this._statesDict.UNDEFINED;
+    if(this._currentUserUid  === '') {
+      ret = this._statesDict.LOGIN_FAILED;
+    } else {
+      const basketData: IBasketData = {
+        _id: '',
+        offerId: offerId,
+        buyerUid: this._currentUserUid
+      }
+      await this._dbExt.createDoc<IBasketData>(this._basketCollection,
+                                               basketData)
+        .then(() => {
+          ret = this._statesDict.CREATE_SUCCESS;
+        })
+    }
+    return new Promise((resolve) => {
+      resolve(ret);
+    });
+  }
 
 }
 
-export interface ISales {
-  _id: string | null;
-  _offerId: string;
-  cardName: string;
-  cardDetails: ICardDetails,
-  providerUid: string;
-  providerEmail: string ;
-  buyerUid: string;
-  buyerEmail: string;
-  priceTotal: number;
-  quantity: number;
-  deliveryMode: string;
-  paymentMode: string;
-  additionInfo: string | null;
-  creationDate : Timestamp;
-  saleDate : Timestamp;
+export interface IResponse {
+  success: Boolean;
+  code: string;
+  message: string;
 }
-
 export interface IDialogData {
   results: IOffer[],
   filter: IFilter,

@@ -29,6 +29,17 @@
     padding: 10px;
   }
 
+  &-actions {
+    display: flex;
+    justify-content: end;
+  }
+
+}
+
+.add-to-basket {
+  color: white;
+  background-color: #3f51b5;
+  border: none;
 }
 
 .isHalfSize {

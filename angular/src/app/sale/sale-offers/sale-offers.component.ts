@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AccountService, IAccountUser } from 'src/app/account/shared/services/account.service';
@@ -23,7 +24,8 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
               private _saleService: SaleService,
               private _accountService : AccountService,
               private _route: ActivatedRoute,
-              private _router: Router) {
+              private _router: Router,
+              private _snackBar: MatSnackBar) {
     this._deliveryModes = this._offerService.getDeliveryModes();
     this._paymentModes = this._offerService.getPaymentModes();
     this._accountService.getUsers()
@@ -68,5 +70,15 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
     this._router.navigate(['sale-card-search', this._dialogDataEncoded]);
   }
 
+  async addToBasket(offerId: string) {
+    const ret = await this._saleService.addToBasket(offerId);
+    this._snackBar.open(ret.message);
+  }
+
+  closeSnackBar() {
+    setTimeout(() => {
+      this._snackBar.dismiss();
+    }, 3000)
+  }
 
 }

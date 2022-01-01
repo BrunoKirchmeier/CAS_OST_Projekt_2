@@ -17,6 +17,7 @@ import { SharedModule } from './shared/shared.module';
 import { AccountModule } from './account/account.module';
 import { OfferModule } from './offer/offer.module';
 import { SalesModule } from './sale/sale.module';
+import { BasketModule } from './basket/basket.module';
 
 // Custom Components
 import { NavigationComponent } from './shared/components/navigation/navigation.component';
@@ -53,6 +54,7 @@ import { MatIconModule} from '@angular/material/icon';
     AccountModule,
     OfferModule,
     SalesModule,
+    BasketModule,
     MatToolbarModule,
     MatMenuModule,
     MatButtonModule,
