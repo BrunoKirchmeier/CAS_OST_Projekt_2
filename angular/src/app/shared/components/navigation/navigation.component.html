@@ -1,31 +1,40 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row>
+  <mat-toolbar-row class="mat-toolbar-row">
     <button mat-icon-button
-            (click)="drawer.toggle();"><mat-icon routerLinkActive="active-icon">menu</mat-icon>
+            (click)="drawer.toggle()"
+            class="mat-toolbar-element-1"><mat-icon routerLinkActive="active-icon">menu</mat-icon>
     </button>
-    <button mat-button
-            [mat-menu-trigger-for]="menu"
-            (click)="closeMenue()"><mat-icon>account_circle</mat-icon>
+
+    <div class="mat-toolbar-element-2">
+      <button mat-button
+              [mat-menu-trigger-for]="menu"
+              (click)="closeMenue()"><mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+          <button mat-menu-item
+                  routerLink="/account-settings"
+                  *ngIf="isLoggedIn === true"><mat-icon>account_circle</mat-icon>
+            Account Einstellungen
+          </button>
+          <button mat-menu-item
+                  routerLink="/login"
+                  *ngIf="isLoggedIn === false"><mat-icon>person</mat-icon>
+            Login
+          </button>
+          <button mat-menu-item
+                  (click)="logout()"
+                  *ngIf="isLoggedIn === true"><mat-icon>person</mat-icon>
+            Logout
+          </button>
+      </mat-menu>
+    </div>
+
+    <button mat-icon-button
+            routerLink="/basket"
+            *ngIf="isLoggedIn === true"
+            class="mat-toolbar-element-3"><mat-icon>shopping_cart</mat-icon>
     </button>
-    <mat-menu x-position="before"
-              #menu="matMenu">
-        <button mat-menu-item
-                routerLink="/account-settings"
-                *ngIf="isLoggedIn === true"><mat-icon>account_circle</mat-icon>
-          Account Einstellungen
-        </button>
-        <button mat-menu-item
-                routerLink="/login"
-                *ngIf="isLoggedIn === false"><mat-icon>person</mat-icon>
-          Login
-        </button>
-        <button mat-menu-item
-                (click)="logout()"
-                *ngIf="isLoggedIn === true"><mat-icon>person</mat-icon>
-          Logout
-        </button>
-    </mat-menu>
-    <span class="toolbar-spacer "></span>
+
   </mat-toolbar-row>
 </mat-toolbar>
 
@@ -52,10 +61,16 @@
          mat-list-item href="#">
         <mat-icon>create</mat-icon>
         <span class="ml-2">Angebote suchen</span>
-    </a>
+      </a>
+      <a [routerLink]="['/basket']"
+          mat-list-item href="#"
+          *ngIf="isLoggedIn === true">
+        <mat-icon>shopping_cart</mat-icon>
+        <span class="ml-2">Warenkorb</span>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content [ngStyle]="{ 'margin-left.px': contentMargin }" >
+  <mat-sidenav-content>
     <div class="main">
       <router-outlet #outlet="outlet"></router-outlet>
     </div>

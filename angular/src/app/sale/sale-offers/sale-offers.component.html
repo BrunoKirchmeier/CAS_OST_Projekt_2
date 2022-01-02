@@ -1,6 +1,5 @@
 <ng-container>
-  <div class="page-container"
-       (click)="closeSnackBar()">
+  <div class="page-container">
 
     <button mat-raised-button
             color="primary"
@@ -23,13 +22,13 @@
         <div class="item-detail">
           <mat-form-field appearance="outline"
                           class="pad-mar-1 isHalfSize">
-            <mat-label for="priceTotal">Preis in CHF: </mat-label>
+            <mat-label for="cardPrice">Kartenpreis CHF: </mat-label>
             <input  matInput
                     readonly="true"
-                    id="priceTotal"
-                    name="priceTotal"
+                    id="cardPrice"
+                    name="cardPrice"
                     type="number"
-                    value="{{offer.priceTotal}}">
+                    value="{{offer.cardPrice}}">
           </mat-form-field>
           <mat-form-field appearance="outline"
                           class="pad-mar-1 isHalfSize">
@@ -74,9 +73,24 @@
           </mat-form-field>
         </div>
         <div class="item-actions">
+          <div class="quantity-change">
+              <button mat-icon-button
+                      class="quantity-change-button"
+                      (click)="quantityRemove(offer)">
+                <mat-icon>remove_circle_outline</mat-icon>
+              </button>
+              <span class="quantity-change-span"
+                    data-id="{{offer?._id}}">0</span>
+              <button mat-icon-button
+                      class="quantity-change-button"
+                      (click)="quantityAdd(offer)">
+                <mat-icon>control_point</mat-icon>
+              </button>
+          </div>
           <div>
-            <button class="add-to-basket"
-                    (click)="addToBasket(offer?._id)">
+            <button mat-icon-button
+                    class="add-to-basket"
+                    (click)="addToBasket(offer)">
               <mat-icon>shopping_cart</mat-icon>
             </button>
           </div>

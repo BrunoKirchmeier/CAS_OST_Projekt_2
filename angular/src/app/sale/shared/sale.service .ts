@@ -27,6 +27,10 @@ export class SaleService {
       success: false,
       code: 'LOGIN_FAILED',
       message: 'Der Warenkorb kann nur im eingeloggten Zustand befüllt werden'},
+    IN_BASKET: {
+        success: false,
+        code: 'IN_BASKET',
+        message: 'Das Angebot ist bereits im Warenkorb vorhanden'},
     CREATE_SUCCESS: {
       success: true,
       code: 'CREATE_SUCCESS',
@@ -308,21 +312,36 @@ export class SaleService {
     });
   }
 
-  async addToBasket(offerId: string): Promise<IResponse> {
+  async addToBasket(offerId: string,
+                    quantity: number): Promise<IResponse> {
+    let basketData: IBasketData[] = [];
     let ret: IResponse = this._statesDict.UNDEFINED;
     if(this._currentUserUid  === '') {
       ret = this._statesDict.LOGIN_FAILED;
     } else {
-      const basketData: IBasketData = {
+      const insertElement: IBasketData = {
         _id: '',
         offerId: offerId,
-        buyerUid: this._currentUserUid
+        buyerUid: this._currentUserUid,
+        quantity: quantity
       }
-      await this._dbExt.createDoc<IBasketData>(this._basketCollection,
-                                               basketData)
-        .then(() => {
-          ret = this._statesDict.CREATE_SUCCESS;
+      let q = query(collection(this._db, this._basketCollection),
+                    where('buyerUid', '==', this._currentUserUid));
+      await this._dbExt.readDoc<IBasketData>(q)
+        .then((res: IBasketData[]) => {
+          basketData = res;
         })
+
+      let existElement: IBasketData | undefined = basketData.find(obj => obj.offerId === offerId);
+      if(existElement !== undefined) {
+        ret = this._statesDict.IN_BASKET;
+      } else {
+        await this._dbExt.createDoc<IBasketData>(this._basketCollection,
+                                                 insertElement)
+          .then(() => {
+          ret = this._statesDict.CREATE_SUCCESS;
+          })
+      }
     }
     return new Promise((resolve) => {
       resolve(ret);

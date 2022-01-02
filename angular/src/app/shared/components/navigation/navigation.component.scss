@@ -3,97 +3,40 @@
   overflow-x: hidden;
 }
 
-.sidenav-container {
-  height: 92%;
-  position: relative;
-}
-
-.sidenav-content {
-  width: 100%;
-}
-
-.sidenav {
-  width: 250px;
-}
-
-.sidenav .mat-toolbar {
-  background: #fff;
-  color: #fff;
-}
-
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
   z-index: 1;
 }
 
-.is-active {
-  background-color: #aaa;
-  color: #fff;
-}
+.sidenav {
+  width: 250px;
 
-.is-active:hover {
-  background-color: #aaa;
-  color: #fff;
-}
+  &-container {
+    height: 92%;
+    position: relative;
+  }
 
-.is-active:focus {
-  background-color: #aaa;
-  color: #fff;
-}
+  &-content {
+    width: 100%;
+  }
 
-.logo {
-  margin-right: 10px;
-  font-size: 18px;
-  width: 100%;
-  font-weight: bolder;
-  text-align: center;
+  &.mat-toolbar {
+    background: #fff;
+    color: #fff;
+  }
 
 }
-.toolbar-icon {
-  padding: 0 0px;
+
+.mat-toolbar {
+  &-row {}
+
+  &-element-1 {}
+
+  &-element-2 {}
+
+  &-element-3 {}
 }
 
-.sidenavContainer {
-  height: 100%;
-}
 
-.toolbar-spacer {
-  flex: 1 1 auto;
-}
 
-.top-nav {
-  height: 64px;
-  position: fixed;
-  top: 0px;
-}
-
-.fixed-toolbar {
-  position: sticky;
-  z-index: 5;
-  top: 0;
-  width: 100%;
-}
-.inner-content{
-  position: absolute;
-  bottom: 0;
-  left: 0;
-}
-
-.nav-link {
-  cursor: pointer;
-}
-
-.navbar-light .navbar-nav .nav-link.active {
-  color: #007ACC
-}
-
-.active {
-  font-weight: bold;
-  background-color: #CFCFCF;
-  color: darkred;
-}
-
-.active-icon {
-  color: darkred;
-}

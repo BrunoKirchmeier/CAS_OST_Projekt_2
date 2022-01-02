@@ -70,15 +70,41 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
     this._router.navigate(['sale-card-search', this._dialogDataEncoded]);
   }
 
-  async addToBasket(offerId: string) {
-    const ret = await this._saleService.addToBasket(offerId);
-    this._snackBar.open(ret.message);
+  async addToBasket(offer: IOffer) {
+    let node = document.querySelector('.quantity-change-span[id="' + offer._id + '"');
+    let htmlValue = node?.innerHTML ?? 0;
+    let quantity: number = htmlValue as number;
+    if(node !== null &&
+      quantity > 0) {
+      const ret = await this._saleService.addToBasket(offer._id,
+                                                      quantity);
+      this._snackBar.open(ret.message);
+      setTimeout(() => {
+        this._snackBar.dismiss();
+      }, 3000)
+    }
   }
 
-  closeSnackBar() {
-    setTimeout(() => {
-      this._snackBar.dismiss();
-    }, 3000)
+  quantityAdd(offer: IOffer) {
+    let node = document.querySelector('.quantity-change-span[id="' + offer._id + '"');
+    let htmlValue = node?.innerHTML ?? 0;
+    let quantity: number = htmlValue as number;
+    if(node !== null &&
+       quantity < offer.quantity) {
+      quantity++;
+      node.innerHTML = quantity.toString();
+    }
+  }
+
+  quantityRemove(offer: IOffer) {
+    let node = document.querySelector('.quantity-change-span[id="' + offer._id + '"');
+    let htmlValue = node?.innerHTML ?? 0;
+    let quantity: number = htmlValue as number;
+    if(node !== null &&
+       quantity > 0) {
+      quantity--;
+      node.innerHTML = quantity.toString();
+    }
   }
 
 }

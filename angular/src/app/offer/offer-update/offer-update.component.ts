@@ -13,7 +13,7 @@ export class OfferUpdateComponent implements OnDestroy {
 
   private _subscriptions: Subscription[] = [];
   private _offerData: any = {
-    priceTotal: null,
+    cardPrice: null,
     quantity: null,
     deliveryMode: null,
     paymentMode: null,
@@ -23,7 +23,7 @@ export class OfferUpdateComponent implements OnDestroy {
   public offerList$: Subject<IOffer[]> = new Subject();
   public activeOffer: string = '';
   public form = new FormGroup({
-    priceTotal: new FormControl('', [Validators.required]),
+    cardPrice: new FormControl('', [Validators.required]),
     deliveryMode: new FormControl('', [Validators.required]),
     paymentMode: new FormControl('', [Validators.required]),
     quantity: new FormControl('', [Validators.required]),
@@ -65,7 +65,6 @@ export class OfferUpdateComponent implements OnDestroy {
     this.activeOffer = value._id !== null && value._id !== undefined
                      ? value._id
                      : '';
-                            console.log(this.activeOffer)
     this._offerService.getOffer(this.activeOffer)
       .then((val) => {
         if(val !== undefined && val !== null) {
@@ -77,7 +76,7 @@ export class OfferUpdateComponent implements OnDestroy {
   async onSubmit(): Promise<any> {
     if(this.form.valid) {
       const data: any = {
-        priceTotal: this.form.get('priceTotal')?.value,
+        cardPrice: this.form.get('cardPrice')?.value,
         quantity: this.form.get('quantity')?.value,
         deliveryMode: this.form.get('deliveryMode')?.value,
         paymentMode: this.form.get('paymentMode')?.value,
@@ -98,7 +97,7 @@ export class OfferUpdateComponent implements OnDestroy {
 
   setFormValues(form: any) {
     // Raw Values witout formations
-    this._offerData.priceTotal = form.priceTotal;
+    this._offerData.cardPrice = form.cardPrice;
     this._offerData.quantity = form.quantity;
     this._offerData.deliveryMode = form.deliveryMode;
     this._offerData.paymentMode = form.paymentMode;
@@ -106,7 +105,7 @@ export class OfferUpdateComponent implements OnDestroy {
 
     // Formatted Values for View
     this.form.setValue({
-      priceTotal: form.priceTotal ?? 0,
+      cardPrice: form.cardPrice ?? 0,
       quantity: form.quantity ?? 0,
       deliveryMode: form.deliveryMode ?? '',
       paymentMode: form.paymentMode ?? '',

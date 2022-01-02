@@ -1,5 +1,5 @@
 import { Component, OnChanges, HostListener, Output, EventEmitter, ElementRef, Input, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IDeliveryMode, IPaymentMode, OfferService } from '../shared/services/offer.service';
 import { ApiScryfallService, ICardDetails } from '../../shared/services/scryfallApi.service';
@@ -16,7 +16,7 @@ export class OfferCreateComponent implements OnChanges {
   public imgIsResized: boolean = false;
   public borderActive: boolean = false;
   public form = new FormGroup({
-    priceTotal: new FormControl('', [Validators.required]),
+    cardPrice: new FormControl('', [Validators.required]),
     deliveryMode: new FormControl('', [Validators.required]),
     paymentMode: new FormControl('', [Validators.required]),
     quantity: new FormControl('', [Validators.required]),
@@ -53,14 +53,14 @@ export class OfferCreateComponent implements OnChanges {
   async onSubmit(): Promise<any> {
     if(this.form.valid) {
       const cardName =  this.currentCardName as string;
-      const priceTotal = this.form.get('priceTotal')?.value;
+      const cardPrice = this.form.get('cardPrice')?.value;
       const quantity = this.form.get('quantity')?.value;
       const deliveryMode = this.form.get('deliveryMode')?.value;
       const paymentMode = this.form.get('paymentMode')?.value;
       const additionInfo = this.form.get('additionInfo')?.value;
       const cardDetails: ICardDetails = await this._scryfall.getCardDetailsByName(cardName);
       this._offerService.createOffer({cardName: cardName,
-                                      priceTotal: priceTotal,
+                                      cardPrice: cardPrice,
                                       quantity: quantity,
                                       deliveryMode: deliveryMode,
                                       paymentMode: paymentMode,

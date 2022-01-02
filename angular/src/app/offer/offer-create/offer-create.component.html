@@ -19,13 +19,13 @@
 
         <mat-form-field appearance="outline"
                         class="pad-mar-1 isHalfSize">
-          <mat-label for="priceTotal">Preis in CHF: </mat-label>
+          <mat-label for="cardPrice">Kartenpreis CHF: </mat-label>
           <input  matInput
-                  id="priceTotal"
-                  name="priceTotal"
+                  id="cardPrice"
+                  name="cardPrice"
                   type="number"
-                  formControlName="priceTotal">
-          <mat-error *ngIf="form.get('priceTotal')?.errors">
+                  formControlName="cardPrice">
+          <mat-error *ngIf="form.get('cardPrice')?.errors">
             <span>Eingabe ist zwingend</span>
           </mat-error>
         </mat-form-field>

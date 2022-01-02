@@ -26,7 +26,7 @@ export interface IBasketData {
   _id: string;
   offerId: string;
   buyerUid: string;
-
+  quantity: number;
 }
 
 

@@ -55,7 +55,7 @@ export class OfferService {
       },
       providerUid: this._currentUser.uid,
       providerEmail: this._currentUser.email,
-      priceTotal: data.priceTotal,
+      cardPrice: data.cardPrice,
       quantity: data.quantity,
       deliveryMode: data.deliveryMode,
       paymentMode: data.paymentMode,
@@ -144,7 +144,7 @@ export interface IOffer {
   cardDetails: ICardDetails | null,
   providerUid: string;
   providerEmail: string ;
-  priceTotal: number;
+  cardPrice: number;
   quantity: number;
   deliveryMode: string;
   paymentMode: string;
