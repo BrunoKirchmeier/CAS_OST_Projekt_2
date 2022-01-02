@@ -1,0 +1,54 @@
+<ng-container>
+  <div class="page-container">
+
+
+    <div *ngFor="let item of basketList$ | async"
+         class="item-container">
+
+      <div class="item-header">
+        <div class="item-header-focus"
+             data-id="{{item._id}}">
+          <img src="{{item.offerDetail?.cardDetails?.cardImageUri}}"
+                class="item-img"
+                (click)="hiddeImgFocus(item)">
+        </div>
+        <div class="item-header-detail"
+              data-id="{{item._id}}">
+          <div class="item-header-detail-colum1"
+               (touchstart)="showImgFocus(item)"
+               (touchend)="hiddeImgFocus(item)">
+            <img src="{{item.offerDetail?.cardDetails?.cardImageUri}}"
+                  class="item-img">
+          </div>
+          <div class="item-header-detail-colum2">
+            <span>{{item.offerDetail?.cardName}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-details">
+        <div class="item-details-colum1"></div>
+        <div class="item-details-colum2">
+          <div class="item-quantity">
+            <button mat-icon-button
+                    class="item-quantity-button"
+                    (click)="quantityRemove(item)">
+              <mat-icon>remove_circle_outline</mat-icon>
+            </button>
+            <span class="item-quantity-span"
+                  data-id="{{item._id}}">{{item.quantity}}</span>
+            <button mat-icon-button
+                    class="item-quantity-button"
+                    (click)="quantityAdd(item)">
+              <mat-icon>control_point</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="item-details-colum3">
+          <span class="item-details-price"
+                data-id="{{item._id}}">{{(item.offerDetail?.cardPrice ?? 0) * item.quantity}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

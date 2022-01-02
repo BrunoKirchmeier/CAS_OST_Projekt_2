@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, query, collection, where, QuerySnapshot } from '@angular/fire/firestore';
 import { DocumentData } from 'rxfire/firestore/interfaces';
-import { IBasketData } from 'src/app/basket/shared/basket.service ';
+import { IBasket } from 'src/app/basket/shared/basket.service ';
 import { IOffer } from 'src/app/offer/shared/services/offer.service';
 import { AuthService } from 'src/app/shared/services/auth.services';
 import { DatabaseService } from 'src/app/shared/services/database.service';
@@ -314,30 +314,32 @@ export class SaleService {
 
   async addToBasket(offerId: string,
                     quantity: number): Promise<IResponse> {
-    let basketData: IBasketData[] = [];
+    let basketData: IBasket[] = [];
     let ret: IResponse = this._statesDict.UNDEFINED;
     if(this._currentUserUid  === '') {
       ret = this._statesDict.LOGIN_FAILED;
     } else {
-      const insertElement: IBasketData = {
+      const insertElement: IBasket = {
         _id: '',
         offerId: offerId,
         buyerUid: this._currentUserUid,
-        quantity: quantity
+        quantity: quantity,
+        offerDetail: null,
+        providerDetail: null,
       }
       let q = query(collection(this._db, this._basketCollection),
                     where('buyerUid', '==', this._currentUserUid));
-      await this._dbExt.readDoc<IBasketData>(q)
-        .then((res: IBasketData[]) => {
+      await this._dbExt.readDoc<IBasket>(q)
+        .then((res: IBasket[]) => {
           basketData = res;
         })
 
-      let existElement: IBasketData | undefined = basketData.find(obj => obj.offerId === offerId);
+      let existElement: IBasket | undefined = basketData.find(obj => obj.offerId === offerId);
       if(existElement !== undefined) {
         ret = this._statesDict.IN_BASKET;
       } else {
-        await this._dbExt.createDoc<IBasketData>(this._basketCollection,
-                                                 insertElement)
+        await this._dbExt.createDoc<IBasket>(this._basketCollection,
+                                             insertElement)
           .then(() => {
           ret = this._statesDict.CREATE_SUCCESS;
           })

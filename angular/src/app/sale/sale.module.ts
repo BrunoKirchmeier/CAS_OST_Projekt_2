@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { salesRoutesModule } from './sale.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpInterceptorService } from '../shared/Intercept/http-interceptor.service';
 
 // Custom Modules
 import { SharedModule } from '../shared/shared.module'
@@ -23,8 +25,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule} from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpInterceptorService } from '../shared/Intercept/http-interceptor.service';
 
 @NgModule({
   declarations: [
