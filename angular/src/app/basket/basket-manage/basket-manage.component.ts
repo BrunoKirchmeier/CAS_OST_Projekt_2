@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ChfFormatterPipe } from 'src/app/shared/pipes/CHF-formatter.pipe';
 import { IBasket, BasketService } from '../shared/basket.service ';
 
 @Component({
@@ -10,13 +9,13 @@ import { IBasket, BasketService } from '../shared/basket.service ';
 })
 export class BasketManageComponent implements OnInit, OnDestroy {
 
-  public basketList$: Subject<IBasket[]> = new Subject();
+  public basketObj$: Subject<{[id: string]: IBasket[];}> = new Subject();
 
-  constructor(private _basketService: BasketService,
-              private _chfFormatterPipe: ChfFormatterPipe) {
+  constructor(private _basketService: BasketService) {
     this._basketService.getBasket()
       .then((res) => {
-        this.basketList$.next(res);
+        this.basketObj$.next(res);
+        console.log(res);
       })
   }
 
@@ -77,6 +76,9 @@ export class BasketManageComponent implements OnInit, OnDestroy {
     }
   }
 
+  removeItem(item: IBasket) {
+
+  }
 
 }
 

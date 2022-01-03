@@ -1,56 +1,60 @@
 <ng-container>
   <div class="page-container">
-
-
-    <div *ngFor="let item of basketList$ | async"
-         class="item-container">
-
-      <div class="item-header">
-        <div class="item-header-focus"
-             data-id="{{item._id}}">
-          <img src="{{item.offerDetail?.cardDetails?.cardImageUri}}"
-                class="item-img"
-                (click)="hiddeImgFocus(item)">
-        </div>
-        <div class="item-header-detail"
+    <div class="buyer-container" *ngFor="let basketList of basketObj$ | async | keyvalue">
+      <h1 class="buyer-name">{{ basketList.value[0]?.providerDetail?.lastName + ' ' + basketList.value[0]?.providerDetail?.firstName }}</h1>
+      <h3 class="buyer-email">{{ basketList.value[0]?.providerDetail?.email }}</h3>
+      <div *ngFor="let item of basketList.value"
+           class="item-container">
+        <div class="item-header">
+          <div class="item-header-focus"
               data-id="{{item._id}}">
-          <div class="item-header-detail-colum1"
-               (touchstart)="showImgFocus(item)"
-               (touchend)="hiddeImgFocus(item)">
             <img src="{{item.offerDetail?.cardDetails?.cardImageUri}}"
-                  class="item-img">
+                  class="item-img"
+                  (click)="hiddeImgFocus(item)">
           </div>
-          <div class="item-header-detail-colum2">
-            <span>{{item.offerDetail?.cardName}}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="item-details">
-        <div class="item-details-colum1"></div>
-        <div class="item-details-colum2">
-          <div class="item-quantity">
-            <button mat-icon-button
-                    class="item-quantity-button"
-                    (click)="quantityRemove(item)">
-              <mat-icon>remove_circle_outline</mat-icon>
-            </button>
-            <span class="item-quantity-value"
-                   id="{{item._id}}">
-              {{item.quantity}}
-            </span>
-            <button mat-icon-button
-                    class="item-quantity-button"
-                    (click)="quantityAdd(item)">
-              <mat-icon>control_point</mat-icon>
-            </button>
-          </div>
-        </div>
-        <div class="item-details-colum3">
-          <span class="item-details-price"
+          <div class="item-header-detail"
                 data-id="{{item._id}}">
-            {{((item.offerDetail?.cardPrice ?? 1) * item.quantity).toFixed(2)}} CHF
-          </span>
+            <div class="item-header-detail-colum1"
+                (touchstart)="showImgFocus(item)"
+                (touchend)="hiddeImgFocus(item)">
+              <img src="{{item.offerDetail?.cardDetails?.cardImageUri}}"
+                  class="item-img">
+            </div>
+            <div class="item-header-detail-colum2">
+              <span>{{item.offerDetail?.cardName}}</span>
+            </div>
+            <div class="item-header-detail-colum3">
+              <button mat-icon-button
+                      (click)="removeItem(item)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="item-details">
+          <div class="item-details-colum1"></div>
+          <div class="item-details-colum2">
+            <div class="item-quantity">
+              <button mat-icon-button
+                      (click)="quantityRemove(item)">
+                <mat-icon>remove_circle_outline</mat-icon>
+              </button>
+              <span class="item-quantity-value"
+                    id="{{item._id}}">
+                {{item.quantity}}
+              </span>
+              <button mat-icon-button
+                      (click)="quantityAdd(item)">
+                <mat-icon>control_point</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="item-details-colum3">
+            <span class="item-details-price"
+                  data-id="{{item._id}}">
+              {{((item.offerDetail?.cardPrice ?? 1) * item.quantity).toFixed(2)}} CHF
+            </span>
+          </div>
         </div>
       </div>
     </div>

@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { basketRoutesModule } from './basket.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ChfFormatterPipe } from 'src/app/shared/pipes/CHF-formatter.pipe';
 
 // Custom Modules
 import { SharedModule } from '../shared/shared.module'
@@ -11,7 +10,6 @@ import { BasketManageComponent } from './basket-manage/basket-manage.component';
 
 // Material Desing
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -33,7 +31,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     FormsModule,
     ReactiveFormsModule,
     MatTabsModule,
-    MatDialogModule,
     MatFormFieldModule,
     MatSelectModule,
     NgxMatSelectSearchModule,
@@ -44,7 +41,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatExpansionModule,
     MatCheckboxModule,
   ],
-  providers: [ChfFormatterPipe],
+  providers: [],
   bootstrap: []
 })
 export class BasketModule {}

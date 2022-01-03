@@ -23,7 +23,7 @@ export class BasketService {
     this._currentUser = JSON.parse(this._authService.currentUser);
   }
 
-  async getBasket(): Promise<IBasket[]> {
+  async getBasket(): Promise<{[id: string]: IBasket[];}> {
     let basket: Array<IBasket> = [];
     let q = query(collection(this._db, this._basketCollection),
                   where('buyerUid', '==', this._currentUser?.uid ?? ''));
@@ -34,21 +34,33 @@ export class BasketService {
           basket.push(item);
         })
       })
+
+    let dictionary: {[id: string]: IBasket[];} = {};
     for(let i=0; i < basket.length; i++) {
       let qOffer = query(collection(this._db, this._offersCollection),
                          where('_id', '==', basket[i].offerId));
       let offer: IOffer[] = await this._dbExt.readDoc<IOffer[]>(qOffer);
 
-
       let qProvider = query(collection(this._db, this._userCollection),
                             where('uid', '==', offer[0].providerUid));
       let provider: IAccountUser[] = await this._dbExt.readDoc<IAccountUser[]>(qProvider);
 
-      basket[i].offerDetail = offer[0];
-      basket[i].providerDetail = provider[0];
+      let obj: IBasket = basket[i];
+      obj.offerDetail = offer[0];
+      obj.providerDetail = provider[0];
+      if(obj.providerDetail?.lastName == '' &&
+         obj.providerDetail?.firstName == '') {
+          obj.providerDetail.lastName = 'Anonym';
+      }
+      if(dictionary.hasOwnProperty(provider[0].uid)) {
+        dictionary[provider[0].uid].push(obj);
+      } else {
+        dictionary[provider[0].uid] = [];
+        dictionary[provider[0].uid].push(obj);
+      }
     };
     return new Promise((resolve) => {
-      resolve(basket);
+      resolve(dictionary);
     });
   }
 
