@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, Subscription } from 'rxjs';
 import { IDeliveryMode, IOffer, IPaymentMode, OfferService } from '../shared/services/offer.service';
+import { CHFValidator, IntValidator } from '../../shared/helpers/form-validators';
 
 @Component({
   selector: 'app-offer-update',
@@ -23,10 +24,10 @@ export class OfferUpdateComponent implements OnDestroy {
   public offerList$: Subject<IOffer[]> = new Subject();
   public activeOffer: string = '';
   public form = new FormGroup({
-    cardPrice: new FormControl('', [Validators.required]),
+    cardPrice: new FormControl('', [Validators.required, CHFValidator()]),
     deliveryMode: new FormControl('', [Validators.required]),
     paymentMode: new FormControl('', [Validators.required]),
-    quantity: new FormControl('', [Validators.required]),
+    quantity: new FormControl('', [Validators.required, IntValidator()]),
     additionInfo: new FormControl('')
   });
   public deliveryModes: Array<IDeliveryMode> = [];
@@ -75,9 +76,11 @@ export class OfferUpdateComponent implements OnDestroy {
 
   async onSubmit(): Promise<any> {
     if(this.form.valid) {
+      let cardPrice: number = this.form.get('cardPrice')?.value ?? 0;
+      let quantity: number = this.form.get('quantity')?.value ?? 0;
       const data: any = {
-        cardPrice: this.form.get('cardPrice')?.value,
-        quantity: this.form.get('quantity')?.value,
+        cardPrice: Math.ceil(cardPrice*20)/20,
+        quantity: Math.round(quantity),
         deliveryMode: this.form.get('deliveryMode')?.value,
         paymentMode: this.form.get('paymentMode')?.value,
         additionInfo: this.form.get('additionInfo')?.value
@@ -86,6 +89,9 @@ export class OfferUpdateComponent implements OnDestroy {
         .then((val) => {
           if(val === true) {
             this._snackBar.open('Daten wurden erfolgreich aktualisiert');
+            setTimeout(() => {
+              this._snackBar.dismiss();
+            }, 3000)
           }
         })
     }

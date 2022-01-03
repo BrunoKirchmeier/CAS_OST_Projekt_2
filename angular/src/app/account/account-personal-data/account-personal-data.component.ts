@@ -102,7 +102,6 @@ export class AccountPersonalDataComponent implements OnInit, OnDestroy {
       // IBAN Validation
       const iban = this._personalData.iban as string;
       let isValidIban: boolean = true;
-      console.log(iban);
       if(iban !== '') {
         await this._ibanValidatorService.checkIban(iban)
           .then((res) => {
@@ -119,10 +118,16 @@ export class AccountPersonalDataComponent implements OnInit, OnDestroy {
         .then(() => {
           this.isSpinnerActive = false;
           this._snackBar.open('Der Account wurde aktualisiert');
+          setTimeout(() => {
+            this._snackBar.dismiss();
+          }, 3000)
         })
       } else {
         this.isSpinnerActive = false;
         this._snackBar.open('Ungültige IBAN');
+        setTimeout(() => {
+          this._snackBar.dismiss();
+        }, 3000)
       }
     }
   }

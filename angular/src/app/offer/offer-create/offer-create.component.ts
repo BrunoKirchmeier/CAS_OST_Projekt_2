@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IDeliveryMode, IPaymentMode, OfferService } from '../shared/services/offer.service';
 import { ApiScryfallService, ICardDetails } from '../../shared/services/scryfallApi.service';
+import { CHFValidator, IntValidator } from '../../shared/helpers/form-validators';
 @Component({
   selector: 'app-offer-create, img[loaded]',
   templateUrl: './offer-create.component.html',
@@ -16,10 +17,10 @@ export class OfferCreateComponent implements OnChanges {
   public imgIsResized: boolean = false;
   public borderActive: boolean = false;
   public form = new FormGroup({
-    cardPrice: new FormControl('', [Validators.required]),
+    cardPrice: new FormControl('', [Validators.required, CHFValidator()]),
     deliveryMode: new FormControl('', [Validators.required]),
     paymentMode: new FormControl('', [Validators.required]),
-    quantity: new FormControl('', [Validators.required]),
+    quantity: new FormControl('', [Validators.required, IntValidator()]),
     additionInfo: new FormControl('')
   });
   public deliveryModes: Array<IDeliveryMode> = [];
@@ -70,6 +71,9 @@ export class OfferCreateComponent implements OnChanges {
         .then(() => {
           this.formDirective.resetForm();
           this._snackBar.open('Das Angebot wurde eröffnet');
+          setTimeout(() => {
+            this._snackBar.dismiss();
+          }, 3000)
         })
     }
   }

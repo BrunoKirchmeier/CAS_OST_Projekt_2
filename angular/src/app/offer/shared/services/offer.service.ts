@@ -36,6 +36,8 @@ export class OfferService {
                                data.cardDetails?.cardColors.length === 0
                              ? ['colorless']
                              : data.cardDetails?.cardColors;
+    let cardPrice: number = data?.cardPrice ?? 0;
+    let quantity: number = data?.quantity ?? 0;
     const offer: IOffer = {
       _id: '',
       cardName: data.cardName,
@@ -55,8 +57,8 @@ export class OfferService {
       },
       providerUid: this._currentUser.uid,
       providerEmail: this._currentUser.email,
-      cardPrice: data.cardPrice,
-      quantity: data.quantity,
+      cardPrice: Math.ceil(cardPrice*20)/20,
+      quantity: Math.round(quantity),
       deliveryMode: data.deliveryMode,
       paymentMode: data.paymentMode,
       additionInfo: data.additionInfo,

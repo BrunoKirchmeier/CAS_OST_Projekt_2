@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
+import { ChfFormatterPipe } from 'src/app/shared/pipes/CHF-formatter.pipe';
 import { IBasket, BasketService } from '../shared/basket.service ';
 
 @Component({
@@ -11,7 +12,8 @@ export class BasketManageComponent implements OnInit, OnDestroy {
 
   public basketList$: Subject<IBasket[]> = new Subject();
 
-  constructor(private _basketService: BasketService) {
+  constructor(private _basketService: BasketService,
+              private _chfFormatterPipe: ChfFormatterPipe) {
     this._basketService.getBasket()
       .then((res) => {
         this.basketList$.next(res);
@@ -43,35 +45,35 @@ export class BasketManageComponent implements OnInit, OnDestroy {
   }
 
   quantityAdd(item: IBasket) {
-    let node = document.querySelector('.item-quantity-span[id="' + item._id + '"');
-    let htmlValue = node?.innerHTML ?? 0;
-    let htmlQuantity: number = htmlValue as number;
+    let node: HTMLSpanElement | null = document.querySelector<HTMLSpanElement>('.item-quantity-value[id="' + item._id + '"');
+    let htmlValue: string = node?.innerText ?? '0';
+    let htmlQuantity: any = parseFloat(htmlValue);
     let itemQuantity: number = item?.offerDetail?.quantity ?? 0;
     if(node !== null &&
        htmlQuantity < itemQuantity) {
       htmlQuantity++;
       node.innerHTML = htmlQuantity.toString();
     }
-    node = document.querySelector('.item-details-price[id="' + item._id + '"');
+    node = document.querySelector<HTMLSpanElement>('.item-details-price[id="' + item._id + '"');
     let price = htmlQuantity * (item.offerDetail?.cardPrice ?? 0);
     if(node !== null) {
-      node.innerHTML = price.toString();
+      node.innerHTML = (Math.ceil(price*20)/20).toFixed(2) + ' CHF';
     }
   }
 
   quantityRemove(item: IBasket) {
-    let node = document.querySelector('.item-quantity-span[id="' + item._id + '"');
-    let htmlValue = node?.innerHTML ?? 0;
-    let htmlQuantity: number = htmlValue as number;
+    let node: HTMLSpanElement | null = document.querySelector<HTMLSpanElement>('.item-quantity-value[id="' + item._id + '"');
+    let htmlValue: string = node?.innerText ?? '0';
+    let htmlQuantity: any = parseFloat(htmlValue);
     if(node !== null &&
        htmlQuantity > 0) {
       htmlQuantity--;
-      node.innerHTML = htmlQuantity.toString();
+      node.innerText = htmlQuantity.toString();
     }
-    node = document.querySelector('.item-details-price[id="' + item._id + '"');
+    node = document.querySelector<HTMLSpanElement>('.item-details-price[id="' + item._id + '"');
     let price = htmlQuantity * (item.offerDetail?.cardPrice ?? 0);
     if(node !== null) {
-      node.innerHTML = price.toString();
+      node.innerText = (Math.ceil(price*20)/20).toFixed(2) + ' CHF';
     }
   }
 

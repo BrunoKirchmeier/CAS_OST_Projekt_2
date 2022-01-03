@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { basketRoutesModule } from './basket.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChfFormatterPipe } from 'src/app/shared/pipes/CHF-formatter.pipe';
 
 // Custom Modules
 import { SharedModule } from '../shared/shared.module'
@@ -43,7 +44,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatExpansionModule,
     MatCheckboxModule,
   ],
-  providers: [],
+  providers: [ChfFormatterPipe],
   bootstrap: []
 })
 export class BasketModule {}

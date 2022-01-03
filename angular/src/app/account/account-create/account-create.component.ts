@@ -38,6 +38,9 @@ export class AccountCreateComponent {
       .then((res: IAuthState) => {
         this.isSpinnerActive = false;
         this._snackBar.open(res.messageText);
+        setTimeout(() => {
+          this._snackBar.dismiss();
+        }, 3000)
       })
     }
   }
@@ -55,9 +58,15 @@ export class AccountCreateComponent {
       .then((res: IAuthState) => {
         this.isSpinnerActive = false;
         this._snackBar.open(res.messageText);
+        setTimeout(() => {
+          this._snackBar.dismiss();
+        }, 3000)
       })
     } else {
       this._snackBar.open('E-Mail und Passwortfeld ausfüllen');
+      setTimeout(() => {
+        this._snackBar.dismiss();
+      }, 3000)
     }
   }
 

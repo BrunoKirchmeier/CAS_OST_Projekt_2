@@ -21,7 +21,8 @@
                     type="number"
                     formControlName="cardPrice">
             <mat-error *ngIf="form.get('cardPrice')?.errors">
-              <span>Eingabe ist zwingend</span>
+              <span *ngIf="form.get('cardPrice')?.errors?.['required']">Eingabe ist zwingend</span>
+              <span *ngIf="form.get('cardPrice')?.errors?.['isNotValidCHF']">CHF auf 0.05 Rappen</span>
             </mat-error>
           </mat-form-field>
 
@@ -35,7 +36,8 @@
                     min="1"
                     formControlName="quantity">
             <mat-error *ngIf="form.get('quantity')?.errors">
-              <span>Eingabe ist zwingend</span>
+              <span *ngIf="form.get('quantity')?.errors?.['required']">Eingabe ist zwingend</span>
+              <span *ngIf="form.get('quantity')?.errors?.['isDecimal']">Nur Ganzzahl erlaubt</span>
             </mat-error>
           </mat-form-field>
 

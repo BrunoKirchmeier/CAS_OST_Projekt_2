@@ -35,8 +35,10 @@
                     (click)="quantityRemove(item)">
               <mat-icon>remove_circle_outline</mat-icon>
             </button>
-            <span class="item-quantity-span"
-                  data-id="{{item._id}}">{{item.quantity}}</span>
+            <span class="item-quantity-value"
+                   id="{{item._id}}">
+              {{item.quantity}}
+            </span>
             <button mat-icon-button
                     class="item-quantity-button"
                     (click)="quantityAdd(item)">
@@ -46,7 +48,9 @@
         </div>
         <div class="item-details-colum3">
           <span class="item-details-price"
-                data-id="{{item._id}}">{{(item.offerDetail?.cardPrice ?? 0) * item.quantity}}</span>
+                data-id="{{item._id}}">
+            {{((item.offerDetail?.cardPrice ?? 1) * item.quantity).toFixed(2)}} CHF
+          </span>
         </div>
       </div>
     </div>
