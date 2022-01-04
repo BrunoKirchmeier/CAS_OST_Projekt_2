@@ -26,7 +26,7 @@ export class BasketService {
   async getBasket(): Promise<{[id: string]: IBasket[];}> {
     let basket: Array<IBasket> = [];
     let q = query(collection(this._db, this._basketCollection),
-                  where('buyerUid', '==', this._currentUser?.uid ?? ''));
+                  where('buyerUid', '==', this._currentUser.uid));
     await this._dbExt.readDoc<IBasket>(q)
       .then((snapshot: QuerySnapshot<DocumentData>) => {
         snapshot.forEach(doc => {
@@ -41,6 +41,8 @@ export class BasketService {
                          where('_id', '==', basket[i].offerId));
       let offer: IOffer[] = await this._dbExt.readDoc<IOffer[]>(qOffer);
 
+
+
       let qProvider = query(collection(this._db, this._userCollection),
                             where('uid', '==', offer[0].providerUid));
       let provider: IAccountUser[] = await this._dbExt.readDoc<IAccountUser[]>(qProvider);
@@ -52,11 +54,11 @@ export class BasketService {
          obj.providerDetail?.firstName == '') {
           obj.providerDetail.lastName = 'Anonym';
       }
-      if(dictionary.hasOwnProperty(provider[0].uid)) {
+      if(dictionary.hasOwnProperty(provider[0]?.uid)) {
         dictionary[provider[0].uid].push(obj);
       } else {
-        dictionary[provider[0].uid] = [];
-        dictionary[provider[0].uid].push(obj);
+        dictionary[provider[0]?.uid] = [];
+        dictionary[provider[0]?.uid].push(obj);
       }
     };
     return new Promise((resolve) => {

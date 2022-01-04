@@ -2,34 +2,26 @@
   &-container {
     text-align: center;
     width: 100%;
+    padding: 20px;
   }
 }
 
 .buyer {
   &-container {
-    max-width: 90%;
     text-align: left;
     display: inline-block;
-    padding-top: 10px;
   }
   &-name {
     color: brown;
     padding: 0px;
     margin: 0px;
-  }
-  &-email {
-    color: brown;
-    padding: 0px;
-    margin: 0px;
-    margin-bottom: 5px;
+    padding-bottom: 5px;
   }
 }
 
 .item {
   &-container {
-    max-width: 90%;
     text-align: center;
-    display: inline-block;
     padding-top: 10px;
   }
   &-header-focus {
@@ -74,5 +66,26 @@
       text-align: right;
       width: 35%;
      }
+  }
+}
+
+
+.total {
+  &-linebreak {
+    width: 100%;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+  }
+  &-container {
+    display: flex;
+    text-align: right;
+  }
+  &-colum1 {
+    width: 65%;
+    text-align: left;
+  }
+  &-colum2 {
+    width: 35%;
+    text-align: right;
   }
 }

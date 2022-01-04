@@ -74,7 +74,8 @@ export class SaleService {
   async getOffersByCardName(cardName: string): Promise<IOffer[]> {
     let offers: IOffer[] = [];
     let q = query(collection(this._db, this._offersCollection),
-                  where('cardName', '==', cardName));
+                  where('providerUid', '!=', this._currentUserUid),
+                  where('cardName', '==', cardName),);
     await this._dbExt.readDoc<IOffer>(q)
       .then((snapshot: QuerySnapshot<DocumentData>) => {
         snapshot.forEach(doc => {
