@@ -16,8 +16,10 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription[] = [];
 
   public inputCardName: FormControl = new FormControl();
+  public inputCardNameSearch: FormControl = new FormControl();
   public inputCardEditionSearch: FormControl = new FormControl();
   public allCardEditionOptions: IFilterOption[] = [];
+  public CardNameSearchList: string[] = [];
   public useFilterButtonIsDisabled: boolean = false;
   public dialogData: IDialogData = {
     results: [],
@@ -37,8 +39,9 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
     this._subscriptions.push(
       this._saleFilterDialogService.dialogData$
         .subscribe((res: IDialogData) => {
-          this.dialogData = res;
-          this.allCardEditionOptions = res.filter.cardEditions;
+            this.dialogData = res;
+            this.allCardEditionOptions = res.filter.cardEditions;
+            this.CardNameSearchList = res.filter.cardNamesInOffers;
         })
     );
     this._subscriptions.push(
@@ -58,7 +61,14 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
         this.searchFiltertCards();
       })
     );
-
+    this._subscriptions.push(
+      this.inputCardNameSearch.valueChanges.pipe(
+        debounceTime(500),
+      )
+      .subscribe((element) => {
+        this.cardNameSearchChanged(element);
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -113,6 +123,21 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
   getAllEditionsThatContain(element: string): IFilterOption[] {
     return this.allCardEditionOptions.filter((i) => i.description.toLowerCase().indexOf(element.toLowerCase()) > -1);
   }
+
+  cardNameSearchChanged(element: string) {
+    let name = element ? element.trim().toLowerCase() : null;
+    if(name !== null) {
+      this.CardNameSearchList = this.getAllThatContain(name);
+    } else {
+      this.CardNameSearchList = this.dialogData.filter.cardNamesInOffers;
+    }
+  }
+
+  getAllThatContain(element: string): string[] {
+    const results: string[] = this.dialogData.filter.cardNamesInOffers.filter((name) => name.toLowerCase().indexOf(element.toLowerCase()) > -1);
+    return results.slice(0, 20);
+  }
+
 
 }
 

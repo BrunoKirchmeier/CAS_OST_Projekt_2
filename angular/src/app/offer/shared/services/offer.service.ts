@@ -14,6 +14,7 @@ export class OfferService {
 
   private _currentUser: any = null;
   private _offersCollection: string = 'offers';
+  private _basketCollection: string = 'basket';
 
   public onChangeOwnerOffer$: Subject<IOffer[]> = new Subject<IOffer[]>();
 
@@ -119,6 +120,10 @@ export class OfferService {
     await this._dbExt.deleteDoc<IOffer>(q);
     let offers: IOffer[] = await this.getMyOffers();
     this.onChangeOwnerOffer$.next(offers);
+
+    q = query(collection(this._db, this._basketCollection),
+              where('offerId', '==', id));
+    await this._dbExt.deleteDoc<IOffer>(q);
     return new Promise((resolve) => {
       resolve(true);
     });

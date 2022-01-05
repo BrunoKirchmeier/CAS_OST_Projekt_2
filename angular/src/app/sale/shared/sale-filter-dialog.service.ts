@@ -1,8 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subject, Subscription } from 'rxjs';
+import { IOffer } from 'src/app/offer/shared/services/offer.service';
 import { DialogFilterComponent } from '../sale-filter/sale-filter.component';
-import { IDialogData } from './sale.service ';
+import { IDialogData, SaleService } from './sale.service ';
 
 @Injectable()
 export class SaleFilterDialogService implements OnDestroy {
@@ -18,7 +19,8 @@ export class SaleFilterDialogService implements OnDestroy {
   public dialogData$: Subject<IDialogData> = new Subject();
 
   constructor(private _filterDialog: MatDialog,
-              private _filterDialogRef: MatDialogRef<DialogFilterComponent>) {}
+              private _filterDialogRef: MatDialogRef<DialogFilterComponent>,
+              private _saleService: SaleService) {}
 
   ngOnDestroy(): void {
     this._subscriptions.forEach((element: Subscription) => {
@@ -28,6 +30,12 @@ export class SaleFilterDialogService implements OnDestroy {
 
   open(dialogData: IDialogData): void {
     this._dialogData = dialogData;
+    if(dialogData.results.length === 0) {
+      this._saleService.getAllOffers()
+      .then((res: IOffer[]) => {
+        this._dialogData.results = res;
+      });
+    }
     this._filterDialogRef = this._filterDialog.open(DialogFilterComponent, { disableClose: true, width:'100%', data: dialogData});
     this._subscriptions.push(
       this._filterDialogRef.afterOpened()
@@ -42,5 +50,4 @@ export class SaleFilterDialogService implements OnDestroy {
         })
     );
   }
-
 }

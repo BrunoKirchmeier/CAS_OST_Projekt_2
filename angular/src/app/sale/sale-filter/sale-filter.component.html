@@ -10,12 +10,12 @@
                   name="cardName"
                   [formControl]="inputCardName">
         <mat-option>
-          <ngx-mat-select-search
-              placeholderLabel="search"
-              noEntriesFoundLabel="No entry matches">
+          <ngx-mat-select-search [formControl]="inputCardNameSearch"
+                                 placeholderLabel="search"
+                                 noEntriesFoundLabel="Keine Treffer">
           </ngx-mat-select-search>
         </mat-option>
-        <mat-option *ngFor="let cardName of dialogData.filter.cardNamesInOffers "
+        <mat-option *ngFor="let cardName of CardNameSearchList"
                     data-id="cardName.index"
                     data-name="cardName.name"
                     [value]="cardName">
