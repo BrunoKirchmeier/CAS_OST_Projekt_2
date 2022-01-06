@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { IFilterOption } from 'src/app/shared/services/scryfallApi.service';
-import { SaleFilterDialogService } from '../shared/sale-filter-dialog.service';
 import { IDialogData, SaleService } from '../shared/sale.service ';
 
 @Component({
@@ -21,29 +21,20 @@ export class DialogFilterComponent implements OnInit, OnDestroy {
   public allCardEditionOptions: IFilterOption[] = [];
   public CardNameSearchList: string[] = [];
   public useFilterButtonIsDisabled: boolean = false;
-  public dialogData: IDialogData = {
-    results: [],
-    filter: {
-      cardTypes: [],
-      cardColors: [],
-      cardEditions: [],
-      cardNamesInOffers: [],
-      cardNameSearch: null,
-    }
-  };
 
   constructor(private _saleService: SaleService,
-              private _saleFilterDialogService: SaleFilterDialogService) {}
+              @Inject(MAT_DIALOG_DATA) public dialogData: IDialogData = {
+                results: [],
+                filter: {
+                  cardTypes: [],
+                  cardColors: [],
+                  cardEditions: [],
+                  cardNamesInOffers: [],
+                  cardNameSearch: null,
+                }
+              }) {}
 
   ngOnInit(): void {
-    this._subscriptions.push(
-      this._saleFilterDialogService.dialogData$
-        .subscribe((res: IDialogData) => {
-            this.dialogData = res;
-            this.allCardEditionOptions = res.filter.cardEditions;
-            this.CardNameSearchList = res.filter.cardNamesInOffers;
-        })
-    );
     this._subscriptions.push(
       this.inputCardEditionSearch.valueChanges.pipe(
         debounceTime(1000),

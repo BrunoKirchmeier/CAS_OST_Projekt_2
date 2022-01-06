@@ -157,7 +157,6 @@ export class SaleService {
     let offers: IOffer[] = [];
     let result1: IOffer[] = [];
     let result2: IOffer[] = [];
-
     // Creator
     let queryCreator = query(collection(this._db, this._offersCollection),
                              where('providerUid', '!=', this._currentUserUid));
@@ -194,12 +193,11 @@ export class SaleService {
         offers = result2.filter(() => true);
       }
       result2 = [];
-
     } else {
       // Colors
       let filterColor: string[] = [];
       filter.cardColors.forEach((element: IFilterOption) => {
-        if(element.state == true) {
+        if(element.state === true) {
           filterColor.push(element.code);
         }
       })
@@ -227,11 +225,10 @@ export class SaleService {
         offers = result1.filter(() => true);
       }
       result2 = [];
-
       // Card Types
       let filterCardTypes: string[] = [];
       filter.cardTypes.forEach((element: IFilterOption) => {
-        if(element.state == true) {
+        if(element.state === true) {
           filterCardTypes.push(element.code);
         }
       })
@@ -260,7 +257,6 @@ export class SaleService {
         offers = result1.filter(() => true);
       }
       result2 = [];
-
       // Card Editions
       let filterCardEditions: string[] = [];
       filter.cardEditions.forEach((element: IFilterOption) => {
@@ -294,7 +290,6 @@ export class SaleService {
       }
       result2 = [];
     }
-
     // Get Each Card max once time
     if(cardNameIsUnique === true) {
       result1 = offers.filter(() => true);
@@ -306,7 +301,6 @@ export class SaleService {
         }
       });
     }
-
     // return
     return new Promise((resolve) => {
       resolve(offers);

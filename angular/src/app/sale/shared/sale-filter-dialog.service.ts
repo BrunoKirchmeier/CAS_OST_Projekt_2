@@ -30,19 +30,16 @@ export class SaleFilterDialogService implements OnDestroy {
 
   open(dialogData: IDialogData): void {
     this._dialogData = dialogData;
+
     if(dialogData.results.length === 0) {
       this._saleService.getAllOffers()
       .then((res: IOffer[]) => {
         this._dialogData.results = res;
+        this.dialogData$.next(this._dialogData);
       });
     }
+
     this._filterDialogRef = this._filterDialog.open(DialogFilterComponent, { disableClose: true, width:'100%', data: dialogData});
-    this._subscriptions.push(
-      this._filterDialogRef.afterOpened()
-        .subscribe(() => {
-          this.dialogData$.next(this._dialogData);
-        })
-    );
     this._subscriptions.push(
       this._filterDialogRef.afterClosed()
         .subscribe((res: IDialogData) => {

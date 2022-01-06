@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { IDialogData, SaleService } from '../shared/sale.service ';
 import { Subject, Subscription } from 'rxjs';
 import { IOffer } from 'src/app/offer/shared/services/offer.service';
@@ -42,6 +41,10 @@ export class SaleCardSearchComponent implements OnInit, OnDestroy {
        }
      )
     } catch(err) {
+      this._saleService.getAllUsedFilterValues()
+      .then((res: IFilter) => {
+        this.dialogData.filter = res;
+      })
       this._saleService.getAllOffers()
       .then((res: IOffer[]) => {
         this.offerList$.next(res);
@@ -57,10 +60,6 @@ export class SaleCardSearchComponent implements OnInit, OnDestroy {
           this.offerList$.next(res.results);
         })
     );
-    this._saleService.getAllUsedFilterValues()
-    .then((res: IFilter) => {
-      this.dialogData.filter = res;
-    })
   }
 
   ngOnDestroy(): void {
@@ -87,7 +86,7 @@ export class SaleCardSearchComponent implements OnInit, OnDestroy {
           element.state = false;
         });
         this.dialogData.filter.cardNameSearch = null;
-        this.dialogData.results = [];
+        this.dialogData.results = res;
       })
   }
 
