@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Firestore, query, collection, where, QuerySnapshot, Timestamp } from '@angular/fire/firestore';
 import { DocumentData } from 'rxfire/firestore/interfaces';
 import { Subject } from 'rxjs';
+import { IBasket } from 'src/app/basket/shared/basket.service ';
 import { DatabaseService } from 'src/app/shared/services/database.service';
 import { ICardDetails } from 'src/app/shared/services/scryfallApi.service';
 import { AuthService } from '../../../shared/services/auth.services';
@@ -109,6 +110,13 @@ export class OfferService {
     let q = query(collection(this._db, this._offersCollection),
                   where('_id', '==', id));
     await this._dbExt.updateDoc<IOffer>(q, data);
+    // Also update Basket detail Data
+    const basketData: any = {
+      offerDetail: data
+    }
+    q = query(collection(this._db, this._basketCollection),
+              where('offerId', '==', id));
+    await this._dbExt.updateDoc<IBasket>(q, basketData);
     return new Promise((resolve) => {
       resolve(true);
     });

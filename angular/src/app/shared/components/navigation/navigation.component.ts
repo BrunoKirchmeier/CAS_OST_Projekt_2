@@ -68,7 +68,7 @@ export class NavigationComponent implements OnInit, OnDestroy, DoCheck {
 
   logout() {
     this._authService.logout()
-    .then(() => { window.location.reload(); })
+    .then(() => { window.location.reload();})
   }
 
 }

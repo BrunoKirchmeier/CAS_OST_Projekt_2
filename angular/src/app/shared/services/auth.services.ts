@@ -91,6 +91,7 @@ export class AuthService {
         city: '',
         countryIso: '',
         phone: '',
+        phonePrefix: '',
         iban: ''
       }
       await this._dbExt.createDoc<IAccountUser>(this._userCollection,
@@ -119,8 +120,7 @@ export class AuthService {
         this._response.code = this._statesDict.LOGIN_SUCCESS.code;
         this._response.messageText = this._statesDict.LOGIN_SUCCESS.message;
         this._response.loginState = true;
-        if(res.hasOwnProperty('user') &&
-           res.user.hasOwnProperty('accessToken')) {
+        if(res.hasOwnProperty('user')) {
             localStorage.setItem('currentUser', JSON.stringify(res.user))
             this._response.currentUser = res.user;
         }
@@ -212,7 +212,6 @@ export class AuthService {
       resolve(this._response);
     });
   }
-
 }
 
 export interface IAuthState {

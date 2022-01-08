@@ -9,13 +9,24 @@ import { IBasket, BasketService } from '../shared/basket.service ';
 })
 export class BasketManageComponent implements OnInit, OnDestroy {
 
-  public basketObj$: Subject<{[id: string]: IBasket[];}> = new Subject();
+  public basketObj$: Subject<{[id: string]: IBasket[] }> = new Subject();
+  public priceTotal: number = 0;
+  public keyCount: number = 0;
 
   constructor(private _basketService: BasketService) {
     this._basketService.getBasket()
       .then((res) => {
+        this.keyCount = (Object.keys(res).length) -1;
+        for(let key in res) {
+          res[key].forEach((item: IBasket) => {
+            this.priceTotal += item.offerDetail.cardPrice * item.quantity;
+            if(item.providerDetail?.lastName == '' &&
+            item.providerDetail?.firstName == '') {
+              item.providerDetail.lastName = 'Anonym';
+            }
+          })
+        }
         this.basketObj$.next(res);
-        console.log(res);
       })
   }
 
@@ -58,12 +69,13 @@ export class BasketManageComponent implements OnInit, OnDestroy {
     if(node !== null) {
       node.innerHTML = (Math.ceil(price*20)/20).toFixed(2) + ' CHF';
     }
+    this.reRenderingPriceTotal();
   }
 
   quantityRemove(item: IBasket) {
     let node: HTMLSpanElement | null = document.querySelector<HTMLSpanElement>('.item-quantity-value[id="' + item._id + '"');
     let htmlValue: string = node?.innerText ?? '0';
-    let htmlQuantity: any = parseFloat(htmlValue);
+    let htmlQuantity: number = parseFloat(htmlValue);
     if(node !== null &&
        htmlQuantity > 0) {
       htmlQuantity--;
@@ -74,10 +86,24 @@ export class BasketManageComponent implements OnInit, OnDestroy {
     if(node !== null) {
       node.innerText = (Math.ceil(price*20)/20).toFixed(2) + ' CHF';
     }
+    this.reRenderingPriceTotal();
+  }
+
+  reRenderingPriceTotal() {
+    this.priceTotal = 0;
+    let nodeListPrices = document.querySelectorAll<HTMLSpanElement>('.item-details-price');
+    nodeListPrices.forEach((node: HTMLSpanElement ) => {
+      let htmlValue: string = node?.innerText ?? '0';
+      let htmlQuantity: number = parseFloat(htmlValue);
+      this.priceTotal += htmlQuantity;
+    });
   }
 
   removeItem(item: IBasket) {
-
+    console.log(item);
+    this._basketService.deleteItem(item._id)
+    .then(() => {
+    })
   }
 
 }

@@ -28,6 +28,7 @@ export class AccountPersonalDataComponent implements OnInit, OnDestroy {
     zip: '',
     city: '',
     countryIso: '',
+    phonePrefix: '',
     phone: '',
     iban: '',
   }
@@ -62,11 +63,11 @@ export class AccountPersonalDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._accountService.getUser(this._personalData.email)
-    .then((val) => {
-      if(val !== undefined && val !== null) {
-        const phonePrefix: string = this.searchPhonePrefix(val.countryIso);
-        val.phonePrefix = phonePrefix;
-        this.setFormValues(val);
+    .then((user: IAccountUser) => {
+      if(user !== undefined && user !== null) {
+        const phonePrefix: string = this.searchPhonePrefix(user.countryIso);
+        user.phonePrefix = phonePrefix;
+        this.setFormValues(user);
       }
     })
     this.filteredCityOptions$ = this.form.get('city')?.valueChanges.pipe(

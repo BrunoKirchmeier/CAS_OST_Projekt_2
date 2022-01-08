@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, query, collection, where, QuerySnapshot } from '@angular/fire/firestore';
 import { DocumentData } from 'rxfire/firestore/interfaces';
+import { IAccountUser } from 'src/app/account/shared/services/account.service';
 import { IBasket } from 'src/app/basket/shared/basket.service ';
 import { IOffer } from 'src/app/offer/shared/services/offer.service';
 import { AuthService } from 'src/app/shared/services/auth.services';
@@ -16,6 +17,7 @@ export class SaleService {
   private _currentUser: any = '';
   private _currentUserUid: string = '';
   private _offersCollection: string = 'offers';
+  private _userCollection: string = 'users';
   private _basketCollection: string = 'basket';
 
   private _statesDict: { [id: string] : IResponse; } = {
@@ -314,29 +316,36 @@ export class SaleService {
     if(this._currentUserUid  === '') {
       ret = this._statesDict.LOGIN_FAILED;
     } else {
-      const insertElement: IBasket = {
-        _id: '',
-        offerId: offerId,
-        buyerUid: this._currentUserUid,
-        quantity: quantity,
-        offerDetail: null,
-        providerDetail: null,
-      }
+      // User is Loged in
       let q = query(collection(this._db, this._basketCollection),
                     where('buyerUid', '==', this._currentUserUid));
       await this._dbExt.readDoc<IBasket>(q)
         .then((res: IBasket[]) => {
           basketData = res;
         })
-
       let existElement: IBasket | undefined = basketData.find(obj => obj.offerId === offerId);
       if(existElement !== undefined) {
         ret = this._statesDict.IN_BASKET;
       } else {
+        // Offer isnt in Basket jet
+        q = query(collection(this._db, this._offersCollection),
+                  where('_id', '==', offerId));
+        let offerDetail: IOffer[] = await this._dbExt.readDoc<IOffer>(q);
+        q = query(collection(this._db, this._userCollection),
+                  where('uid', '==', offerDetail[0].providerUid));
+        let providerDetail: IAccountUser[] = await this._dbExt.readDoc<IAccountUser>(q);
+        const insertElement: IBasket = {
+          _id: '',
+          offerId: offerId,
+          buyerUid: this._currentUserUid,
+          quantity: quantity,
+          offerDetail: offerDetail[0] ?? null,
+          providerDetail: providerDetail[0] ?? null,
+        }
         await this._dbExt.createDoc<IBasket>(this._basketCollection,
                                              insertElement)
           .then(() => {
-          ret = this._statesDict.CREATE_SUCCESS;
+            ret = this._statesDict.CREATE_SUCCESS;
           })
       }
     }

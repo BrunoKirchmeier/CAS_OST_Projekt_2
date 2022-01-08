@@ -1,10 +1,10 @@
 <ng-container>
   <div class="page-container">
     <h1>Warenkorb</h1>
-    <div class="buyer-container" *ngFor="let basketList of basketObj$ | async | keyvalue">
+    <div class="buyer-container" *ngFor="let basketList of basketObj$ | async | keyvalue; let i=index">
       <h1 class="buyer-name">{{ basketList.value[0].providerDetail?.lastName + ' ' + basketList.value[0].providerDetail?.firstName }}</h1>
       <div *ngFor="let item of basketList.value"
-           class="item-container">
+          class="item-container">
         <div class="item-header">
           <div class="item-header-focus"
               data-id="{{item._id}}">
@@ -40,7 +40,7 @@
                 <mat-icon>remove_circle_outline</mat-icon>
               </button>
               <span class="item-quantity-value"
-                    id="{{item._id}}">
+                    data-id="{{item._id}}">
                 {{item.quantity}}
               </span>
               <button mat-icon-button
@@ -51,24 +51,24 @@
           </div>
           <div class="item-details-colum3">
             <span class="item-details-price"
-                  data-id="{{item._id}}">
+                  data-id="{{item._id}}"
+                  (change)="reRenderingPriceTotal()">
               {{((item.offerDetail?.cardPrice ?? 1) * item.quantity).toFixed(2)}} CHF
             </span>
           </div>
         </div>
       </div>
-    </div>
-    <div class="total-linebreak"></div>
-    <div class="total-container">
-      <div class="total-colum1">
-        <h3>Total:</h3>
+      <div *ngIf="i == keyCount">
+        <div class="total-linebreak"></div>
+        <div class="total-container">
+          <div class="total-colum1">
+            <h3>Total:</h3>
+          </div>
+          <div class="total-colum2">
+            <h3 class="total-price">{{ priceTotal.toFixed(2)}} CHF</h3>
+          </div>
+        </div>
       </div>
-      <div class="total-colum2">
-        <h3>30.00 CHF</h3>
-      </div>
     </div>
-
-
-
   </div>
 </ng-container>

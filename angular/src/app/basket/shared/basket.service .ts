@@ -13,8 +13,6 @@ import { DatabaseService } from 'src/app/shared/services/database.service';
 export class BasketService {
 
   private _currentUser: any = null;
-  private _userCollection: string = 'users';
-  private _offersCollection: string = 'offers';
   private _basketCollection: string = 'basket';
 
   constructor(private _authService: AuthService,
@@ -23,7 +21,7 @@ export class BasketService {
     this._currentUser = JSON.parse(this._authService.currentUser);
   }
 
-  async getBasket(): Promise<{[id: string]: IBasket[];}> {
+  async getBasket(): Promise<{[id: string]: IBasket[]}> {
     let basket: Array<IBasket> = [];
     let q = query(collection(this._db, this._basketCollection),
                   where('buyerUid', '==', this._currentUser.uid));
@@ -34,31 +32,18 @@ export class BasketService {
           basket.push(item);
         })
       })
-
-    let dictionary: {[id: string]: IBasket[];} = {};
+    let dictionary: {[id: string]: IBasket[]} = {};
     for(let i=0; i < basket.length; i++) {
-      let qOffer = query(collection(this._db, this._offersCollection),
-                         where('_id', '==', basket[i].offerId));
-      let offer: IOffer[] = await this._dbExt.readDoc<IOffer[]>(qOffer);
-
-
-
-      let qProvider = query(collection(this._db, this._userCollection),
-                            where('uid', '==', offer[0].providerUid));
-      let provider: IAccountUser[] = await this._dbExt.readDoc<IAccountUser[]>(qProvider);
-
       let obj: IBasket = basket[i];
-      obj.offerDetail = offer[0];
-      obj.providerDetail = provider[0];
       if(obj.providerDetail?.lastName == '' &&
          obj.providerDetail?.firstName == '') {
           obj.providerDetail.lastName = 'Anonym';
       }
-      if(dictionary.hasOwnProperty(provider[0]?.uid)) {
-        dictionary[provider[0].uid].push(obj);
+      if(dictionary.hasOwnProperty(obj.providerDetail.uid)) {
+        dictionary[obj.providerDetail.uid].push(obj);
       } else {
-        dictionary[provider[0]?.uid] = [];
-        dictionary[provider[0]?.uid].push(obj);
+        dictionary[obj.providerDetail.uid] = [];
+        dictionary[obj.providerDetail.uid].push(obj);
       }
     };
     return new Promise((resolve) => {
@@ -66,14 +51,21 @@ export class BasketService {
     });
   }
 
-}
+  async deleteItem(id: string): Promise<boolean> {
+    let q = query(collection(this._db, this._basketCollection),
+                  where('_id', '==', id));
+    await this._dbExt.deleteDoc<IOffer>(q);
+    return new Promise((resolve) => {
+      resolve(true);
+    });
+  }
 
+}
 export interface IBasket {
   _id: string;
   offerId: string;
   buyerUid: string;
   quantity: number;
-  offerDetail: IOffer | null;
-  providerDetail: IAccountUser | null;
+  offerDetail: IOffer;
+  providerDetail: IAccountUser;
 }
-
