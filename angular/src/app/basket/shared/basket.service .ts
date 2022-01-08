@@ -60,6 +60,18 @@ export class BasketService {
     });
   }
 
+  async updateItem(item: IBasket): Promise<boolean> {
+    let q = query(collection(this._db, this._basketCollection),
+                  where('_id', '==', item._id));
+    await this._dbExt.updateDoc<IBasket>(q, item);
+    return new Promise((resolve) => {
+      resolve(true);
+    });
+  }
+
+
+
+
 }
 export interface IBasket {
   _id: string;

@@ -107,12 +107,21 @@ export class OfferService {
   }
 
   async updateOffer(id: string, data: any): Promise<boolean> {
+    let offer: any = {};
     let q = query(collection(this._db, this._offersCollection),
                   where('_id', '==', id));
     await this._dbExt.updateDoc<IOffer>(q, data);
     // Also update Basket detail Data
+    q = query(collection(this._db, this._offersCollection),
+              where('_id', '==', id));
+    await this._dbExt.readDoc<IOffer>(q)
+      .then((snapshot: QuerySnapshot<DocumentData>) => {
+        snapshot.forEach(doc => {
+          offer = doc;
+        })
+      })
     const basketData: any = {
-      offerDetail: data
+      offerDetail: offer
     }
     q = query(collection(this._db, this._basketCollection),
               where('offerId', '==', id));

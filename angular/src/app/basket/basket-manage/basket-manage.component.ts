@@ -14,25 +14,35 @@ export class BasketManageComponent implements OnInit, OnDestroy {
   public keyCount: number = 0;
 
   constructor(private _basketService: BasketService) {
-    this._basketService.getBasket()
-      .then((res) => {
-        this.keyCount = (Object.keys(res).length) -1;
-        for(let key in res) {
-          res[key].forEach((item: IBasket) => {
-            this.priceTotal += item.offerDetail.cardPrice * item.quantity;
-            if(item.providerDetail?.lastName == '' &&
-            item.providerDetail?.firstName == '') {
-              item.providerDetail.lastName = 'Anonym';
-            }
-          })
-        }
-        this.basketObj$.next(res);
-      })
+    this.getBasket();
   }
 
 	ngOnInit(): void {}
 
   ngOnDestroy(): void {}
+
+  getBasket() {
+    this.priceTotal = 0;
+    this._basketService.getBasket()
+    .then((res) => {
+      this.keyCount = (Object.keys(res).length) -1;
+      for(let key in res) {
+        res[key].forEach((item: IBasket) => {
+          if(this.checkOfferAvailability(item) === true) {
+            this.priceTotal += item.offerDetail.cardPrice * item.quantity;
+          } else {
+            item.quantity = item.offerDetail.quantity;
+            this.updateItem(item);
+          }
+          if(item.providerDetail?.lastName == '' &&
+          item.providerDetail?.firstName == '') {
+            item.providerDetail.lastName = 'Anonym';
+          }
+        })
+      }
+      this.basketObj$.next(res);
+    })
+  }
 
   showImgFocus(item: IBasket) {
     let nodeFocus: HTMLElement | null  = document.querySelector('.item-header-focus[id="' + item._id + '"');
@@ -69,6 +79,8 @@ export class BasketManageComponent implements OnInit, OnDestroy {
     if(node !== null) {
       node.innerHTML = (Math.ceil(price*20)/20).toFixed(2) + ' CHF';
     }
+    item.quantity = htmlQuantity;
+    this.updateItem(item);
     this.reRenderingPriceTotal();
   }
 
@@ -86,6 +98,8 @@ export class BasketManageComponent implements OnInit, OnDestroy {
     if(node !== null) {
       node.innerText = (Math.ceil(price*20)/20).toFixed(2) + ' CHF';
     }
+    item.quantity = htmlQuantity;
+    this.updateItem(item);
     this.reRenderingPriceTotal();
   }
 
@@ -100,10 +114,33 @@ export class BasketManageComponent implements OnInit, OnDestroy {
   }
 
   removeItem(item: IBasket) {
-    console.log(item);
     this._basketService.deleteItem(item._id)
     .then(() => {
+      this.getBasket();
     })
+  }
+
+  updateItem(item: IBasket) {
+    this._basketService.updateItem(item)
+  }
+
+  checkOfferAvailability(item: IBasket): any {
+    let ret: Boolean = false;
+    let nodeQuantity: HTMLSpanElement | null = document.querySelector<HTMLSpanElement>('.item-quantity-value[id="' + item._id + '"');
+    let htmlValue: string = nodeQuantity?.innerText ?? '0';
+    let htmlQuantity: number = parseFloat(htmlValue);
+    // good
+    if(item.offerDetail.quantity >= htmlQuantity &&
+        item.offerDetail.quantity >= item.quantity) {
+      ret = true;
+    } else if(nodeQuantity !== null) {
+      nodeQuantity.innerText = item.offerDetail.quantity.toString();
+      let nodeItem: HTMLDivElement | null = document.querySelector<HTMLDivElement>('.item-details[id="' + item._id + '"');
+      if(nodeItem !== null) {
+        nodeItem.style.color = 'red';
+      }
+    }
+    return ret;
   }
 
 }

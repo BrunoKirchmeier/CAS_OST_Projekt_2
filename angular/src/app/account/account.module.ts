@@ -8,7 +8,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountCreateComponent } from './account-create/account-create.component';
 import { AccountMenuComponent } from './account-menu/account-menu.component';
 import { AccountPersonalDataComponent } from './account-personal-data/account-personal-data.component';
-import { AccountPaymentDataComponent } from './account-payment-data/account-payment-data.component';
 import { IbanFormatterPipe } from './shared/pipes/iban-formatter.pipe'
 
 // Material Desing
@@ -27,7 +26,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     AccountCreateComponent,
     AccountMenuComponent,
     AccountPersonalDataComponent,
-    AccountPaymentDataComponent,
     IbanFormatterPipe
   ],
   imports: [
