@@ -56,7 +56,6 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
              offerdetail.providerFirstName === '') {
               offerdetail.providerLastName = 'Anonym';
           }
-
           offerDetails.push(offerdetail);
         })
         this.offerList$.next(offerDetails);

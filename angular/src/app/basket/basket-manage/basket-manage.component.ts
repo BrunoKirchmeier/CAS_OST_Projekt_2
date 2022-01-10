@@ -9,6 +9,8 @@ import { IBasket, BasketService } from '../shared/basket.service ';
 })
 export class BasketManageComponent implements OnInit, OnDestroy {
 
+  private basketObj: {[id: string]: IBasket[] } = {};
+
   public basketObj$: Subject<{[id: string]: IBasket[] }> = new Subject();
   public priceTotal: number = 0;
   public keyCount: number = 0;
@@ -24,24 +26,22 @@ export class BasketManageComponent implements OnInit, OnDestroy {
   getBasket() {
     this.priceTotal = 0;
     this._basketService.getBasket()
-    .then((res) => {
-      this.keyCount = (Object.keys(res).length) -1;
-      for(let key in res) {
-        res[key].forEach((item: IBasket) => {
-          if(this.checkOfferAvailability(item) === true) {
-            this.priceTotal += item.offerDetail.cardPrice * item.quantity;
-          } else {
-            item.quantity = item.offerDetail.quantity;
-            this.updateItem(item);
-          }
-          if(item.providerDetail?.lastName == '' &&
-          item.providerDetail?.firstName == '') {
-            item.providerDetail.lastName = 'Anonym';
-          }
-        })
-      }
-      this.basketObj$.next(res);
-    })
+      .then((res) => {
+        this.keyCount = (Object.keys(res).length) -1;
+        for(let key in res) {
+          res[key].forEach((item: IBasket) => {
+            if(this.checkOfferAvailability(item) === true) {
+              this.priceTotal += item.offerDetail.cardPrice * item.quantity;
+            }
+            if(item.providerDetail?.lastName == '' &&
+            item.providerDetail?.firstName == '') {
+              item.providerDetail.lastName = 'Anonym';
+            }
+          })
+        }
+        this.basketObj$.next(res);
+        this.basketObj = res;
+      })
   }
 
   showImgFocus(item: IBasket) {
@@ -82,6 +82,8 @@ export class BasketManageComponent implements OnInit, OnDestroy {
     item.quantity = htmlQuantity;
     this.updateItem(item);
     this.reRenderingPriceTotal();
+    const index: number = this.basketObj[item.providerDetail.uid].findIndex(obj => obj.offerId === item.offerId);
+    this.basketObj[item.providerDetail.uid][index].quantity = htmlQuantity;
   }
 
   quantityRemove(item: IBasket) {
@@ -101,6 +103,8 @@ export class BasketManageComponent implements OnInit, OnDestroy {
     item.quantity = htmlQuantity;
     this.updateItem(item);
     this.reRenderingPriceTotal();
+    const index: number = this.basketObj[item.providerDetail.uid].findIndex(obj => obj.offerId === item.offerId);
+    this.basketObj[item.providerDetail.uid][index].quantity = htmlQuantity;
   }
 
   reRenderingPriceTotal() {
@@ -141,6 +145,17 @@ export class BasketManageComponent implements OnInit, OnDestroy {
       }
     }
     return ret;
+  }
+
+  checkBasket() {
+    this._basketService.getBasket()
+    .then((res) => {
+      for(let key in res) {
+        res[key].forEach((item: IBasket) => {
+          this.checkOfferAvailability(item);
+        })
+      }
+    })
   }
 
 }
