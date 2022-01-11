@@ -53,7 +53,7 @@
           <div class="item-details-colum3">
             <span class="item-details-price"
                   data-id="{{item._id}}"
-                  (change)="reRenderingPriceTotal()">
+                  (change)="calcPriceTotal()">
               {{((item.offerDetail?.cardPrice ?? 1) * item.quantity).toFixed(2)}} CHF
             </span>
           </div>
