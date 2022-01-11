@@ -73,6 +73,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       })
     } else {
       this._snackBar.open('Bitte gültige E-Mail Adresse angeben');
+      setTimeout(() => {
+        this._snackBar.dismiss();
+      }, 3000)
     }
   }
 

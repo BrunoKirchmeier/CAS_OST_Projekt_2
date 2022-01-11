@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
+import { DocumentChange } from 'rxfire/firestore/interfaces';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { IBasket, BasketService } from '../shared/basket.service ';
 
 @Component({
@@ -8,19 +9,32 @@ import { IBasket, BasketService } from '../shared/basket.service ';
   templateUrl: './basket-manage.component.html',
   styleUrls: ['./basket-manage.component.scss']
 })
-export class BasketManageComponent implements OnInit {
+export class BasketManageComponent implements OnInit, OnDestroy {
 
   private _basketObj: {[id: string]: IBasket[] } = {};
+  private _subscriptions: Subscription[] = [];
 
   public basketObj$: Subject<{[id: string]: IBasket[] }> = new Subject();
   public priceTotal: number = 0;
   public keyCount: number = 0;
+  public onChangeBasket$: Observable<DocumentChange<IBasket>[]> = new Observable();
 
   constructor(private _basketService: BasketService,
               private _snackBar: MatSnackBar) {}
 
 	ngOnInit(): void {
     this.getBasket();
+    this.onChangeBasket$.subscribe((docs: DocumentChange<IBasket>[]) => {
+      docs.forEach((basket: DocumentChange<IBasket>) => {
+        console.log(basket.doc);
+      })
+    })
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.forEach((element: Subscription) => {
+      element.unsubscribe();
+    });
   }
 
   getBasket() {
@@ -167,7 +181,7 @@ export class BasketManageComponent implements OnInit {
       for(let key in res) {
         res[key].forEach((varItem: IBasket) => {
           if(this.checkOfferAvailability(varItem) === false) {
-            isFailed = false;
+            isFailed = true;
             let dbItem: IBasket | undefined = this._basketObj[varItem.providerDetail.uid].find(obj => obj.offerId === varItem.offerId);
             let node: HTMLSpanElement | null = document.querySelector<HTMLSpanElement>('.item-details-price[id="' + dbItem?._id + '"');
             if(dbItem !== undefined &&
@@ -182,7 +196,7 @@ export class BasketManageComponent implements OnInit {
         })
       }
       this.calcPriceTotal();
-      if(isFailed === false){
+      if(isFailed === true){
         this._snackBar.open('Die Stückzahl mindestens eines Artikels wurde auf die maximal verfübare Menge reduziert');
           setTimeout(() => {
             this._snackBar.dismiss();

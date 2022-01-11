@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Firestore, collection, QuerySnapshot, DocumentReference, addDoc, getDocs, setDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
-import { DocumentData } from 'rxfire/firestore/interfaces';
+import { Injectable, Query } from '@angular/core';
+import { Firestore, collection, QuerySnapshot, DocumentReference, addDoc, getDocs, setDoc, updateDoc, deleteDoc, collectionChanges } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { DocumentChange, DocumentData } from 'rxfire/firestore/interfaces';
 
 
 @Injectable({
@@ -75,6 +76,10 @@ export class DatabaseService {
     return new Promise((resolve) => {
       resolve(true);
     });
+  }
+
+  onChangeDoc<T>(query: any): Observable<DocumentChange<T>[]> {
+    return collectionChanges<T>(query);
   }
 
 }

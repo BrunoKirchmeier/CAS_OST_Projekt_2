@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, query, collection, where, QuerySnapshot } from '@angular/fire/firestore';
-import { DocumentData } from 'rxfire/firestore/interfaces';
+import { DocumentChange, DocumentData } from 'rxfire/firestore/interfaces';
+import { Observable } from 'rxjs';
 import { IAccountUser } from 'src/app/account/shared/services/account.service';
 import { IOffer } from 'src/app/offer/shared/services/offer.service';
 import { AuthService } from 'src/app/shared/services/auth.services';
@@ -15,10 +16,15 @@ export class BasketService {
   private _currentUser: any = null;
   private _basketCollection: string = 'basket';
 
+  public onChangeBasket$: Observable<DocumentChange<IBasket>[]> = new Observable();
+
   constructor(private _authService: AuthService,
               private _dbExt: DatabaseService,
               private _db: Firestore) {
     this._currentUser = JSON.parse(this._authService.currentUser);
+    let q = query(collection(this._db, this._basketCollection),
+                  where('buyerUid', '==', this._currentUser.uid));
+    this.onChangeBasket$ = this._dbExt.onChangeDoc(q);
   }
 
   async getBasket(): Promise<{[id: string]: IBasket[]}> {
@@ -68,8 +74,6 @@ export class BasketService {
       resolve(true);
     });
   }
-
-
 
 
 }
