@@ -49,9 +49,7 @@ export class BasketManageComponent implements OnInit, OnDestroy {
         this.keyCount = (Object.keys(res).length) -1;
         for(let key in res) {
           res[key].forEach((item: IBasket) => {
-            if(this.checkOfferAvailability(item) === true) {
-              this.priceTotal += item.offerDetail.cardPrice * item.quantity;
-            }
+            this.checkOfferAvailability(item);
           })
         }
         this.calcPriceTotal();
@@ -216,6 +214,7 @@ export class BasketManageComponent implements OnInit, OnDestroy {
     this.checkBasket()
       .then((res: Boolean) => {
         if(res === true) {
+
           this._router.navigate(['/basket-summary']);
         }
       })

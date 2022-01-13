@@ -21,16 +21,16 @@ export class BasketService {
   constructor(private _authService: AuthService,
               private _dbExt: DatabaseService,
               private _db: Firestore) {
-    this._currentUser = JSON.parse(this._authService.currentUser);
+    this._currentUser = JSON.parse(this._authService.currentUser) ?? '';
     let q = query(collection(this._db, this._basketCollection),
-                  where('buyerUid', '==', this._currentUser.uid));
+                  where('buyerUid', '==', this._currentUser?.uid ?? ''));
     this.onChangeBasket$ = this._dbExt.onChangeDoc(q);
   }
 
   async getBasket(): Promise<{[id: string]: IBasket[]}> {
     let basket: Array<IBasket> = [];
     let q = query(collection(this._db, this._basketCollection),
-                  where('buyerUid', '==', this._currentUser.uid));
+                  where('buyerUid', '==', this._currentUser?.uid ?? ''));
     await this._dbExt.readDoc<IBasket>(q)
       .then((snapshot: QuerySnapshot<DocumentData>) => {
         snapshot.forEach(doc => {

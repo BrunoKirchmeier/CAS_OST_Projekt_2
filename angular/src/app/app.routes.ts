@@ -66,14 +66,14 @@ export const appRoutes: Routes = [
   },
   {
     path: 'basket',
-    component: BasketManageComponent,
+    component: BasketManageComponent, canActivate: [AuthGuard],
     data: { appTitle: 'Magic Tauschbörse',
             pageTitle: 'Warenkorb'
           }
   },
   {
     path: 'basket-summary',
-    component: BasketSummaryComponent,
+    component: BasketSummaryComponent, canActivate: [AuthGuard],
     data: { appTitle: 'Magic Tauschbörse',
             pageTitle: 'Kaufprozess'
           }

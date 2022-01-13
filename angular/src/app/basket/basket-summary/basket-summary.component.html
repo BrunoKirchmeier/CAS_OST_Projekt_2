@@ -28,7 +28,7 @@
         <div class="item-colum2">
           <span class="item-quantity"
                 data-id="{{item._id}}">
-            {{item.offerDetail?.quantity + ' x ' + (item.offerDetail?.cardPrice ?? 0).toFixed(2) + ' CHF' }}
+            {{item.quantity + ' x ' + (item.offerDetail?.cardPrice ?? 0).toFixed(2) + ' CHF' }}
           </span>
         </div>
 
@@ -51,12 +51,13 @@
         </div>
       </div>
     </div>
-    <div class="order">
+    <div class="order"
+         *ngIf="priceTotal > 0">
       <button mat-raised-button
               color="primary"
-              (click)="checkBasket()">
-        Kaufprozess abschliessen
-        </button>
+              (click)="sendEmail()">
+              Kaufprozess abschliessen
+      </button>
     </div>
   </div>
 </ng-container>

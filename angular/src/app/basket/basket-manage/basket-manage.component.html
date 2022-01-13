@@ -82,13 +82,14 @@
           </div>
         </div>
       </div>
-      <div class="order">
-        <button mat-raised-button
-                color="primary"
-                (click)="getBasketSummary()">
-          Bestellung ausführen
-        </button>
-      </div>
+    </div>
+    <div class="order"
+         *ngIf="priceTotal > 0">
+      <button mat-raised-button
+              color="primary"
+              (click)="getBasketSummary()">
+        Bestellung ausführen
+      </button>
     </div>
   </div>
 </ng-container>
