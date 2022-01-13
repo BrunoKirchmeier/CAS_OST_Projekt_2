@@ -45,6 +45,10 @@ export class BasketService {
          obj.providerDetail?.firstName == '') {
           obj.providerDetail.lastName = 'Anonym';
       }
+      if(obj.providerDetail?.zip == '') {
+          obj.providerDetail.city = 'Wohnort Unbekannt';
+      }
+
       if(dictionary.hasOwnProperty(obj.providerDetail.uid)) {
         dictionary[obj.providerDetail.uid].push(obj);
       } else {

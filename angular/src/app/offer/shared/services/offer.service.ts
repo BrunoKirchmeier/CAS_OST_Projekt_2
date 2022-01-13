@@ -61,6 +61,7 @@ export class OfferService {
       providerEmail: this._currentUser.email,
       cardPrice: Math.ceil(cardPrice*20)/20,
       quantity: Math.round(quantity),
+      reservedQuantity: 0,
       deliveryMode: data.deliveryMode,
       paymentMode: data.paymentMode,
       additionInfo: data.additionInfo,
@@ -170,6 +171,7 @@ export interface IOffer {
   providerEmail: string ;
   cardPrice: number;
   quantity: number;
+  reservedQuantity: number;
   deliveryMode: string;
   paymentMode: string;
   additionInfo: string | null;

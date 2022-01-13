@@ -28,15 +28,9 @@
 
 }
 
-.mat-toolbar {
-  &-row {}
-
-  &-element-1 {}
-
-  &-element-2 {}
-
-  &-element-3 {}
+.toolbar {
+  &-title {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
-
-
-

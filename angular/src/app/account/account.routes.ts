@@ -10,12 +10,16 @@ const accountRoutes = [
   {
     path: 'register',
     component: AccountCreateComponent,
-    data: { title: 'Account'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Account Erstellen'
+          }
   },
   {
     path: 'account-settings',
     component: AccountMenuComponent, canActivate: [AuthGuard],
-    data: { title: 'Account Update'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Account Einstellungen'
+          }
   },
 ];
 

@@ -1,8 +1,20 @@
 <ng-container>
   <div class="page-container">
-    <h1>Warenkorb</h1>
+    <div class="page-header-container">
+      <div>
+        <button mat-raised-button
+              color="primary"
+              (click)="navigateBack()">
+          Zurück
+        </button>
+      </div>
+      <div class="page-header-colum2">
+        <h1>Warenkorb</h1>
+      </div>
+    </div>
     <div class="buyer-container" *ngFor="let basketList of basketObj$ | async | keyvalue; let i=index">
       <h1 class="buyer-name">{{ basketList.value[0].providerDetail?.lastName + ' ' + basketList.value[0].providerDetail?.firstName }}</h1>
+      <h4 class="buyer-address">{{ basketList.value[0].providerDetail?.zip + ' ' + basketList.value[0].providerDetail?.city }}</h4>
       <div *ngFor="let item of basketList.value"
           class="item-container">
         <div class="item-header">
@@ -70,11 +82,13 @@
           </div>
         </div>
       </div>
+      <div class="order">
+        <button mat-raised-button
+                color="primary"
+                (click)="getBasketSummary()">
+          Bestellung ausführen
+        </button>
+      </div>
     </div>
-    <button mat-raised-button
-            color="primary"
-            (click)="checkBasket()">
-      Bestellung ausführen
-    </button>
   </div>
 </ng-container>

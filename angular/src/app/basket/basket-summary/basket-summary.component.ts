@@ -1,17 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { DocumentChange } from 'rxfire/firestore/interfaces';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { IBasket, BasketService } from '../shared/basket.service ';
 
 @Component({
-  selector: 'app-basket-manage',
-  templateUrl: './basket-manage.component.html',
-  styleUrls: ['./basket-manage.component.scss']
+  selector: 'app-basket-summary',
+  templateUrl: './basket-summary.component.html',
+  styleUrls: ['./basket-summary.component.scss']
 })
-export class BasketManageComponent implements OnInit, OnDestroy {
+export class BasketSummaryComponent implements OnInit, OnDestroy {
 
   private _basketObj: {[id: string]: IBasket[] } = {};
   private _subscriptions: Subscription[] = [];
@@ -23,7 +22,6 @@ export class BasketManageComponent implements OnInit, OnDestroy {
 
   constructor(private _basketService: BasketService,
               private _snackBar: MatSnackBar,
-              private _router: Router,
               private _location: Location) {}
 
 	ngOnInit(): void {
@@ -177,48 +175,36 @@ export class BasketManageComponent implements OnInit, OnDestroy {
     return ret === true ? true: false;
   }
 
-  async checkBasket(): Promise<Boolean> {
-    let isValid: Boolean = true;
-    await this._basketService.getBasket()
-      .then((res) => {
-        this._basketObj = res;
-        for(let key in res) {
-          res[key].forEach((varItem: IBasket) => {
-            if(this.checkOfferAvailability(varItem) === false) {
-              isValid = false;
-              let dbItem: IBasket | undefined = this._basketObj[varItem.providerDetail.uid].find(obj => obj.offerId === varItem.offerId);
-              let node: HTMLSpanElement | null = document.querySelector<HTMLSpanElement>('.item-details-price[id="' + dbItem?._id + '"');
-              if(dbItem !== undefined &&
-                node !== null) {
-                  let price = dbItem.quantity * (dbItem.offerDetail?.cardPrice ?? 0);
-                  node.innerText = (Math.ceil(price*20)/20).toFixed(2) + ' CHF';
-              }
-              if(dbItem !== undefined) {
-                this.updateItem(dbItem);
-              }
+  checkBasket() {
+    this._basketService.getBasket()
+    .then((res) => {
+      this._basketObj = res;
+      let isFailed: Boolean = false;
+      for(let key in res) {
+        res[key].forEach((varItem: IBasket) => {
+          if(this.checkOfferAvailability(varItem) === false) {
+            isFailed = true;
+            let dbItem: IBasket | undefined = this._basketObj[varItem.providerDetail.uid].find(obj => obj.offerId === varItem.offerId);
+            let node: HTMLSpanElement | null = document.querySelector<HTMLSpanElement>('.item-details-price[id="' + dbItem?._id + '"');
+            if(dbItem !== undefined &&
+               node !== null) {
+                let price = dbItem.quantity * (dbItem.offerDetail?.cardPrice ?? 0);
+                node.innerText = (Math.ceil(price*20)/20).toFixed(2) + ' CHF';
             }
-          })
-        }
-        this.calcPriceTotal();
-        if(isValid === false){
-          this._snackBar.open('Die Stückzahl mindestens eines Artikels wurde auf die maximal verfübare Menge reduziert');
-            setTimeout(() => {
-              this._snackBar.dismiss();
-            }, 3000)
-        }
-      })
-    return new Promise((resolve) => {
-        resolve(isValid);
-      });
-  }
-
-  getBasketSummary() {
-    this.checkBasket()
-      .then((res: Boolean) => {
-        if(res === true) {
-          this._router.navigate(['/basket-summary']);
-        }
-      })
+            if(dbItem !== undefined) {
+              this.updateItem(dbItem);
+            }
+          }
+        })
+      }
+      this.calcPriceTotal();
+      if(isFailed === true){
+        this._snackBar.open('Die Stückzahl mindestens eines Artikels wurde auf die maximal verfübare Menge reduziert');
+          setTimeout(() => {
+            this._snackBar.dismiss();
+          }, 3000)
+      }
+    })
   }
 
   closeSnackBar() {

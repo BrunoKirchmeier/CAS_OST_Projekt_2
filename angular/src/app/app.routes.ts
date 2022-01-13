@@ -9,6 +9,7 @@ import { OfferMenuComponent } from './offer/offer-menu/offer-menu.component';
 import { SaleCardSearchComponent } from './sale/sale-card-search/sale-card-search.component';
 import { SaleOffersComponent } from './sale/sale-offers/sale-offers.component';
 import { BasketManageComponent } from './basket/basket-manage/basket-manage.component';
+import { BasketSummaryComponent } from './basket/basket-summary/basket-summary.component';
 
 
 export const appRoutes: Routes = [
@@ -17,40 +18,64 @@ export const appRoutes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    data: { title: 'Home'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Home'
+          }
   },
   {
     path: 'register',
     component: AccountCreateComponent,
-    data: { title: 'Account'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Account Erstellen'
+          }
   },
   {
     path: 'account-settings',
     component: AccountMenuComponent, canActivate: [AuthGuard],
-    data: { title: 'Account Update'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Account Einstellungen'
+          }
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Login'
+          }
   },
   {
     path: 'offer',
     component: OfferMenuComponent, canActivate: [AuthGuard],
-    data: { title: 'Angebote Erstellen Menü'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Meine Angebote'
+          }
   },
   {
     path: 'sale-card-search',
     component: SaleCardSearchComponent,
-    data: { title: 'Karten Suchen'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Kartensuche'
+          }
   },
   {
     path: 'sale-offers/:cardName',
     component: SaleOffersComponent,
-    data: { title: 'Angebote Suchen'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Angebotsuche'
+          }
   },
   {
     path: 'basket',
     component: BasketManageComponent,
-    data: { title: 'Warenkorb'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Warenkorb'
+          }
+  },
+  {
+    path: 'basket-summary',
+    component: BasketSummaryComponent,
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Kaufprozess'
+          }
   },
 ];

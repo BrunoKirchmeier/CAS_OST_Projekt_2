@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Custom Modules
 import { SharedModule } from '../shared/shared.module'
 import { BasketManageComponent } from './basket-manage/basket-manage.component';
+import { BasketSummaryComponent } from './basket-summary/basket-summary.component';
 
 // Material Desing
 import { MatTabsModule } from '@angular/material/tabs';
@@ -23,6 +24,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 @NgModule({
   declarations: [
     BasketManageComponent,
+    BasketSummaryComponent,
   ],
   imports: [
     CommonModule,

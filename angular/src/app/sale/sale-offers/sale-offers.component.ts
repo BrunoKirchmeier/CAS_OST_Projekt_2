@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AccountService, IAccountUser } from 'src/app/account/shared/services/account.service';
 import { IDeliveryMode, IOffer, IPaymentMode, OfferService } from 'src/app/offer/shared/services/offer.service';
-import { IDialogData, SaleService } from '../shared/sale.service ';
+import { SaleService } from '../shared/sale.service ';
 
 @Component({
   selector: 'app-sales-search',

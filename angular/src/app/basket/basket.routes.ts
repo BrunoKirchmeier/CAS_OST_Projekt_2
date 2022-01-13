@@ -1,13 +1,23 @@
 import { RouterModule } from '@angular/router';
 import { BasketManageComponent } from './basket-manage/basket-manage.component';
+import { BasketSummaryComponent } from './basket-summary/basket-summary.component';
 
 const basketRoutes = [
 
   { path: '', redirectTo: 'home', pathMatch: 'full'},
   {
-    path: 'basket/',
+    path: 'basket',
     component: BasketManageComponent,
-    data: { title: 'Warenkorb'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Warenkorb'
+          }
+  },
+  {
+    path: 'basket-summary',
+    component: BasketSummaryComponent,
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Kaufprozess'
+          }
   },
 ];
 

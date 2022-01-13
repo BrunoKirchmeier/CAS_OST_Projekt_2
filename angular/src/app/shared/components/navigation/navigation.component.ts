@@ -4,6 +4,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { AuthService } from '../../services/auth.services';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { Router, RoutesRecognized } from '@angular/router';
 
 @Component({
   selector: 'app-navigation',
@@ -20,13 +21,23 @@ export class NavigationComponent implements OnInit, OnDestroy, DoCheck {
   public isMenuOpen: boolean = true;
   public contentMargin = 240;
   public isLoggedIn: Boolean = false;
+  public siteTitle: String = '';
 
   constructor(private _breakpointObserver: BreakpointObserver,
               private _authService: AuthService,
-              private _snackBar: MatSnackBar) {}
+              private _snackBar: MatSnackBar,
+              private _router: Router) {}
 
   ngOnInit() {
     this.isMenuOpen = true;
+    this._subscriptions.push(
+      this._router.events.subscribe(event => {
+        if (event instanceof RoutesRecognized) {
+          let route = event.state.root.firstChild;
+          this.siteTitle = route?.data.appTitle || '';
+        }
+      })
+    )
     this._subscriptions.push(
       this._breakpointObserver.observe(Breakpoints.Handset)
       .subscribe((state: BreakpointState) => {

@@ -9,12 +9,16 @@ const salesRoutes = [
   {
     path: 'sale-card-search/:dialogDataBase64?',
     component: SaleCardSearchComponent,
-    data: { title: 'Karte suchen'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Karte suchen'
+          }
   },
   {
     path: 'sale-offers/:cardName/:dialogDataBase64?',
     component: SaleOffersComponent,
-    data: { title: 'Angebote suchen'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Angebote suchen'
+          }
   },
 ];
 

@@ -6,6 +6,16 @@
   }
 }
 
+.page-header {
+  &-container {
+    display: flex;
+    padding-bottom: 20px;
+  }
+  &-colum2 {
+    flex-grow: 1;
+  }
+}
+
 .buyer {
   &-container {
     text-align: left;
@@ -13,6 +23,12 @@
     width: 100%;
   }
   &-name {
+    color: brown;
+    padding: 0px;
+    margin: 0px;
+    padding-bottom: 5px;
+  }
+  &-address {
     color: brown;
     padding: 0px;
     margin: 0px;
@@ -73,7 +89,6 @@
   }
 }
 
-
 .total {
   &-linebreak {
     width: 100%;
@@ -93,3 +108,8 @@
     text-align: right;
   }
 }
+
+.order {
+  text-align: center;
+}
+

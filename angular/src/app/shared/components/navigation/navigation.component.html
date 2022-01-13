@@ -1,11 +1,9 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row class="mat-toolbar-row">
+  <mat-toolbar-row>
     <button mat-icon-button
-            (click)="drawer.toggle()"
-            class="mat-toolbar-element-1"><mat-icon routerLinkActive="active-icon">menu</mat-icon>
+            (click)="drawer.toggle()"><mat-icon routerLinkActive="active-icon">menu</mat-icon>
     </button>
-
-    <div class="mat-toolbar-element-2">
+    <div>
       <button mat-button
               [mat-menu-trigger-for]="menu"
               (click)="closeMenue()"><mat-icon>account_circle</mat-icon>
@@ -28,12 +26,14 @@
           </button>
       </mat-menu>
     </div>
-
     <button mat-icon-button
             routerLink="/basket"
-            *ngIf="isLoggedIn === true"
-            class="mat-toolbar-element-3"><mat-icon>shopping_cart</mat-icon>
+            *ngIf="isLoggedIn === true"><mat-icon>shopping_cart</mat-icon>
     </button>
+    <h2 class="toolbar-title">
+      {{ siteTitle }}
+    </h2>
+
 
   </mat-toolbar-row>
 </mat-toolbar>

@@ -10,12 +10,16 @@ const offerRoutes = [
   {
     path: 'offer-create',
     component: OfferCreateComponent, canActivate: [AuthGuard],
-    data: { title: 'Angebot erstellen'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Angebot erstellen'
+          }
   },
   {
     path: 'offer-update',
     component: OfferUpdateComponent,
-    data: { title: 'Angebotssuche'}
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Angebot suchen'
+          }
   },
 ];
 
