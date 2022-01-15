@@ -15,6 +15,8 @@ export class BasketService {
 
   private _currentUser: any = null;
   private _basketCollection: string = 'basket';
+  private _saleCollection: string = 'sale';
+  private _offersCollection: string = 'offers';
 
   public onChangeBasket$: Observable<DocumentChange<IBasket>[]> = new Observable();
 
@@ -22,9 +24,10 @@ export class BasketService {
               private _dbExt: DatabaseService,
               private _db: Firestore) {
     this._currentUser = JSON.parse(this._authService.currentUser) ?? '';
+    // Basket of login user is changing
     let q = query(collection(this._db, this._basketCollection),
                   where('buyerUid', '==', this._currentUser?.uid ?? ''));
-    this.onChangeBasket$ = this._dbExt.onChangeDoc(q);
+    this.onChangeBasket$ = this._dbExt.onChangeDoc<IBasket>(q);
   }
 
   async getBasket(): Promise<{[id: string]: IBasket[]}> {
@@ -83,12 +86,20 @@ export class BasketService {
     // send Emails
     // .....
     // update DB
-
+    for(let i=0; i < items.length; i++) {
+      await this._dbExt.createDoc<IBasket>(this._saleCollection,
+                                           items[i]);
+      let q = query(collection(this._db, this._basketCollection),
+                    where('_id', '==', items[i]._id));
+      await this._dbExt.deleteDoc<IBasket>(q);
+      q = query(collection(this._db, this._offersCollection),
+                where('_id', '==', items[i].offerDetail._id));
+      await this._dbExt.updateDoc<IOffer>(q, items);
+    }
     return new Promise((resolve) => {
       resolve(true);
     });
   }
-
 }
 export interface IBasket {
   _id: string;

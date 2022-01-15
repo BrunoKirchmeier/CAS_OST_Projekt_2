@@ -61,9 +61,9 @@ export class BasketSummaryComponent implements OnInit, OnDestroy {
   }
 
   sendEmail(): void {
-
-    // this._basketObj.f
-    // this._basketService.
+    for(let key in this._basketObj) {
+      this._basketService.confirmBasket(this._basketObj[key]);
+    }
   }
 
 }

@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { DocumentChange } from 'rxfire/firestore/interfaces';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { IBasket, BasketService } from '../shared/basket.service ';
 
 @Component({
@@ -19,7 +19,6 @@ export class BasketManageComponent implements OnInit, OnDestroy {
   public basketObj$: Subject<{[id: string]: IBasket[] }> = new Subject();
   public priceTotal: number = 0;
   public keyCount: number = 0;
-  public onChangeBasket$: Observable<DocumentChange<IBasket>[]> = new Observable();
 
   constructor(private _basketService: BasketService,
               private _snackBar: MatSnackBar,
@@ -28,9 +27,16 @@ export class BasketManageComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
     this.getBasket();
-    this.onChangeBasket$.subscribe((docs: DocumentChange<IBasket>[]) => {
-      docs.forEach((basket: DocumentChange<IBasket>) => {
-        console.log(basket.doc);
+    this._basketService.onChangeBasket$.subscribe((docs: DocumentChange<IBasket>[]) => {
+      docs.forEach((docs: DocumentChange<IBasket>) => {
+        // Update singel data on chnage Basket
+        const basketItem: IBasket = docs.doc.data();
+        if(this._basketObj !== undefined &&
+          this._basketObj[basketItem.providerDetail.uid] !== undefined ) {
+            let index = this._basketObj[basketItem.providerDetail.uid].findIndex((item => item._id === basketItem._id));
+            this._basketObj[basketItem.providerDetail.uid][index] = basketItem;
+            this.basketObj$.next(this._basketObj);
+        }
       })
     })
   }
