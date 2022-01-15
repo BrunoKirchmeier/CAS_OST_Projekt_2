@@ -27,8 +27,7 @@
           <div class="item-header-detail"
                 data-id="{{item._id}}">
             <div class="item-header-detail-colum1"
-                (touchstart)="showImgFocus(item)"
-                (touchend)="hiddeImgFocus(item)">
+                 (click)="showImgFocus(item)">
               <img src="{{item.offerDetail?.cardDetails?.cardImageUri}}"
                   class="item-img">
             </div>

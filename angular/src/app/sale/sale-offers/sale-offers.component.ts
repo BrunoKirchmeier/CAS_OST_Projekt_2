@@ -74,10 +74,15 @@ export class SaleOffersComponent implements OnInit, OnDestroy {
     let htmlValue = node?.innerHTML ?? 0;
     let quantity: number = htmlValue as number;
     if(node !== null &&
-      quantity > 0) {
+       quantity > 0) {
       const ret = await this._saleService.addToBasket(offer._id,
                                                       quantity);
       this._snackBar.open(ret.message);
+      setTimeout(() => {
+        this._snackBar.dismiss();
+      }, 3000)
+    } else if(quantity == 0) {
+      this._snackBar.open('Bitte Menge eingeben');
       setTimeout(() => {
         this._snackBar.dismiss();
       }, 3000)

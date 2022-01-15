@@ -13,6 +13,9 @@
 .button-back {
   width: 100%;
   margin-top: 40px;
+  @media (min-width: $global-breakpoint-desktop) {
+    width: 20%;
+  }
 }
 
 .img {

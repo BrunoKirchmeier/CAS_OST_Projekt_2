@@ -157,7 +157,8 @@ export class OfferService {
 
   getPaymentModes() {
     const options: Array<IPaymentMode> = [
-      {name: 'transfer', description: 'Kontoüberweisung'}
+      {name: 'transfer', description: 'Kontoüberweisung'},
+      {name: 'direct', description: 'Barzahlung'}
     ]
     return options;
   }

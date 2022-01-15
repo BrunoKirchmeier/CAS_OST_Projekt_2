@@ -1,19 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DocumentChange } from 'rxfire/firestore/interfaces';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { IBasket, BasketService } from '../shared/basket.service ';
-
-
-
-// Configurations
-import { environment } from 'src/environments/environment';
-
-
-// Libaries
-// import { SMTPClient } from 'emailjs';
-
+import { IAccountUser } from 'src/app/account/shared/services/account.service';
 
 @Component({
   selector: 'app-basket-summary',
@@ -23,7 +13,6 @@ import { environment } from 'src/environments/environment';
 export class BasketSummaryComponent implements OnInit, OnDestroy {
 
   private _basketObj: {[id: string]: IBasket[] } = {};
-  private _subscriptions: Subscription[] = [];
 
   public basketObj$: Subject<{[id: string]: IBasket[] }> = new Subject();
   public priceTotal: number = 0;
@@ -31,7 +20,6 @@ export class BasketSummaryComponent implements OnInit, OnDestroy {
   public onChangeBasket$: Observable<DocumentChange<IBasket>[]> = new Observable();
 
   constructor(private _basketService: BasketService,
-              private _snackBar: MatSnackBar,
               private _location: Location) {}
 
 	ngOnInit(): void {
@@ -72,41 +60,10 @@ export class BasketSummaryComponent implements OnInit, OnDestroy {
     this._location.back();
   }
 
+  sendEmail(): void {
 
-
-
-
-
-
-/*
-
-  private _smtpClient = new SMTPClient({
-    user: environment.email.username,
-    password: environment.email.pw,
-    host: environment.email.host,
-    tls: true,
-  })
-  */
-
-  async sendEmail(to: string = '',
-                  subject: string = '',
-                  text: string = ''): Promise<Boolean> {
-    const reg_message: any = {
-      text: 'i hope this works',
-      from: environment.email.from,
-      to: 'bruno_churchi@gmx.ch',
-      cc: '',
-      subject: 'testing emailjs',
-    };
-/*
-    await this._smtpClient.sendAsync(reg_message)
-      .then((res: any) => {
-console.log(res);
-      })
-*/
-    return new Promise((resolve) => {
-      resolve(true);
-    });
+    // this._basketObj.f
+    // this._basketService.
   }
 
 }

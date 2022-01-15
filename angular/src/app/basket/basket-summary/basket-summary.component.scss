@@ -63,10 +63,12 @@
 .total {
   &-linebreak {
     width: 100%;
+    padding-top: 20px;
     border-bottom-style: solid;
     border-bottom-width: 1px;
   }
   &-container {
+    padding-top: 10px;
     display: flex;
     text-align: right;
   }

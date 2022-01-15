@@ -79,6 +79,15 @@ export class BasketService {
     });
   }
 
+  async confirmBasket(items: IBasket[]): Promise<boolean> {
+    // send Emails
+    // .....
+    // update DB
+
+    return new Promise((resolve) => {
+      resolve(true);
+    });
+  }
 
 }
 export interface IBasket {

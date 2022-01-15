@@ -17,47 +17,47 @@
       <h4 class="buyer-address">{{ basketList.value[0].providerDetail?.zip + ' ' + basketList.value[0].providerDetail?.city }}</h4>
       <div *ngFor="let item of basketList.value"
            class="item-container">
-
-        <div class="item-colum1">
-          <span class="item-cardName"
-                data-id="{{item._id}}">
-            {{item.offerDetail?.cardDetails?.cardName}}
-          </span>
-        </div>
-
-        <div class="item-colum2">
-          <span class="item-quantity"
-                data-id="{{item._id}}">
-            {{item.quantity + ' x ' + (item.offerDetail?.cardPrice ?? 0).toFixed(2) + ' CHF' }}
-          </span>
-        </div>
-
-        <div class="item-colum3">
-          <span class="item-price"
-                data-id="{{item._id}}">
-            {{((item.offerDetail?.cardPrice ?? 1) * item.quantity).toFixed(2)}} CHF
-          </span>
-        </div>
-      </div>
-      <div *ngIf="i == keyCount">
-        <div class="total-linebreak"></div>
-        <div class="total-container">
-          <div class="total-colum1">
-            <h3>Total:</h3>
+        <div *ngIf="item.quantity > 0">
+          <div class="item-colum1">
+            <span class="item-cardName"
+                  data-id="{{item._id}}">
+              {{item.offerDetail?.cardDetails?.cardName}}
+            </span>
           </div>
-          <div class="total-colum2">
-            <h3 class="total-price">{{ priceTotal.toFixed(2)}} CHF</h3>
+          <div class="item-colum2">
+            <span class="item-quantity"
+                  data-id="{{item._id}}">
+              {{item.quantity + ' x ' + (item.offerDetail?.cardPrice ?? 0).toFixed(2) + ' CHF' }}
+            </span>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="order"
-         *ngIf="priceTotal > 0">
-      <button mat-raised-button
-              color="primary"
-              (click)="sendEmail()">
+          <div class="item-colum3">
+            <span class="item-price"
+                  data-id="{{item._id}}">
+              {{((item.offerDetail?.cardPrice ?? 1) * item.quantity).toFixed(2)}} CHF
+            </span>
+          </div>
+
+          <div *ngIf="i == keyCount">
+            <div class="total-linebreak"></div>
+            <div class="total-container">
+              <div class="total-colum1">
+                <h3>Total:</h3>
+              </div>
+              <div class="total-colum2">
+                <h3 class="total-price">{{ priceTotal.toFixed(2)}} CHF</h3>
+              </div>
+            </div>
+          </div>
+          <div class="order"
+              *ngIf="i == keyCount && priceTotal > 0">
+            <button mat-raised-button
+                    color="primary"
+                    (click)="sendEmail()">
               Kaufprozess abschliessen
-      </button>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </ng-container>
