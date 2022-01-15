@@ -51,7 +51,6 @@ export class BasketService {
       if(obj.providerDetail?.zip == '') {
           obj.providerDetail.city = 'Wohnort Unbekannt';
       }
-
       if(dictionary.hasOwnProperty(obj.providerDetail.uid)) {
         dictionary[obj.providerDetail.uid].push(obj);
       } else {
@@ -94,7 +93,7 @@ export class BasketService {
       await this._dbExt.deleteDoc<IBasket>(q);
       q = query(collection(this._db, this._offersCollection),
                 where('_id', '==', items[i].offerDetail._id));
-      await this._dbExt.updateDoc<IOffer>(q, items);
+      await this._dbExt.updateDoc<IOffer>(q, items[i]);
     }
     return new Promise((resolve) => {
       resolve(true);

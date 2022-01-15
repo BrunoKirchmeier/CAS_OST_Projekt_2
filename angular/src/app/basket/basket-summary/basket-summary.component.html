@@ -36,27 +36,26 @@
               {{((item.offerDetail?.cardPrice ?? 1) * item.quantity).toFixed(2)}} CHF
             </span>
           </div>
-
-          <div *ngIf="i == keyCount">
-            <div class="total-linebreak"></div>
-            <div class="total-container">
-              <div class="total-colum1">
-                <h3>Total:</h3>
-              </div>
-              <div class="total-colum2">
-                <h3 class="total-price">{{ priceTotal.toFixed(2)}} CHF</h3>
-              </div>
-            </div>
+        </div>
+      </div>
+      <div *ngIf="i === keyCount">
+        <div class="total-linebreak"></div>
+        <div class="total-container">
+          <div class="total-colum1">
+            <h3>Total:</h3>
           </div>
-          <div class="order"
-              *ngIf="i == keyCount && priceTotal > 0">
-            <button mat-raised-button
-                    color="primary"
-                    (click)="sendEmail()">
-              Kaufprozess abschliessen
-            </button>
+          <div class="total-colum2">
+            <h3 class="total-price">{{ priceTotal.toFixed(2)}} CHF</h3>
           </div>
         </div>
+      </div>
+      <div class="order"
+           *ngIf="i === keyCount && priceTotal > 0">
+        <button mat-raised-button
+                color="primary"
+                (click)="sendEmail()">
+          Kaufprozess abschliessen
+        </button>
       </div>
     </div>
   </div>

@@ -29,11 +29,18 @@ export class BasketManageComponent implements OnInit, OnDestroy {
     this.getBasket();
     this._basketService.onChangeBasket$.subscribe((docs: DocumentChange<IBasket>[]) => {
       docs.forEach((docs: DocumentChange<IBasket>) => {
-        // Update singel data on chnage Basket
+        // Update singel data on xhange Basket
         const basketItem: IBasket = docs.doc.data();
         if(this._basketObj !== undefined &&
           this._basketObj[basketItem.providerDetail.uid] !== undefined ) {
             let index = this._basketObj[basketItem.providerDetail.uid].findIndex((item => item._id === basketItem._id));
+            if(basketItem.providerDetail?.lastName == '' &&
+              basketItem.providerDetail?.firstName == '') {
+              basketItem.providerDetail.lastName = 'Anonym';
+            }
+            if(basketItem.providerDetail?.zip == '') {
+              basketItem.providerDetail.city = 'Wohnort Unbekannt';
+            }
             this._basketObj[basketItem.providerDetail.uid][index] = basketItem;
             this.basketObj$.next(this._basketObj);
         }
