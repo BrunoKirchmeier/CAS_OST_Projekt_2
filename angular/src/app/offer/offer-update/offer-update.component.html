@@ -4,11 +4,12 @@
     <div *ngFor="let offer of offerList$ | async"
          class="item-container"
          data-id="{{offer?._id}}">
+
       <img src="{{offer.cardDetails?.cardImageUri}}"
             class="item-img"
             (click)="showOfferDetails(offer)">
       <div class="item-detail"
-            *ngIf="offer.cardDetails !== null && activeOffer == offer?._id">
+           *ngIf="offer.cardDetails !== null && activeOffer == offer?._id">
         <form [formGroup]="form"
               (ngSubmit)="onSubmit()">
 

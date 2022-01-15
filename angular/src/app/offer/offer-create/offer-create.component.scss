@@ -1,9 +1,10 @@
+@import "../../../variables";
 
 .page {
   &-container {
-    max-width: 80%;
-    display: inline-block;
-    text-align: center;
+    @media (min-width: $global-breakpoint-desktop) {
+      display: flex;
+    }
   }
 }
 
@@ -12,11 +13,12 @@
     max-width: 100%;
     margin-top: 20px;
   }
-
   &-detail {
     display: inline-block;
-    padding-top: 10px;
-    text-align: center;
+    padding-top: 20px;
+    @media (min-width: $global-breakpoint-desktop) {
+      padding: 50px;
+    }
   }
 }
 

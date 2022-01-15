@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, Subscription } from 'rxjs';
 import { IDeliveryMode, IOffer, IPaymentMode, OfferService } from '../shared/services/offer.service';
 import { CHFValidator, IntValidator } from '../../shared/helpers/form-validators';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-offer-update',
@@ -32,14 +33,28 @@ export class OfferUpdateComponent implements OnDestroy {
   });
   public deliveryModes: Array<IDeliveryMode> = [];
   public paymentModes: Array<IPaymentMode> = [];
+  public isMobile: boolean = false;
 
-  constructor(private _offerService: OfferService,
+  constructor(private _breakpointObserver: BreakpointObserver,
+              private _offerService: OfferService,
               private _snackBar: MatSnackBar) {
     this.deliveryModes = this._offerService.getDeliveryModes();
     this.paymentModes = this._offerService.getPaymentModes();
   }
 
   ngOnInit() {
+
+    this._subscriptions.push(
+      this._breakpointObserver.observe(Breakpoints.Handset)
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.isMobile = true;
+        } else {
+          this.isMobile = false;
+        }
+      })
+    );
+
     this._subscriptions.push(
       this.offerList$
         .subscribe()

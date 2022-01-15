@@ -1,6 +1,13 @@
+@import "../../../../variables";
+
 .main {
   overflow-y: hidden;
   overflow-x: hidden;
+  width: $global-screen-width-mobile;
+  margin: auto;
+  @media (min-width: $global-breakpoint-desktop) {
+    width: $global-screen-width-desktop;
+  }
 }
 
 .mat-toolbar.mat-primary {
@@ -11,21 +18,16 @@
 
 .sidenav {
   width: 250px;
-
   &-container {
-    height: 92%;
-    position: relative;
+    height: 100%;
   }
-
   &-content {
     width: 100%;
   }
-
   &.mat-toolbar {
     background: #fff;
     color: #fff;
   }
-
 }
 
 .toolbar {

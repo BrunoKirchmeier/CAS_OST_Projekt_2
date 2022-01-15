@@ -5,10 +5,10 @@
       *ngIf="cardDetails !== null && cardDetails !== undefined">
 
     <img src="{{cardDetails.cardImageUri}}"
-      data-id="{{cardDetails._id}}"
-      data-name="{{cardDetails.cardName}}"
-      (loaded)="onLoaded(cardDetails.cardName)"
-      class="item-img">
+        data-id="{{cardDetails._id}}"
+        data-name="{{cardDetails.cardName}}"
+        (loaded)="onLoaded(cardDetails.cardName)"
+        class="item-img">
 
     <div class="item-detail"
         *ngIf="currentCardName !== null">

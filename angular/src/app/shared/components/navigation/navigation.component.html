@@ -33,18 +33,14 @@
     <h2 class="toolbar-title">
       {{ siteTitle }}
     </h2>
-
-
   </mat-toolbar-row>
 </mat-toolbar>
-
 <mat-sidenav-container class="sidenav-container" >
-  <mat-sidenav
-  #drawer
-  class="sidenav"
-  [attr.role]="isMobile ? 'dialog' : 'navigation'"
-  [mode]="isMobile ? 'over' : 'side'"
-  [opened]="isMenuOpen">
+  <mat-sidenav #drawer
+               class="sidenav"
+               [attr.role]="isMobile ? 'dialog' : 'navigation'"
+               [mode]="isMobile ? 'over' : 'side'"
+               [opened]="isMenuOpen">
     <mat-nav-list (click)="closeMenue()">
       <a [routerLink]="['/home']"
          mat-list-item href="#"
