@@ -1,11 +1,5 @@
 @import "../../../variables";
 
-.page {
-  &-container {
-    // text-align: center;
-  }
-}
-
 .filter {
   &-container {
     text-align: center;
@@ -40,13 +34,9 @@
       padding-right: 20px;
     }
   }
-
   &-detail {
-    // display: inline-block;
     padding-top: 20px;
-    // text-align: center;
   }
-
   &-button-delete {
     margin-top: 20px;
   }
