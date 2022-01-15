@@ -1,39 +1,53 @@
+@import "../../../variables";
+
 .page {
   &-container {
-    text-align: center;
+    // text-align: center;
   }
 }
 
 .filter {
   &-container {
     text-align: center;
-    padding-top: 10px;
+    padding-top: 20px;
   }
   &-button {
-    width: 90%;
-    margin-top: 10px;
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+
+.offer {
+  &-container {
+    @media (min-width: $global-breakpoint-desktop) {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
   }
 }
 
 .item {
   &-container {
-    max-width: 60%;
-    display: inline-block;
-    text-align: center;
+    @media (min-width: $global-breakpoint-desktop) {
+      width: 40%;
+    }
   }
-
   &-img {
     max-width: 100%;
     margin-top: 20px;
+    @media (min-width: $global-breakpoint-desktop) {
+      padding-right: 20px;
+    }
   }
 
   &-detail {
-    display: inline-block;
-    padding-top: 10px;
-    text-align: center;
+    // display: inline-block;
+    padding-top: 20px;
+    // text-align: center;
   }
 
   &-button-delete {
-    margin-top: 10px;
+    margin-top: 20px;
   }
 }

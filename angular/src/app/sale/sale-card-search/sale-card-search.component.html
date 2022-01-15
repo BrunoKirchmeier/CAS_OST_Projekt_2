@@ -16,17 +16,14 @@
       </button>
     </div>
 
-    <div *ngFor="let offer of offerList$ | async"
-         class="offer-container">
-      <div class="offer-item"
+    <div class="offer-container">
+      <div *ngFor="let offer of offerList$ | async"
+           class="item-container"
            data-id="{{offer._id}}">
-           <div class="item-container">
-              <img src="{{offer.cardDetails?.cardImageUri}}"
-                   class="item-img"
-                   (click)="getAllOffersForCard(offer.cardName)">
-           </div>
+        <img src="{{offer.cardDetails?.cardImageUri}}"
+              class="item-img"
+              (click)="getAllOffersForCard(offer.cardName)">
+        </div>
       </div>
-    </div>
-
   </div>
 </ng-container>
