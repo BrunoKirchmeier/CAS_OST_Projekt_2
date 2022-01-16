@@ -227,7 +227,6 @@ export class BasketManageComponent implements OnInit, OnDestroy {
     this.checkBasket()
       .then((res: Boolean) => {
         if(res === true) {
-
           this._router.navigate(['/basket-summary']);
         }
       })

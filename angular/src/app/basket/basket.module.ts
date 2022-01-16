@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module'
 import { BasketManageComponent } from './basket-manage/basket-manage.component';
 import { BasketSummaryComponent } from './basket-summary/basket-summary.component';
+import { BasketConfirmComponent } from './basket-confirm/basket-confirm.component';
 
 // Material Desing
 import { MatTabsModule } from '@angular/material/tabs';
@@ -25,6 +26,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   declarations: [
     BasketManageComponent,
     BasketSummaryComponent,
+    BasketConfirmComponent,
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,6 @@
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from '../shared/guards/auth.guard';
+import { BasketConfirmComponent } from './basket-confirm/basket-confirm.component';
 import { BasketManageComponent } from './basket-manage/basket-manage.component';
 import { BasketSummaryComponent } from './basket-summary/basket-summary.component';
 
@@ -18,6 +19,13 @@ const basketRoutes = [
     component: BasketSummaryComponent, canActivate: [AuthGuard],
     data: { appTitle: 'Magic Tauschbörse',
             pageTitle: 'Kaufprozess'
+          }
+  },
+  {
+    path: 'basket-confirm',
+    component: BasketConfirmComponent, canActivate: [AuthGuard],
+    data: { appTitle: 'Magic Tauschbörse',
+            pageTitle: 'Bestätigung'
           }
   },
 ];

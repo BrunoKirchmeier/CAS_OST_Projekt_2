@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { DocumentChange } from 'rxfire/firestore/interfaces';
 import { Observable, Subject } from 'rxjs';
 import { IBasket, BasketService } from '../shared/basket.service ';
-import { IAccountUser } from 'src/app/account/shared/services/account.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-basket-summary',
@@ -20,6 +20,7 @@ export class BasketSummaryComponent implements OnInit, OnDestroy {
   public onChangeBasket$: Observable<DocumentChange<IBasket>[]> = new Observable();
 
   constructor(private _basketService: BasketService,
+              private _router: Router,
               private _location: Location) {}
 
 	ngOnInit(): void {
@@ -83,6 +84,8 @@ export class BasketSummaryComponent implements OnInit, OnDestroy {
     for(let key in this._basketObj) {
       this._basketService.confirmBasket(this._basketObj[key]);
     }
+    this._router.navigate(['/basket-confirm']);
+
   }
 
 }
