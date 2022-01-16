@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { DocumentChange } from 'rxfire/firestore/interfaces';
 import { Observable, Subject } from 'rxjs';
 import { IBasket, BasketService } from '../shared/basket.service ';
@@ -18,7 +18,7 @@ export class BasketConfirmComponent implements OnInit, OnDestroy {
   public onChangeBasket$: Observable<DocumentChange<IBasket>[]> = new Observable();
 
   constructor(private _basketService: BasketService,
-              private _location: Location) {}
+              private _router: Router) {}
 
 	ngOnInit(): void {
     this.getBasket();
@@ -45,7 +45,7 @@ export class BasketConfirmComponent implements OnInit, OnDestroy {
   }
 
   navigateBack() {
-    this._location.back();
+    this._router.navigate(['/']);
   }
 
 }

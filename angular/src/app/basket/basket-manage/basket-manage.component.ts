@@ -177,11 +177,11 @@ export class BasketManageComponent implements OnInit, OnDestroy {
       varItem.offerDetail.quantity >= varItem.quantity) {
       ret = true;
       if(nodeQuantity !== null) {
-        nodeQuantity.classList.remove('item-quanitity-error');
+        // nodeQuantity.classList.remove('item-quanitity-error');
       }
     } else if(varItem !== undefined &&
               nodeQuantity !== null) {
-      nodeQuantity.classList.add('item-quanitity-error');
+      // nodeQuantity.classList.add('item-quanitity-error');
       nodeQuantity.innerText = varItem.offerDetail.quantity.toString();
       this._basketObj[item.providerDetail.uid][index].quantity = varItem.offerDetail.quantity;
     }

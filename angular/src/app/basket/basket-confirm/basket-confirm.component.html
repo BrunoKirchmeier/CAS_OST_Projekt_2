@@ -2,55 +2,19 @@
   <div class="page-container">
     <div class="page-header-container">
       <div>
-        <button mat-raised-button
-              color="primary"
-              (click)="navigateBack()">
-          Zurück
-        </button>
       </div>
       <div class="page-header-colum2">
         <h1>Kaufbestätigung</h1>
       </div>
     </div>
-    <h1 class="info">Es wurden Email an die Verkaufer Verschickt. Die Bezahlung und übergabe wird durch Kaufer und Verkaufer direkt ausgehandelt</h1>
-    <div class="buyer-container" *ngFor="let basketList of basketObj$ | async | keyvalue;">
-      <h1 class="buyer-name">{{ basketList.value[0].providerDetail?.lastName + ' ' + basketList.value[0].providerDetail?.firstName }}</h1>
-      <h4 class="buyer-email">{{ basketList.value[0].providerDetail?.email ?? ''}}</h4>
-      <h4 class="buyer-street">{{ basketList.value[0].providerDetail?.address ?? ''}}</h4>
-      <h4 class="buyer-address">{{ basketList.value[0].providerDetail?.zip + ' ' + basketList.value[0].providerDetail?.city }}</h4>
-
-      <div *ngFor="let item of basketList.value"
-           class="item-container">
-        <div *ngIf="item.quantity > 0">
-          <div class="item-colum1">
-            <span class="item-cardName"
-                  data-id="{{item._id}}">
-              {{item.offerDetail?.cardDetails?.cardName}}
-            </span>
-          </div>
-          <div class="item-colum2">
-            <span class="item-quantity"
-                  data-id="{{item._id}}">
-              {{item.quantity + ' x ' + (item.offerDetail?.cardPrice ?? 0).toFixed(2) + ' CHF' }}
-            </span>
-          </div>
-          <div class="item-colum3">
-            <span class="item-price"
-                  data-id="{{item._id}}">
-              {{((item.offerDetail?.cardPrice ?? 1) * item.quantity).toFixed(2)}} CHF
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="total-linebreak"></div>
-      <div class="total-container">
-        <div class="total-colum1">
-          <h3>Total:</h3>
-        </div>
-        <div class="total-colum2">
-          <h3 class="total-price">{{ priceProviderTotal[basketList.key].toFixed(2)}} CHF</h3>
-        </div>
-      </div>
+    <div class="info">
+      <h2>Vielen Dank für Ihre Bestellung!</h2>
+      <h2>Sie erhalten in Kürze eine E-mail mit den Angaben zu den Verkäufern. Die Bezahlung und Kartenübergabe muss durch Käufer unf Verkäufer verhandelt werden</h2>
     </div>
+    <button mat-raised-button
+            color="primary"
+            (click)="navigateBack()">
+      Zur Startseite
+    </button>
   </div>
 </ng-container>

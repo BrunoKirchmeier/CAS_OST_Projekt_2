@@ -93,7 +93,9 @@ export class BasketService {
       await this._dbExt.deleteDoc<IBasket>(q);
       q = query(collection(this._db, this._offersCollection),
                 where('_id', '==', items[i].offerDetail._id));
-      await this._dbExt.updateDoc<IOffer>(q, items[i]);
+      let offer: IOffer[] = await this._dbExt.readDoc<IOffer>(q);
+          offer[0].quantity = offer[0].quantity - items[i].quantity;
+      await this._dbExt.updateDoc<IOffer>(q, offer[0]);
     }
     return new Promise((resolve) => {
       resolve(true);
